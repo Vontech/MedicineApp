@@ -2,6 +2,8 @@ package org.vontech.medicine
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import org.vontech.medicine.auth.attemptLogin
 import org.vontech.medicine.auth.createUser
 
 class MainActivity : AppCompatActivity() {
@@ -10,7 +12,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        createUser("androidtest2", "aaron2@vontech.org", "12345", "12345")
+        attemptLogin("androidtest2", "12345", this) {userSession ->
+            Log.i("MainActivity.kt", userSession.toString())
+        }
 
     }
 }
