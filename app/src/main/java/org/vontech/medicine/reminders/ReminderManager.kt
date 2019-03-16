@@ -3,11 +3,10 @@ package org.vontech.medicine.reminders
 import android.app.AlarmManager
 import org.vontech.medicine.pokos.Frequency
 import java.util.*
-import android.content.Context.ALARM_SERVICE
-import android.support.v4.content.ContextCompat.getSystemService
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.os.Bundle
 import android.util.Log
 import org.vontech.medicine.background.ReminderBroadcastReceiver
 
@@ -24,6 +23,13 @@ class ReminderManager {
     fun addReminder(title: String, message: String, time: Date, frequency: Frequency, context: Context) {
         // Create the intent to send a broadcast
         val notifyIntent = Intent(context, ReminderBroadcastReceiver::class.java)
+
+        // Create bundle to pass title and message through intent
+        var extras = Bundle()
+        extras.putString("title", title)
+        extras.putString("message", message)
+        notifyIntent.putExtras(extras)
+
         // Make it a pending intent so it can be fired at a given time
         val pendingIntent = PendingIntent.getBroadcast(context, 0, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT)
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager

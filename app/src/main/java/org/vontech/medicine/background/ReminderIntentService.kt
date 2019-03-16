@@ -14,8 +14,9 @@ class ReminderIntentService: IntentService("ReminderIntentService") {
 
     override fun onHandleIntent(intent: Intent?) {
         val builder = Notification.Builder(this)
-        builder.setContentTitle("My Title")
-        builder.setContentText("This is the Body")
+        builder.setContentTitle(intent!!.getStringExtra("title"))
+        builder.setContentText(intent!!.getStringExtra("message"))
+
         builder.setSmallIcon(android.R.drawable.sym_def_app_icon)
 //        val notifyIntent = Intent(this, MainActivity::class.java)
 //        val pendingIntent = PendingIntent.getActivity(this, 2, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT)
