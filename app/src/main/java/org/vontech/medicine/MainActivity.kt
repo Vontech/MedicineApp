@@ -8,12 +8,20 @@ import org.vontech.medicine.auth.createUser
 
 class MainActivity : AppCompatActivity() {
 
+    private lateinit var app: MedicineApplication
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        app = this.application as MedicineApplication
+
+        // If user session is available, attempt to build an API session (await this)
+
+        // If that fails, open up the login activity
+
         attemptLogin("androidtest2", "12345", this) {userSession ->
-            Log.i("MainActivity.kt", userSession.toString())
+            app.buildApi(userSession)
         }
 
     }
