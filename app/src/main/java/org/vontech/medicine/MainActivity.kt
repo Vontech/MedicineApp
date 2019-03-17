@@ -15,13 +15,11 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         app = this.application as MedicineApplication
+        val isLoggedIn = app.attemptToLoadExistingSession(this)
 
-        // If user session is available, attempt to build an API session (await this)
-
-        // If that fails, open up the login activity
-
-        attemptLogin("androidtest2", "12345", this) {userSession ->
-            app.buildApi(userSession)
+        if (isLoggedIn) {
+            Log.i("MainActivity.kt", "Logged in!")
+            Log.i("MainActivity.kt", app.userSession.toString())
         }
 
     }
