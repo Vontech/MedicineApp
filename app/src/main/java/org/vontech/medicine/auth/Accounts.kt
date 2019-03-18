@@ -6,7 +6,7 @@ import com.github.kittinunf.fuel.core.Headers
 import com.github.kittinunf.fuel.httpPost
 import org.json.JSONObject
 import org.vontech.medicine.R
-import org.vontech.medicine.utils.jsonToUserSession
+import org.vontech.medicine.utils.responseJsonToUserSession
 import java.util.*
 
 // Constants for authentication
@@ -70,8 +70,12 @@ fun attemptLogin(username: String, password: String, context: Context, onFinish:
             ))
             .also { println(it) }
             .responseString { result ->
-                val userSession = jsonToUserSession(result.component1()!!)
-                onFinish(userSession)
+                if (result.component1() == null) {
+                    onFinish(null)
+                } else {
+                    val userSession = responseJsonToUserSession(result.component1()!!)
+                    onFinish(userSession)
+                }
             }
     } catch (e: Exception) {
         Log.e("Accounts.kt", e.message)

@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Medicine</string>
+
+    <!-- LOGIN SCREEN -->
+    <string name="login_username_empty_error">A valid username must be entered</string>
+    <string name="login_password_empty_error">A valid password must be entered</string>
+    <string name="login_failed_error">Username and password incorrect</string>
+
 </resources>
