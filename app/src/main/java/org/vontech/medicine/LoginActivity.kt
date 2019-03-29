@@ -71,11 +71,16 @@ class LoginActivity : AppCompatActivity() {
 
     }
 
-    fun setupViews() {
+    private fun setupViews() {
 
         // Add listener for logging in
         submitButton.setOnClickListener {
             submitLogin()
+        }
+
+        openRegistrationButton.setOnClickListener {
+            val registrationIntent = Intent(this@LoginActivity, RegistrationActivity::class.java)
+            startActivity(registrationIntent)
         }
 
     }

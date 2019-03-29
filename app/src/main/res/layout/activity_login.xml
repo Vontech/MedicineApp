@@ -33,8 +33,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" android:id="@+id/errorText" android:visibility="gone"/>
         <Button
-                android:text="Button"
+                android:text="Login"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" android:id="@+id/submitButton"/>
+        <Button
+                android:text="Register"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:id="@+id/openRegistrationButton"/>
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

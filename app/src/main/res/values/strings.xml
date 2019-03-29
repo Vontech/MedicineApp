@@ -6,4 +6,11 @@
     <string name="login_password_empty_error">A valid password must be entered</string>
     <string name="login_failed_error">Username and password incorrect</string>
 
+    <!-- REGISTRATION SCREEN -->
+    <string name="registration_username_empty_error">A valid username must be entered</string>
+    <string name="registration_password_empty_error">A valid password must be entered</string>
+    <string name="registration_passwords_not_matched_error">Passwords do not match</string>
+    <string name="registration_login_error">Account created, but login failed. Please try logging in.</string>
+
+
 </resources>
