@@ -29,7 +29,7 @@ fun logout(userSession: UserSession) {
     throw NotImplementedError()
 }
 
-fun createUser(username: String, email: String, password: String, passwordAgain: String) {
+fun createUser(username: String, email: String, password: String, passwordAgain: String, onFinish: (errorMessage: String?) -> Unit) {
 
     val body = JSONObject(mapOf(
         "username" to username,
@@ -38,11 +38,25 @@ fun createUser(username: String, email: String, password: String, passwordAgain:
         "passwordConf" to passwordAgain
     ))
 
-    CREATE_USER_ENDPOINT.httpPost()
-        .header(Headers.CONTENT_TYPE, "application/json")
-        .body(body.toString())
-        .also { println(it) }
-        .response { result -> println(result) }
+    try {
+        CREATE_USER_ENDPOINT.httpPost()
+            .header(Headers.CONTENT_TYPE, "application/json")
+            .body(body.toString())
+            .also { println(it) }
+            .response { req, res, result ->
+                when(res.statusCode) {
+                    200 -> onFinish(null)
+                    else -> {
+                        val bod = JSONObject(String(res.data))
+                        onFinish(bod.getString("message"))
+                    }
+                }
+            }
+    } catch (e: Exception) {
+        Log.e("Accounts.kt", e.message)
+        onFinish("An error occurred during account creation. Please try again later.")
+    }
+
 
 }
 
