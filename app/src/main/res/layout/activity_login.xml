@@ -9,8 +9,8 @@
 
     <LinearLayout
             android:orientation="vertical"
-            android:layout_width="395dp"
-            android:layout_height="715dp" tools:layout_editor_absoluteY="8dp" tools:layout_editor_absoluteX="8dp">
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" tools:layout_editor_absoluteY="8dp" tools:layout_editor_absoluteX="8dp">
         <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -21,6 +21,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
+                android:hint="@string/login_hint_password"
                 android:ems="10"
                 android:id="@+id/passwordEntry"/>
         <ProgressBar
@@ -29,15 +30,15 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/loginProgress" android:visibility="gone"/>
         <TextView
-                android:text="TextView"
+                android:text=""
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" android:id="@+id/errorText" android:visibility="gone"/>
         <Button
-                android:text="Login"
+                android:text="@string/login_button_login"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" android:id="@+id/submitButton"/>
         <Button
-                android:text="Register"
+                android:text="@string/login_button_register"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" android:id="@+id/openRegistrationButton"/>
     </LinearLayout>
