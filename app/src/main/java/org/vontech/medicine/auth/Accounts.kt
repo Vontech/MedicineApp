@@ -62,20 +62,20 @@ fun attemptLogin(username: String, password: String, context: Context, onFinish:
         "grant_type" to "password"
     )
 
-    try {
-        LOGIN_USER_ENDPOINT.httpPost(body)
-            .header(mapOf(
-                Headers.CONTENT_TYPE to "application/x-www-form-urlencoded",
-                Headers.AUTHORIZATION to "Basic ${context.getString(R.string.MED_API_KEY)}"
-            ))
-            .also { println(it) }
-            .responseString { result ->
-                val userSession = jsonToUserSession(result.component1()!!)
-                onFinish(userSession)
-            }
-    } catch (e: Exception) {
-        Log.e("Accounts.kt", e.message)
-        onFinish(null)
-    }
+//    try {
+//        LOGIN_USER_ENDPOINT.httpPost(body)
+//            .header(mapOf(
+//                Headers.CONTENT_TYPE to "application/x-www-form-urlencoded",
+//                Headers.AUTHORIZATION to "Basic ${context.getString(R.string.MED_API_KEY)}"
+//            ))
+//            .also { println(it) }
+//            .responseString { result ->
+//                val userSession = jsonToUserSession(result.component1()!!)
+//                onFinish(userSession)
+//            }
+//    } catch (e: Exception) {
+//        Log.e("Accounts.kt", e.message)
+//        onFinish(null)
+//    }
 
 }

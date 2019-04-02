@@ -32,4 +32,11 @@
         android:text="Save Medication"
         android:id="@+id/saveMedicationButton"/>
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Delete Medication"
+        android:id="@+id/deleteMedicationButton"
+        android:visibility="invisible"/>
+
 </LinearLayout>
