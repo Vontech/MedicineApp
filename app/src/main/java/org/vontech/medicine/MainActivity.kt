@@ -30,6 +30,11 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        scanMedicationButton.setOnClickListener {
+            val intent = Intent(this, ScanActivity::class.java)
+            startActivity(intent)
+        }
+
         loadData()
 
         // Instantiate RecyclerView and set its adapter

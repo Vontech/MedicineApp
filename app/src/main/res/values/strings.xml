@@ -20,6 +20,10 @@
     <string name="register_hint_password">Password</string>
     <string name="register_hint_password_confirm">Confirm Password</string>
 
+    <!-- SCAN STRINGS -->
+    <string name="scan_button_scan">Begin Scanning</string>
+    <string name="scan_button_scan_stop">Stop Scanning</string>
+
     <!-- PREFERENCE KEYS -->
     <string name="medication_prefs">MEDICATION_PREFS</string>
     <string name="edit_medication">EDIT_MEDICATION</string>
