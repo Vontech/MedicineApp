@@ -11,13 +11,14 @@ import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_add_medication.*
 import org.vontech.medicine.pokos.Medication
 import com.google.gson.reflect.TypeToken
+import java.util.*
 
 class EditMedicationActivity : AppCompatActivity() {
 
     private lateinit var prefs: SharedPreferences
     private lateinit var medications: ArrayList<Medication>
     private var edit: Boolean = false
-    private lateinit var tempMed: Medication
+    private lateinit var oldMedication: Medication
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,12 +26,12 @@ class EditMedicationActivity : AppCompatActivity() {
 
         prefs = this.getSharedPreferences(getString(R.string.medication_prefs), Context.MODE_PRIVATE)
         // Get list of medications
-        medications = getMedications(getString(R.string.medication_prefs))
+        medications = getMedications(getString(R.string.medication_list))
 
         // Populate TextViews with medication values if editing a medication
         if (intent.getSerializableExtra(this.getString(R.string.edit_medication)) is Medication) {
-            tempMed = intent.getSerializableExtra(this.getString(R.string.edit_medication)) as Medication
-            populateTextViews(tempMed)
+            oldMedication = intent.getSerializableExtra(this.getString(R.string.edit_medication)) as Medication
+            populateViews(oldMedication)
             // Only show delete button if editing an existing Medication
             deleteMedicationButton.visibility = View.VISIBLE
             edit = true
@@ -38,7 +39,7 @@ class EditMedicationActivity : AppCompatActivity() {
 
         // Set onClickListeners for buttons
         saveMedicationButton.setOnClickListener { saveMedication() }
-        deleteMedicationButton.setOnClickListener { deleteMedication() }
+        deleteMedicationButton.setOnClickListener { deleteMedication(oldMedication) }
     }
 
     /**
@@ -51,23 +52,17 @@ class EditMedicationActivity : AppCompatActivity() {
             return
         }
 
-        // Default dose is 0 ml, override if user inputs value
         // Dose has a default value to protect against converting a null value to an Int
         var dose = 0
-        if (!doseEditText.text.isEmpty()) {
-            dose = doseEditText.text.toString().toInt()
-        }
+        if (!doseEditText.text.isEmpty()) { dose = doseEditText.text.toString().toInt() }
 
-        // if editing an existing medication, update medication from intent with new values
-        if (edit) {
-            tempMed.name = nameEditText.text.toString()
-            tempMed.dose = dose
-            tempMed.notes = notesEditText.text.toString()
-        } else {
-            // If adding a new medication, create a Medication object and add it to the list
-            tempMed = Medication(nameEditText.text.toString(), dose, notesEditText.text.toString())
-            medications.add(tempMed)
-        }
+        // Create a new Medication object from the fields
+        val newMedication = Medication(nameEditText.text.toString(), dose, notesEditText.text.toString())
+        newMedication.calendarToJoda(dayPicker.selectedDays)
+
+        // If editing a medication, replace the old medication with a new one. Otherwise, add it to the list
+        if (edit) { medications[medications.indexOf(oldMedication)] = newMedication }
+        else { medications.add(newMedication) }
 
         saveArrayList() // Save changes to ArrayList
 
@@ -80,10 +75,12 @@ class EditMedicationActivity : AppCompatActivity() {
      * Returns the ArrayList of Medications from SharedPreferences
      */
     private fun getMedications(key: String): ArrayList<Medication> {
-        val gson = Gson()
         val json = prefs.getString(key, null)
         val type = object : TypeToken<ArrayList<Medication>>() {}.type
-        return gson.fromJson(json, type)
+        if (Gson().fromJson<ArrayList<Medication>>(json, type) == null) { return arrayListOf() }
+
+        return Gson().fromJson<ArrayList<Medication>>(json, type)
+
     }
 
     /**
@@ -104,13 +101,14 @@ class EditMedicationActivity : AppCompatActivity() {
     }
 
     /**
-     * Populates the activity's TextView's with the values from the given Medication
+     * Populates the activity's views with the values from the given Medication
      * @param medication the Medication used to populate the TextViews
      */
-    private fun populateTextViews(medication: Medication) {
+    private fun populateViews(medication: Medication) {
         nameEditText.setText(medication.name)
         doseEditText.setText(medication.dose.toString())
         notesEditText.setText(medication.notes)
+        dayPicker.selectedDays = medication.jodaToCalendar()
     }
 
     /**
