@@ -30,14 +30,15 @@ class ScanBuilder {
 
     fun processImage(jpeg: ByteArray, onFinish: () -> Unit) {
 
-        val backgroundTask = ScanProcessAsyncTask(this)
+        val backgroundTask = ScanProcessAsyncTask(this, onFinish)
+
         backgroundTask.execute(jpeg)
 
     }
 
 }
 
-class ScanProcessAsyncTask(private val scanBuilder: ScanBuilder): AsyncTask<ByteArray, Void, Bitmap>() {
+class ScanProcessAsyncTask(private val scanBuilder: ScanBuilder, private val onFinish: () -> Unit): AsyncTask<ByteArray, Void, Bitmap>() {
 
     override fun doInBackground(vararg jpegs: ByteArray): Bitmap {
 
@@ -64,6 +65,9 @@ class ScanProcessAsyncTask(private val scanBuilder: ScanBuilder): AsyncTask<Byte
 
                 // Due to memory issue, recycle the drawable
                 result.recycle()
+
+                // Update the UI
+                onFinish()
 
             }
             .addOnFailureListener { e ->

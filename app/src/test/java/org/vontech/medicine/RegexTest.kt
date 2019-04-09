@@ -28,7 +28,7 @@ class RegexText: FeatureSpec({
             val found = medDoc.fuzzySearch(FILLED_DATE_REGEX, "date filled.12/22/2018")
             found.shouldNotBeNull()
             found.value.shouldNotBeEmpty()
-            found.groupValues.get(1) shouldBe "12/22/2018"
+            found.groupValues[1] shouldBe "12/22/2018"
 
         }
 

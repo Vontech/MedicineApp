@@ -59,6 +59,7 @@ data class MedicineDocumentExtraction (
 enum class MedicineField {
     NAME,
     DOSAGE_AMOUNT,
+    DOSAGE_TYPE,
     DOSAGE_FREQUENCY,
     DOSAGE_TIMES,
     TOTAL_QUANTITY,
@@ -77,7 +78,10 @@ fun remainingFields(extraction: MedicineDocumentExtraction): List<MedicineField>
     val remaining = mutableListOf<MedicineField>()
     if (extraction.name.isNullOrBlank()) remaining.add(MedicineField.NAME)
     if (extraction.dosageAmount == null) remaining.add(MedicineField.DOSAGE_AMOUNT)
+    if (extraction.dosageType == null) remaining.add(MedicineField.DOSAGE_TYPE)
     if (extraction.dosageFrequency == null) remaining.add(MedicineField.DOSAGE_FREQUENCY)
     if (extraction.dosageTimes == null) remaining.add(MedicineField.DOSAGE_TIMES)
+    if (extraction.totalQuantity == null) remaining.add(MedicineField.TOTAL_QUANTITY)
+    if (extraction.quantityType == null) remaining.add(MedicineField.QUANTITY_TYPE)
     return remaining
 }

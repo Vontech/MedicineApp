@@ -104,8 +104,10 @@ class ScanActivity : AppCompatActivity() {
         Log.i("ScanActivity.kt", "Attempting extraction!")
         val docResult = scanBuilder!!.build()
         val model = getModel(docResult)
-        model?.extract(docResult).apply {
-            Log.i("ScanActivity.kt", this.toString())
+        val extraction = model?.extract(docResult)
+        if (extraction != null) {
+            Log.i("ScanActivity.kt", extraction.toString())
+
         }
 
     }
