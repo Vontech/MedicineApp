@@ -33,6 +33,10 @@ class MainActivity : AppCompatActivity() {
         }
 
         Log.d("Medications", medicineList.toString())
+        scanMedicationButton.setOnClickListener {
+            val intent = Intent(this, ScanActivity::class.java)
+            startActivity(intent)
+        }
 
         // Instantiate RecyclerView and set its adapter
         linearLayoutManager = LinearLayoutManager(this)
@@ -41,13 +45,11 @@ class MainActivity : AppCompatActivity() {
         recyclerView.adapter = adapter
 
         app = this.application as MedicineApplication
+        val isLoggedIn = app.attemptToLoadExistingSession(this)
 
-        // If user session is available, attempt to build an API session (await this)
-
-        // If that fails, open up the login activity
-
-        attemptLogin("androidtest2", "12345", this) {userSession ->
-            app.buildApi(userSession)
+        if (isLoggedIn) {
+            Log.i("MainActivity.kt", "Logged in!")
+            Log.i("MainActivity.kt", app.userSession.toString())
         }
     }
 

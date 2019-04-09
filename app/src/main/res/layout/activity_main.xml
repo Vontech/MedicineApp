@@ -17,4 +17,8 @@
     android:id="@+id/newMedicationButton"
     android:text="Add New Medication"/>
 
+    <Button android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:id="@+id/scanMedicationButton"
+            android:text="Scan New Medication"/>
+
 </LinearLayout>

@@ -6,7 +6,7 @@ import com.github.kittinunf.fuel.core.Headers
 import com.github.kittinunf.fuel.httpPost
 import org.json.JSONObject
 import org.vontech.medicine.R
-import org.vontech.medicine.utils.jsonToUserSession
+import org.vontech.medicine.utils.responseJsonToUserSession
 import java.util.*
 
 // Constants for authentication
@@ -29,7 +29,7 @@ fun logout(userSession: UserSession) {
     throw NotImplementedError()
 }
 
-fun createUser(username: String, email: String, password: String, passwordAgain: String) {
+fun createUser(username: String, email: String, password: String, passwordAgain: String, onFinish: (errorMessage: String?) -> Unit) {
 
     val body = JSONObject(mapOf(
         "username" to username,
@@ -38,11 +38,25 @@ fun createUser(username: String, email: String, password: String, passwordAgain:
         "passwordConf" to passwordAgain
     ))
 
-    CREATE_USER_ENDPOINT.httpPost()
-        .header(Headers.CONTENT_TYPE, "application/json")
-        .body(body.toString())
-        .also { println(it) }
-        .response { result -> println(result) }
+    try {
+        CREATE_USER_ENDPOINT.httpPost()
+            .header(Headers.CONTENT_TYPE, "application/json")
+            .body(body.toString())
+            .also { println(it) }
+            .response { req, res, result ->
+                when(res.statusCode) {
+                    200 -> onFinish(null)
+                    else -> {
+                        val bod = JSONObject(String(res.data))
+                        onFinish(bod.getString("message"))
+                    }
+                }
+            }
+    } catch (e: Exception) {
+        Log.e("Accounts.kt", e.message)
+        onFinish("An error occurred during account creation. Please try again later.")
+    }
+
 
 }
 
@@ -62,20 +76,24 @@ fun attemptLogin(username: String, password: String, context: Context, onFinish:
         "grant_type" to "password"
     )
 
-//    try {
-//        LOGIN_USER_ENDPOINT.httpPost(body)
-//            .header(mapOf(
-//                Headers.CONTENT_TYPE to "application/x-www-form-urlencoded",
-//                Headers.AUTHORIZATION to "Basic ${context.getString(R.string.MED_API_KEY)}"
-//            ))
-//            .also { println(it) }
-//            .responseString { result ->
-//                val userSession = jsonToUserSession(result.component1()!!)
-//                onFinish(userSession)
-//            }
-//    } catch (e: Exception) {
-//        Log.e("Accounts.kt", e.message)
-//        onFinish(null)
-//    }
+    try {
+        LOGIN_USER_ENDPOINT.httpPost(body)
+            .header(mapOf(
+                Headers.CONTENT_TYPE to "application/x-www-form-urlencoded",
+                Headers.AUTHORIZATION to "Basic ${context.getString(R.string.MED_API_KEY)}"
+            ))
+            .also { println(it) }
+            .responseString { result ->
+                if (result.component1() == null) {
+                    onFinish(null)
+                } else {
+                    val userSession = responseJsonToUserSession(result.component1()!!)
+                    onFinish(userSession)
+                }
+            }
+    } catch (e: Exception) {
+        Log.e("Accounts.kt", e.message)
+        onFinish(null)
+    }
 
 }
