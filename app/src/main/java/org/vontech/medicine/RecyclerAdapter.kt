@@ -46,7 +46,7 @@ class RecyclerAdapter(private val medications: ArrayList<Medication>)
         fun bindMedication(medication: Medication) {
             this.medication = medication
             view.nameTextView.text = medication.name
-            view.doseTextView.text = medication.dose.toString()
+            view.doseTextView.text = medication.dose.toString() + " mL"
             view.notesTextView.text = medication.notes
         }
     }

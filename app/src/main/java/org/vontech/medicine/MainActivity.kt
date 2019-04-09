@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.activity_main.*
 import org.vontech.medicine.auth.attemptLogin
 import org.vontech.medicine.pokos.Medication
@@ -18,24 +19,24 @@ class MainActivity : AppCompatActivity() {
     private lateinit var prefs: SharedPreferences
     private lateinit var linearLayoutManager: LinearLayoutManager
     private lateinit var adapter: RecyclerAdapter
-    private var medicineList: ArrayList<Medication> = arrayListOf()
+    private lateinit var medicineList: ArrayList<Medication>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         prefs = this.getSharedPreferences(getString(R.string.medication_prefs), Context.MODE_PRIVATE)
+        medicineList = getArrayList(getString(R.string.medication_list))
 
         newMedicationButton.setOnClickListener {
             val intent = Intent(this, EditMedicationActivity::class.java)
             startActivity(intent)
         }
 
+        Log.d("Medications", medicineList.toString())
         scanMedicationButton.setOnClickListener {
             val intent = Intent(this, ScanActivity::class.java)
             startActivity(intent)
         }
-
-        loadData()
 
         // Instantiate RecyclerView and set its adapter
         linearLayoutManager = LinearLayoutManager(this)
@@ -52,16 +53,18 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    /**
-     * Populates ArrayList of Medications with deserialized strings from SharedPreferences
-     */
-    private fun loadData() {
-        val allMedications = prefs.all
-        // For every serialized JSON string in SharedPreferences, deserialize and add it to the ArrayList
-        for (entry in allMedications.entries) {
-            val gson = Gson()
-            Log.d("Map values", entry.key + ": " + entry.value.toString())
-            medicineList.add(gson.fromJson(entry.value.toString(), Medication::class.java))
+    private fun getArrayList(key: String): ArrayList<Medication> {
+//        val gson = Gson()
+        val json = prefs.getString(key, null)
+//        val type = object : TypeToken<ArrayList<Medication>>() {}.type
+
+        val turnsType = object : TypeToken<ArrayList<Medication>>() {}.type
+        if (Gson().fromJson<ArrayList<Medication>>(json, turnsType) == null) {
+            return arrayListOf()
+        } else {
+            return Gson().fromJson<ArrayList<Medication>>(json, turnsType)
         }
+
+//        return gson.fromJson(json, type)
     }
 }

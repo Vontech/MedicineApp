@@ -27,5 +27,6 @@
     <!-- PREFERENCE KEYS -->
     <string name="medication_prefs">MEDICATION_PREFS</string>
     <string name="edit_medication">EDIT_MEDICATION</string>
+    <string name="medication_list">MEDICATION_LIST</string>
 
 </resources>
