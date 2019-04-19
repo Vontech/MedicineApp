@@ -5,6 +5,9 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import org.vontech.medicine.pokos.Frequency
+import org.vontech.medicine.reminders.ReminderManager
+import java.util.*
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import com.google.gson.Gson
@@ -24,6 +27,10 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        val reminderManager = ReminderManager()
+        //reminderManager.addReminder("Aaron", "Vontell", Date(), Frequency.DAILY, this)
+
         prefs = this.getSharedPreferences(getString(R.string.medication_prefs), Context.MODE_PRIVATE)
         medicineList = getArrayList(getString(R.string.medication_list))
 
