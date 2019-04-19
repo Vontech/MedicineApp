@@ -1,0 +1,35 @@
+{
+  "project_info": {
+    "project_number": "728324451371",
+    "firebase_url": "https://medicine-c5fed.firebaseio.com",
+    "project_id": "medicine-c5fed",
+    "storage_bucket": "medicine-c5fed.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:728324451371:android:a2128681ea1a5c49",
+        "android_client_info": {
+          "package_name": "org.vontech.medicine"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBJAVl4JOCtXtMKsKw67RDfBy5KQII15VQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "728324451371-tqt4pd5440sdgton4n9b81tbh6hj9rto.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
