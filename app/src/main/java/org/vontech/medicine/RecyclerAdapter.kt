@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import kotlinx.android.synthetic.main.recyclerview_item_row.view.*
 import org.vontech.medicine.pokos.Medication
 
-class RecyclerAdapter(private val medications: ArrayList<Medication>)
+class RecyclerAdapter(private val medications: List<Medication>)
     : RecyclerView.Adapter<RecyclerAdapter.MedicationHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerAdapter.MedicationHolder {
