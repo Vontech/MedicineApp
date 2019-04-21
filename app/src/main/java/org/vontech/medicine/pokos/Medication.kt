@@ -6,7 +6,7 @@ import java.lang.IllegalArgumentException
 import java.util.Calendar
 import java.util.UUID
 
-data class Medication(var name: String, var dose: Int, var notes: String) : Serializable {
+data class Medication(var name: String?, var dose: Float?, var notes: String?) : Serializable {
     val id = UUID.randomUUID().toString()
     var days = mutableSetOf<Int>()
 

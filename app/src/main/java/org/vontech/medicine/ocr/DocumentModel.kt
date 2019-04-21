@@ -83,5 +83,13 @@ fun remainingFields(extraction: MedicineDocumentExtraction): List<MedicineField>
     if (extraction.dosageTimes == null) remaining.add(MedicineField.DOSAGE_TIMES)
     if (extraction.totalQuantity == null) remaining.add(MedicineField.TOTAL_QUANTITY)
     if (extraction.quantityType == null) remaining.add(MedicineField.QUANTITY_TYPE)
+    if (extraction.rxIdentifier == null) remaining.add(MedicineField.RX_IDENTIFIER)
+    if (extraction.fillDate == null) remaining.add(MedicineField.FILL_DATE)
+    if (extraction.discardDate == null) remaining.add(MedicineField.DISCARD_DATE)
+    if (extraction.contactNumbers.isNullOrEmpty()) remaining.add(MedicineField.CONTACT_NUMBERS)
+    if (extraction.contactEmails.isNullOrEmpty()) remaining.add(MedicineField.CONTACT_EMAILS)
+    if (extraction.contactNames.isNullOrEmpty()) remaining.add(MedicineField.CONTACT_NAMES)
+    if (extraction.medicationDescription.isNullOrBlank()) remaining.add(MedicineField.MEDICATION_DESCRIPTION)
+    if (extraction.applicationAction.isNullOrBlank()) remaining.add(MedicineField.APPLICATION_ACTION)
     return remaining
 }

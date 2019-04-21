@@ -1,14 +1,19 @@
 package org.vontech.medicine
 
 import android.content.Context
+import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import com.otaliastudios.cameraview.CameraListener
 import kotlinx.android.synthetic.main.activity_scan.*
+import org.vontech.medicine.ocr.MedicineDocumentExtraction
 import org.vontech.medicine.ocr.ScanBuilder
 import org.vontech.medicine.ocr.models.getModel
+import org.vontech.medicine.ocr.remainingFields
+import org.vontech.medicine.pokos.Medication
+import org.vontech.medicine.utils.MedicationStore
 import java.util.*
 
 class ScanActivity : AppCompatActivity() {
@@ -23,9 +28,13 @@ class ScanActivity : AppCompatActivity() {
     private var runnables = mutableListOf<Runnable>()
     private val imageTakingHandler = Handler()
 
+    // Storage references
+    private lateinit var medicationStore: MedicationStore
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_scan)
+        medicationStore = MedicationStore(this)
         setupCamera()
         setupViews()
     }
@@ -99,7 +108,7 @@ class ScanActivity : AppCompatActivity() {
 
     }
 
-    private fun attemptMedicationExtraction() {
+    private fun attemptMedicationExtraction(): MedicineDocumentExtraction? {
 
         Log.i("ScanActivity.kt", "Attempting extraction!")
         val docResult = scanBuilder!!.build()
@@ -107,9 +116,24 @@ class ScanActivity : AppCompatActivity() {
         val extraction = model?.extract(docResult)
         if (extraction != null) {
             Log.i("ScanActivity.kt", extraction.toString())
-
+            val remaining = remainingFields(extraction)
+            val toShow = "FOUND:\n" + remaining.joinToString("\n")
+            tempFields.text = toShow
         }
+        return extraction
+    }
 
+    private fun moveToEditing() {
+        val extracted = attemptMedicationExtraction()
+        val medicineToEdit = Medication(
+            dose=extracted?.dosageAmount,
+            name=extracted?.name,
+            notes=""
+        )
+        val editMedicationIntent = Intent(this, EditMedicationActivity::class.java)
+        editMedicationIntent.putExtra(getString(R.string.scan_medication), medicineToEdit)
+        startActivity(editMedicationIntent)
+        finish()
     }
 
     private fun stopCapture() {
@@ -122,6 +146,7 @@ class ScanActivity : AppCompatActivity() {
         Log.i("ScanActivity.kt", "Removing all handlers")
 
         attemptMedicationExtraction()
+        moveToEditing()
 
 
     }

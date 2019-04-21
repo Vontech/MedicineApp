@@ -33,6 +33,11 @@ class EditMedicationActivity : AppCompatActivity() {
             edit = true
         }
 
+        if (intent.getSerializableExtra(this.getString(R.string.scan_medication)) is Medication) {
+            val medication = intent.getSerializableExtra(this.getString(R.string.scan_medication)) as Medication
+            populateViews(medication)
+        }
+
         // Set onClickListeners for buttons
         saveMedicationButton.setOnClickListener { saveMedication() }
         deleteMedicationButton.setOnClickListener { deleteMedication(oldMedication) }
@@ -49,8 +54,8 @@ class EditMedicationActivity : AppCompatActivity() {
         }
 
         // Dose has a default value to protect against converting a null value to an Int
-        var dose = 0
-        if (!doseEditText.text.isEmpty()) { dose = doseEditText.text.toString().toInt() }
+        var dose = 0f
+        if (!doseEditText.text.isEmpty()) { dose = doseEditText.text.toString().toFloat() }
 
         // Create a new Medication object from the fields
         val newMedication = Medication(nameEditText.text.toString(), dose, notesEditText.text.toString())
@@ -74,9 +79,15 @@ class EditMedicationActivity : AppCompatActivity() {
      * @param medication the Medication used to populate the TextViews
      */
     private fun populateViews(medication: Medication) {
-        nameEditText.setText(medication.name)
-        doseEditText.setText(medication.dose.toString())
-        notesEditText.setText(medication.notes)
+        if (medication.name != null) {
+            nameEditText.setText(medication.name)
+        }
+        if (medication.dose != null) {
+            doseEditText.setText(medication.dose.toString())
+        }
+        if (medication.notes != null) {
+            notesEditText.setText(medication.notes)
+        }
         dayPicker.selectedDays = medication.jodaToCalendar()
     }
 
