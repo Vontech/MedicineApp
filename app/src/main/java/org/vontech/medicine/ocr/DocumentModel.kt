@@ -1,6 +1,9 @@
 package org.vontech.medicine.ocr
 
+import android.util.Log
+import org.vontech.medicine.utils.MedicineNameDefinition
 import java.util.*
+import kotlin.collections.HashMap
 
 /**
  * An abstract class providing methods to search a document for requested fields
@@ -10,7 +13,10 @@ abstract class MedicineDocumentModel {
 
     abstract fun modelScore(scannedDoc: DocumentScan): Float
 
-    abstract fun extract(scannedDoc: DocumentScan): MedicineDocumentExtraction
+    abstract fun extract(
+        scannedDoc: DocumentScan,
+        medicineNames: HashMap<String, MedicineNameDefinition>
+    ): MedicineDocumentExtraction
 
     fun fuzzySearch(pattern: String, toSearch: String, ignoreCase: Boolean = true): MatchResult? {
         return fuzzySearchAll(pattern, toSearch, ignoreCase).toList().getOrNull(0)
@@ -33,6 +39,23 @@ abstract class MedicineDocumentModel {
         }
 
         return regex.findAll(toSearch)
+
+    }
+
+    fun getLikelyMedicineNames(scannedDoc: DocumentScan, medicineNames: HashMap<String, MedicineNameDefinition>): List<String> {
+
+        val elements = scannedDoc.elements.map { it.elements }.flatten().sortedBy { -1.0 * (it.confidence?: 0f) }
+        val possibleNames = mutableListOf<String>()
+        elements.forEach {
+            val c = it.text.toLowerCase()
+            if (c in medicineNames) {
+                possibleNames.add(medicineNames[c]!!.brandName)
+            }
+        }
+
+        Log.i("MEDICINE NAMES", possibleNames.toString())
+
+        return possibleNames
 
     }
 

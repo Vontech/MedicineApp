@@ -31,10 +31,16 @@ class ScanActivity : AppCompatActivity() {
     // Storage references
     private lateinit var medicationStore: MedicationStore
 
+    // Global references
+    private lateinit var app: MedicineApplication
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_scan)
+
         medicationStore = MedicationStore(this)
+        app = this.application as MedicineApplication
+
         setupCamera()
         setupViews()
     }
@@ -113,11 +119,11 @@ class ScanActivity : AppCompatActivity() {
         Log.i("ScanActivity.kt", "Attempting extraction!")
         val docResult = scanBuilder!!.build()
         val model = getModel(docResult)
-        val extraction = model?.extract(docResult)
+        val extraction = model?.extract(docResult, app.medicineNames)
         if (extraction != null) {
             Log.i("ScanActivity.kt", extraction.toString())
             val remaining = remainingFields(extraction)
-            val toShow = "FOUND:\n" + remaining.joinToString("\n")
+            val toShow = "REMAINING:\n" + remaining.joinToString("\n")
             tempFields.text = toShow
         }
         return extraction

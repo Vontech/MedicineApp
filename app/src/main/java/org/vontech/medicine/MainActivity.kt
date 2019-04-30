@@ -47,6 +47,7 @@ class MainActivity : AppCompatActivity() {
             Log.i("MainActivity.kt", "Logged in!")
             Log.i("MainActivity.kt", app.userSession.toString())
         }
+
     }
 
     override fun onResume() {

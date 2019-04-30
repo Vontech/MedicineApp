@@ -24,12 +24,16 @@ class MedicineApplication : Application() {
 
     var medicineApi: MedicineApi? = null
     var userSession: UserSession? = null
+    lateinit var medicineNames: HashMap<String, MedicineNameDefinition>
 
     override fun onCreate() {
         super.onCreate()
 
         // Setup the FuelManager
         FuelManager.instance.basePath = API_URL
+
+        // Background task to read medicine
+        loadMedicineNames()
 
     }
 
@@ -82,6 +86,14 @@ class MedicineApplication : Application() {
         editor.putString(SESSION_STORE_KEY, userSessionToJson(userSession))
         editor.commit() // TODO: Should we use apply?
 
+    }
+
+    private fun loadMedicineNames() {
+        // Load medications in background task
+        medicineNames = MedicineReader(this).readMedicines()
+        medicineNames.forEach {
+            //Log.i("MedicineApplication.kt", it.key + " --> " + it.value)
+        }
     }
 
 }
