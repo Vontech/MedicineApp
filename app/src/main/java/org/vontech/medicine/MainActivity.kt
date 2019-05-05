@@ -3,6 +3,9 @@ package org.vontech.medicine
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import org.vontech.medicine.pokos.Frequency
+import org.vontech.medicine.reminders.ReminderManager
+import java.util.*
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import kotlinx.android.synthetic.main.activity_main.*
@@ -22,6 +25,9 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         medicationStore = MedicationStore(this)
         medicineList = medicationStore.getMedications()
+
+        val reminderManager = ReminderManager()
+        //reminderManager.addReminder("Aaron", "Vontell", Date(), Frequency.DAILY, this)
 
         newMedicationButton.setOnClickListener {
             val intent = Intent(this, EditMedicationActivity::class.java)
