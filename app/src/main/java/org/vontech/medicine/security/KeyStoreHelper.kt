@@ -26,6 +26,10 @@ const val TAG = "KeyStoreHelper"
  * A collection of helpers for encrypting keys on the Android
  * device. Largely adapted from
  * https://medium.com/@ali.muzaffar/securing-sharedpreferences-in-android-a21883a9cbf8
+ * TODO:
+ *  - ks.getEntry returns an error, causing non key to actually be used
+ *  - encrypt and decrypt are never used, are they supposed to be?
+ *  - make sure that this is actually security and not just obfiscation
  */
 
 class SecurityConstants {
@@ -167,11 +171,11 @@ private fun getPrivateKeyEntry(alias: String): KeyStore.PrivateKeyEntry? {
         val ks = KeyStore
             .getInstance(SecurityConstants.KEYSTORE_PROVIDER_ANDROID_KEYSTORE)
         ks.load(null)
-//        val entry = ks.getEntry(alias, null)
-        val privateKey = ks.getKey(alias, null) as PrivateKey
-//        val publicKey = ks.getCertificate(alias).getPublicKey()
 
-        val entry = KeyStore.PrivateKeyEntry(privateKey, )
+        val privateKey = ks.getKey(alias, null) as PrivateKey
+        val publicKey = ks.getCertificate(alias).publicKey
+
+        val entry = ks.getEntry(alias, null)
 
         if (entry == null) {
             Log.w(TAG, "No key found under alias: $alias")

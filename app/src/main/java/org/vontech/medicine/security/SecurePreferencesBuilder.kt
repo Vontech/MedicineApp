@@ -6,6 +6,7 @@ import android.content.SharedPreferences
 import android.text.TextUtils
 import android.os.Build
 import android.provider.Settings
+import android.util.Log
 import com.securepreferences.SecurePreferences
 import org.vontech.medicine.R
 
@@ -37,6 +38,8 @@ class SecurePreferencesBuilder(private val context: Context) {
             //bitshift everything by some pre-determined amount for added security
             pass = bitshiftEntireString(pass)
         }
+
+        Log.i("PASSWORD", pass)
 
         return SecurePreferences(context, pass, PREFERENCES_FILE)
 
