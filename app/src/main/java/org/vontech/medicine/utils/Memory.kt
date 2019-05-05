@@ -6,14 +6,14 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import org.vontech.medicine.R
 import org.vontech.medicine.pokos.Medication
+import org.vontech.medicine.security.SecurePreferencesBuilder
 import java.util.ArrayList
 
 class MedicationStore(context: Context) {
 
     private val LT = "MedicationStore" // Logging tag
-    private val MED_KEY = context.getString(R.string.medication_prefs)
     private val MEDICATIONS_KEY = context.getString(R.string.medication_list)
-    private var prefs = context.getSharedPreferences(MED_KEY, Context.MODE_PRIVATE)
+    private var prefs = SecurePreferencesBuilder(context).build()//context.getSharedPreferences(MED_KEY, Context.MODE_PRIVATE)
     private val gson = Gson()
 
     /**
