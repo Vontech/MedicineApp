@@ -1,8 +1,6 @@
 package org.vontech.medicine
 
-import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import org.vontech.medicine.pokos.Frequency
@@ -10,29 +8,26 @@ import org.vontech.medicine.reminders.ReminderManager
 import java.util.*
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.activity_main.*
-import org.vontech.medicine.auth.attemptLogin
 import org.vontech.medicine.pokos.Medication
+import org.vontech.medicine.utils.MedicationStore
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var app: MedicineApplication
-    private lateinit var prefs: SharedPreferences
     private lateinit var linearLayoutManager: LinearLayoutManager
     private lateinit var adapter: RecyclerAdapter
-    private lateinit var medicineList: ArrayList<Medication>
+    private lateinit var medicineList: List<Medication>
+    private lateinit var medicationStore: MedicationStore
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        medicationStore = MedicationStore(this)
+        medicineList = medicationStore.getMedications()
 
         val reminderManager = ReminderManager()
         //reminderManager.addReminder("Aaron", "Vontell", Date(), Frequency.DAILY, this)
-
-        prefs = this.getSharedPreferences(getString(R.string.medication_prefs), Context.MODE_PRIVATE)
-        medicineList = getArrayList(getString(R.string.medication_list))
 
         newMedicationButton.setOnClickListener {
             val intent = Intent(this, EditMedicationActivity::class.java)
@@ -58,20 +53,14 @@ class MainActivity : AppCompatActivity() {
             Log.i("MainActivity.kt", "Logged in!")
             Log.i("MainActivity.kt", app.userSession.toString())
         }
+
     }
 
-    private fun getArrayList(key: String): ArrayList<Medication> {
-//        val gson = Gson()
-        val json = prefs.getString(key, null)
-//        val type = object : TypeToken<ArrayList<Medication>>() {}.type
-
-        val turnsType = object : TypeToken<ArrayList<Medication>>() {}.type
-        if (Gson().fromJson<ArrayList<Medication>>(json, turnsType) == null) {
-            return arrayListOf()
-        } else {
-            return Gson().fromJson<ArrayList<Medication>>(json, turnsType)
-        }
-
-//        return gson.fromJson(json, type)
+    override fun onResume() {
+        super.onResume()
+        medicineList = medicationStore.getMedications()
+        adapter.notifyDataSetChanged()
+        recyclerView
     }
+
 }

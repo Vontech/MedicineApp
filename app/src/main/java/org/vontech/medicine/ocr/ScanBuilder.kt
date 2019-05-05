@@ -15,16 +15,19 @@ import com.google.firebase.ml.vision.text.FirebaseVisionText
 class ScanBuilder {
 
     private val textParts = mutableListOf<String>()
+    private val elements = mutableListOf<FirebaseVisionText.Line>()
 
     fun addScannedText(text: String, lines: List<FirebaseVisionText.Line>) {
         Log.i("ScanBuilder.kt", text)
         textParts.add(text)
+        elements.addAll(lines)
     }
 
     fun build(): DocumentScan {
         return DocumentScan(
             textParts,
-            textParts.joinToString("\n")
+            textParts.joinToString("\n"),
+            elements
         )
     }
 
@@ -82,4 +85,8 @@ class ScanProcessAsyncTask(private val scanBuilder: ScanBuilder, private val onF
  * A completed, stitched OCR record built using the ScanBuilder
  * @author Aaron Vontell
  */
-class DocumentScan(val textParts: List<String>, val joinedText: String)
+class DocumentScan(
+    val textParts: List<String>,
+    val joinedText: String,
+    val elements: MutableList<FirebaseVisionText.Line>
+)

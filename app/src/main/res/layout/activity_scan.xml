@@ -8,16 +8,31 @@
         android:layout_height="match_parent"
         tools:context=".ScanActivity">
 
-    <com.otaliastudios.cameraview.CameraView
-            android:id="@+id/scanCamera"
-            android:keepScreenOn="true"
-            android:layout_weight="1"
-            android:layout_width="match_parent"
-            android:layout_height="0dp" />
+        <RelativeLayout
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="0dp">
 
-    <Button android:id="@+id/scanButton"
+            <com.otaliastudios.cameraview.CameraView
+                    android:id="@+id/scanCamera"
+                    android:keepScreenOn="true"
+
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                <TextView
+                        android:text="No fields found"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" android:id="@+id/tempFields" android:padding="8dp"
+                        android:textStyle="bold" android:textColor="@color/colorPrimaryDark"/>
+            </com.otaliastudios.cameraview.CameraView>
+
+        </RelativeLayout>
+
+
+
+        <Button android:id="@+id/scanButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Start Capturing"/>
+            android:text="Start Capturing" app:layout_constraintTop_toTopOf="parent"/>
 
 </LinearLayout>

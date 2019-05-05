@@ -10,7 +10,10 @@ class MockMedicineDocumentModel: MedicineDocumentModel() {
         return 1.0f
     }
 
-    override fun extract(scannedDoc: DocumentScan): MedicineDocumentExtraction {
+    override fun extract(
+        scannedDoc: DocumentScan,
+        medicineNames: HashMap<String, MedicineNameDefinition>
+    ): MedicineDocumentExtraction {
         return MedicineDocumentExtraction()
     }
 

@@ -1,6 +1,9 @@
 package org.vontech.medicine.ocr
 
+import android.util.Log
+import org.vontech.medicine.utils.MedicineNameDefinition
 import java.util.*
+import kotlin.collections.HashMap
 
 /**
  * An abstract class providing methods to search a document for requested fields
@@ -10,7 +13,10 @@ abstract class MedicineDocumentModel {
 
     abstract fun modelScore(scannedDoc: DocumentScan): Float
 
-    abstract fun extract(scannedDoc: DocumentScan): MedicineDocumentExtraction
+    abstract fun extract(
+        scannedDoc: DocumentScan,
+        medicineNames: HashMap<String, MedicineNameDefinition>
+    ): MedicineDocumentExtraction
 
     fun fuzzySearch(pattern: String, toSearch: String, ignoreCase: Boolean = true): MatchResult? {
         return fuzzySearchAll(pattern, toSearch, ignoreCase).toList().getOrNull(0)
@@ -33,6 +39,23 @@ abstract class MedicineDocumentModel {
         }
 
         return regex.findAll(toSearch)
+
+    }
+
+    fun getLikelyMedicineNames(scannedDoc: DocumentScan, medicineNames: HashMap<String, MedicineNameDefinition>): List<String> {
+
+        val elements = scannedDoc.elements.map { it.elements }.flatten().sortedBy { -1.0 * (it.confidence?: 0f) }
+        val possibleNames = mutableListOf<String>()
+        elements.forEach {
+            val c = it.text.toLowerCase()
+            if (c in medicineNames) {
+                possibleNames.add(medicineNames[c]!!.brandName)
+            }
+        }
+
+        Log.i("MEDICINE NAMES", possibleNames.toString())
+
+        return possibleNames
 
     }
 
@@ -83,5 +106,13 @@ fun remainingFields(extraction: MedicineDocumentExtraction): List<MedicineField>
     if (extraction.dosageTimes == null) remaining.add(MedicineField.DOSAGE_TIMES)
     if (extraction.totalQuantity == null) remaining.add(MedicineField.TOTAL_QUANTITY)
     if (extraction.quantityType == null) remaining.add(MedicineField.QUANTITY_TYPE)
+    if (extraction.rxIdentifier == null) remaining.add(MedicineField.RX_IDENTIFIER)
+    if (extraction.fillDate == null) remaining.add(MedicineField.FILL_DATE)
+    if (extraction.discardDate == null) remaining.add(MedicineField.DISCARD_DATE)
+    if (extraction.contactNumbers.isNullOrEmpty()) remaining.add(MedicineField.CONTACT_NUMBERS)
+    if (extraction.contactEmails.isNullOrEmpty()) remaining.add(MedicineField.CONTACT_EMAILS)
+    if (extraction.contactNames.isNullOrEmpty()) remaining.add(MedicineField.CONTACT_NAMES)
+    if (extraction.medicationDescription.isNullOrBlank()) remaining.add(MedicineField.MEDICATION_DESCRIPTION)
+    if (extraction.applicationAction.isNullOrBlank()) remaining.add(MedicineField.APPLICATION_ACTION)
     return remaining
 }

@@ -7,6 +7,7 @@ val DOSAGE_TYPE = mapOf(
     "MG" to "MG"
 )
 val DOSAGE_TYPE_REGEX = "(${DOSAGE_TYPE.keys.joinToString("|")})"
+val DOSAGE_AMOUNT_REGEX = "\\s*(\\d*\\.{0,1}\\d+|\\d+\\.{0,1}\\d*)\\s*(?:${DOSAGE_TYPE.keys.joinToString("|")})"
 
 // TODO: Allow this to handle \d{2} at the end without leaving out digits
 const val DATE_REGEX = "(?:[0][0-9]|[1][0-2])\\/(?:[0-2]\\d|[3][0-1])\\/\\d{4}"
