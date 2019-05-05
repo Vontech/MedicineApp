@@ -11,8 +11,17 @@
             android:label="@string/app_name"
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
-            android:theme="@style/AppTheme"
-            android:usesCleartextTraffic="true">
+            android:usesCleartextTraffic="true"
+            android:theme="@style/AppTheme">
+        <receiver
+            android:name=".background.ReminderBroadcastReceiver"
+            android:enabled="true"
+            android:exported="false" >
+        </receiver>
+        <service
+            android:name=".background.ReminderIntentService"
+            android:exported="false" >
+        </service>
         <activity android:name=".ScanActivity">
         </activity>
         <activity android:name=".RegistrationActivity">
