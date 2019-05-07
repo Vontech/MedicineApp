@@ -6,6 +6,10 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 
+/**
+ * This class's onReceive method is called by the OS when an intent needs to be fired.
+ * onReceive passes on the pendingIntent to ReminderIntentService for the notification to be fired.
+ */
 class ReminderBroadcastReceiver: BroadcastReceiver() {
 
     /**

@@ -8,14 +8,14 @@ import android.util.Log
 
 
 /**
- * Creates a notification for the reminder
+ * Receives the intent from ReminderBroadcastReceiver, builds, and fires a notification
  */
 class ReminderIntentService: IntentService("ReminderIntentService") {
 
     override fun onHandleIntent(intent: Intent?) {
         val builder = Notification.Builder(this)
         builder.setContentTitle(intent!!.getStringExtra("title"))
-        builder.setContentText(intent!!.getStringExtra("message"))
+        builder.setContentText(intent.getStringExtra("message"))
 
         builder.setSmallIcon(android.R.drawable.sym_def_app_icon)
 //        val notifyIntent = Intent(this, MainActivity::class.java)

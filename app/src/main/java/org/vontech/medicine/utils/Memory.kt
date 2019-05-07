@@ -54,12 +54,11 @@ class MedicationStore(context: Context) {
         Log.d(LT, "getMedications()")
         val json = prefs.getString(MEDICATIONS_KEY, null)
         val type = object : TypeToken<ArrayList<Medication>>() {}.type
-        val medications = if (Gson().fromJson<ArrayList<Medication>>(json, type) == null) {
+        return if (Gson().fromJson<ArrayList<Medication>>(json, type) == null) {
             return arrayListOf()
         } else {
             Gson().fromJson<ArrayList<Medication>>(json, type)
         }
-        return medications
     }
 
     /**
