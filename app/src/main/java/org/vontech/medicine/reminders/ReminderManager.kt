@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.util.Log
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import org.vontech.medicine.R
 import org.vontech.medicine.background.ReminderBroadcastReceiver
 import org.vontech.medicine.pokos.Medication
 import org.vontech.medicine.security.SecurePreferencesBuilder

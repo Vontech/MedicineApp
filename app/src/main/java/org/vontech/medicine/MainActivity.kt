@@ -26,8 +26,8 @@ class MainActivity : AppCompatActivity() {
         medicationStore = MedicationStore(this)
         medicineList = medicationStore.getMedications()
 
-        val reminderManager = ReminderManager()
-        //reminderManager.addReminder("Aaron", "Vontell", Date(), Frequency.DAILY, this)
+        val reminderManager = ReminderManager(this)
+        reminderManager.addReminder("Aaron", "Vontell", time = Date())
 
         newMedicationButton.setOnClickListener {
             val intent = Intent(this, EditMedicationActivity::class.java)
