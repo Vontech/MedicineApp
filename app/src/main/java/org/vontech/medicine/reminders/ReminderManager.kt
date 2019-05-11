@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.util.Log
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import org.vontech.medicine.R
 import org.vontech.medicine.background.ReminderBroadcastReceiver
 import org.vontech.medicine.pokos.Medication
 import org.vontech.medicine.security.SecurePreferencesBuilder
@@ -29,7 +30,7 @@ class ReminderManager(val context: Context) {
      * @param: time The time to send the reminder at
      * @param: frequency The frequency for the reminder
      */
-    fun addReminder(title: String, message: String, id: Int = UUID.randomUUID().hashCode(), time: Date) {
+    fun addReminder(title: String, message: String, time: Date, id: Int = UUID.randomUUID().hashCode()) {
         // Create the intent to send a broadcast
         val notifyIntent = Intent(context, ReminderBroadcastReceiver::class.java)
 
@@ -59,7 +60,7 @@ class ReminderManager(val context: Context) {
      */
     fun editReminder(newTitle: String, newMessage: String, oldId: Int, time: Date) {
         deleteReminder(oldId, context)
-        addReminder(newTitle, newMessage, oldId, time)
+        addReminder(newTitle, newMessage, time, oldId)
     }
 
     /**
@@ -100,7 +101,8 @@ class ReminderManager(val context: Context) {
     fun getPendingIntentFromID(id: Int): PendingIntent {
         if (this.getReminderIDs().contains(id)) {
             val intent = Intent(context, ReminderBroadcastReceiver::class.java)
-            return PendingIntent.getBroadcast(context, id, intent, PendingIntent.FLAG_NO_CREATE)
+            if (PendingIntent.getBroadcast(context, id, intent, PendingIntent.FLAG_NO_CREATE) != null)
+                return PendingIntent.getBroadcast(context, id, intent, PendingIntent.FLAG_NO_CREATE)
         }
         throw IllegalArgumentException("Given ID is not associated with a registered PendingIntent")
     }
