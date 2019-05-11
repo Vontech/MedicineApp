@@ -50,11 +50,10 @@ class MainActivity : AppCompatActivity() {
             Log.i("MainActivity.kt", app.userSession.toString())
         }
 
+        // TODO Test ReminderManager methods
         val reminderManager = ReminderManager(this)
         reminderManager.addReminder("My title", "My message", Calendar.getInstance().time)
         Log.d("Reminder IDs", reminderManager.getReminderIDs().toString())
-
-
     }
 
     override fun onResume() {
