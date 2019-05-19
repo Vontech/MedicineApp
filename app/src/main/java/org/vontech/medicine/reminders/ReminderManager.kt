@@ -139,6 +139,7 @@ class ReminderManager(val context: Context) {
             medication.times.sorted().forEach {time ->
                 var daysToAdd = day - today.dayOfWeek
                 if (daysToAdd < 0) { daysToAdd += 7 }
+                if (daysToAdd == 0 && LocalTime.now().isAfter(time)) { daysToAdd += 7 }
                 var newDay = DateTime.now().plusDays(daysToAdd)
                 newDay = newDay.withTime(time.hourOfDay, time.minuteOfHour, time.secondOfMinute, 0)
                 times.add(newDay)

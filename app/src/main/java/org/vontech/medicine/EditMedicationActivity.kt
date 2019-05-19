@@ -71,7 +71,7 @@ class EditMedicationActivity : AppCompatActivity() {
         val now = DateTime.now()
         newMedication.times.add(now.plusSeconds(3).toLocalTime())
         newMedication.times.add(now.plusSeconds(7).toLocalTime())
-        newMedication.times.add(now.plusSeconds(10).toLocalTime())
+        newMedication.times.add(now.plusSeconds(12).toLocalTime())
 
         // If editing a medication, replace the old medication with a new one. Otherwise, add it to the list
         if (edit) {
