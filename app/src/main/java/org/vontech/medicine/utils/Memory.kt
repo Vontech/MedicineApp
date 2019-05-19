@@ -61,6 +61,12 @@ class MedicationStore(context: Context) {
         }
     }
 
+    fun getMedicationById(id: Int): Medication? {
+        Log.d(LT, "getMedicationById()")
+        val meds = getMedications()
+        return meds.firstOrNull() {it.id == id}
+    }
+
     /**
      * Saves the list of medications to memory
      */

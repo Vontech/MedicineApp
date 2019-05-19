@@ -1,8 +1,6 @@
 package org.vontech.medicine.reminders
 
 import android.app.AlarmManager
-import java.util.Date
-import java.util.UUID
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
@@ -16,6 +14,7 @@ import org.vontech.medicine.background.ReminderBroadcastReceiver
 import org.vontech.medicine.pokos.Medication
 import org.vontech.medicine.security.SecurePreferencesBuilder
 import java.lang.IllegalArgumentException
+import java.lang.RuntimeException
 import java.util.ArrayList
 
 class ReminderManager(val context: Context) {
@@ -31,12 +30,14 @@ class ReminderManager(val context: Context) {
      * @param: time The time to send the reminder at
      * @param: frequency The frequency for the reminder
      */
-    fun addReminder(title: String, message: String, time: DateTime, id: Int = UUID.randomUUID().hashCode()) {
+    fun addReminder(title: String, message: String, id: Int, time: DateTime) {
         // Create the intent to send a broadcast
         val notifyIntent = Intent(context, ReminderBroadcastReceiver::class.java)
 
+        Log.d("ADDING REMINDER", time.toString())
+
         // Create bundle to pass title and message through intent
-        var extras = Bundle()
+        val extras = Bundle()
         extras.putInt("id", id)
         extras.putString("title", title)
         extras.putString("message", message)
@@ -61,7 +62,7 @@ class ReminderManager(val context: Context) {
      */
     fun editReminder(newTitle: String, newMessage: String, id: Int, time: DateTime) {
         deleteReminder(id)
-        addReminder(newTitle, newMessage, time, id)
+        addReminder(newTitle, newMessage, id, time)
     }
 
     /**
@@ -110,31 +111,7 @@ class ReminderManager(val context: Context) {
 
     // Schedule the next reminder for this medication using addReminder
     fun scheduleReminder(medication: Medication, title: String, message: String) {
-        if (!medication.days.isEmpty()) {
-            var day = DateTime()
-
-            // If the medication needs to be taken later today
-            if (medication.times.size > 1 && medication.days.contains(day.dayOfWeek)) {
-                // TODO: Find earliest time AFTER current time to schedule reminder for
-
-                return
-            }
-
-            // If the next reminder is on a different day
-            day = DateTime().plusDays(1)
-            for (i in 2..7) {
-                // If the medication needs to be taken on this day, schedule for the earliest time
-                if (medication.days.contains(day.dayOfWeek)) {
-                    val time = medication.times.first()
-                    val nextReminderTime = DateTime(day.year, day.monthOfYear, day.dayOfMonth,
-                        time.hourOfDay, time.minuteOfHour, time.secondOfMinute)
-                    addReminder(title, message, nextReminderTime)
-                    return
-                }
-
-                day = DateTime().plusDays(1)
-            }
-        }
+        addReminder(title, message, medication.id, getNextTime(medication)!!)
     }
 
     /**
@@ -145,5 +122,35 @@ class ReminderManager(val context: Context) {
         val json = gson.toJson(reminderIds)
         editor.putString(REMINDER_IDS_KEY, json)
         editor.apply()
+    }
+
+    fun getNextTime(medication: Medication) : DateTime? {
+
+        if (medication.days.isEmpty() || medication.times.isEmpty()) {
+            return null
+        }
+
+        var day = DateTime()
+
+        // If the medication needs to be taken later today
+        val remainingTimes = medication.times.filter { it.isAfter(day.toLocalTime()) }.sorted()
+        if (remainingTimes.isNotEmpty() && medication.days.contains(day.dayOfWeek)) {
+            return remainingTimes.first().toDateTimeToday()
+        }
+
+        // If the next reminder is on a different day
+        day = DateTime().plusDays(1)
+        for (i in 2..7) {
+            // If the medication needs to be taken on this day, schedule for the earliest time
+            if (medication.days.contains(day.dayOfWeek)) {
+                val time = medication.times.sorted().first()
+                return DateTime(day.year, day.monthOfYear, day.dayOfMonth,
+                    time.hourOfDay, time.minuteOfHour, time.secondOfMinute)
+            }
+
+            day = DateTime().plusDays(1)
+        }
+
+        throw RuntimeException("SOMEHOW REACHED BOTTOM OF getNextTime")
     }
 }

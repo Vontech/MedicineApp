@@ -5,10 +5,10 @@ import org.joda.time.LocalTime
 import java.io.Serializable
 import java.lang.IllegalArgumentException
 import java.util.Calendar
-import java.util.UUID
+import kotlin.random.Random
 
 data class Medication(var name: String?, var dose: Float?, var notes: String?) : Serializable {
-    val id = UUID.randomUUID().toString()
+    val id = Random.nextInt()
     var days = mutableSetOf<Int>()
     var times = mutableSetOf<LocalTime>()
 

@@ -6,8 +6,13 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_add_medication.*
+import org.joda.time.DateTime
 import org.vontech.medicine.pokos.Medication
+import org.vontech.medicine.reminders.ReminderManager
 import org.vontech.medicine.utils.MedicationStore
+
+val NOTIFICATION_TITLE = "Time to take your medicine, hoe!"
+val NOTIFICATION_MESSAGE = "Click to view this medication"
 
 class EditMedicationActivity : AppCompatActivity() {
 
@@ -15,12 +20,14 @@ class EditMedicationActivity : AppCompatActivity() {
     private lateinit var medications: List<Medication>
     private var edit: Boolean = false
     private lateinit var oldMedication: Medication
+    private lateinit var reminderManager: ReminderManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_medication)
 
         medicationStore = MedicationStore(this)
+        reminderManager = ReminderManager(this)
         // Get list of medications
         medications = medicationStore.getMedications()
 
@@ -61,12 +68,19 @@ class EditMedicationActivity : AppCompatActivity() {
         val newMedication = Medication(nameEditText.text.toString(), dose, notesEditText.text.toString())
         newMedication.calendarToJoda(dayPicker.selectedDays)
 
+        val now = DateTime.now()
+        newMedication.times.add(now.plusSeconds(3).toLocalTime())
+        newMedication.times.add(now.plusSeconds(7).toLocalTime())
+        newMedication.times.add(now.plusSeconds(10).toLocalTime())
+
         // If editing a medication, replace the old medication with a new one. Otherwise, add it to the list
         if (edit) {
             medicationStore.replaceMedication(oldMedication, newMedication)
+            scheduleReminder(newMedication, isReplacing = true)
         }
         else {
             medicationStore.saveMedication(newMedication)
+            scheduleReminder(newMedication)
         }
 
         // Return to MainActivity
@@ -98,9 +112,30 @@ class EditMedicationActivity : AppCompatActivity() {
     private fun deleteMedication(medication: Medication) {
         medicationStore.deleteMedication(medication)
 
+        scheduleReminder(medication, isDeleting = true)
+
         // Return to MainActivity
         val intent = Intent(this, MainActivity::class.java)
         this.startActivity(intent)
         Toast.makeText(this, "Medication deleted", Toast.LENGTH_SHORT).show()
     }
+
+    private fun scheduleReminder(medication: Medication, isReplacing: Boolean = false, isDeleting: Boolean = false) {
+
+        if (isDeleting) {
+            reminderManager.deleteReminder(medication.id)
+            return
+        }
+
+        val nextTime = reminderManager.getNextTime(medication)
+
+        if (isReplacing) {
+            reminderManager.editReminder(NOTIFICATION_TITLE, NOTIFICATION_MESSAGE, medication.id, nextTime!!)
+            return
+        }
+
+        reminderManager.addReminder(NOTIFICATION_TITLE, NOTIFICATION_MESSAGE, medication.id, nextTime!!)
+
+    }
+
 }
