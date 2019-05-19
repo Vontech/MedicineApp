@@ -1,6 +1,7 @@
 package org.vontech.medicine.pokos
 
 import org.joda.time.DateTimeConstants
+import org.joda.time.LocalTime
 import java.io.Serializable
 import java.lang.IllegalArgumentException
 import java.util.Calendar
@@ -9,6 +10,7 @@ import java.util.UUID
 data class Medication(var name: String?, var dose: Float?, var notes: String?) : Serializable {
     val id = UUID.randomUUID().toString()
     var days = mutableSetOf<Int>()
+    var times = mutableSetOf<LocalTime>()
 
     // Add adapter methods for converting to and from days
     fun jodaToCalendar() : List<Int> {

@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.util.Log
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import org.joda.time.DateTime
 import org.vontech.medicine.R
 import org.vontech.medicine.background.ReminderBroadcastReceiver
 import org.vontech.medicine.pokos.Medication
@@ -30,7 +31,7 @@ class ReminderManager(val context: Context) {
      * @param: time The time to send the reminder at
      * @param: frequency The frequency for the reminder
      */
-    fun addReminder(title: String, message: String, time: Date, id: Int = UUID.randomUUID().hashCode()) {
+    fun addReminder(title: String, message: String, time: DateTime, id: Int = UUID.randomUUID().hashCode()) {
         // Create the intent to send a broadcast
         val notifyIntent = Intent(context, ReminderBroadcastReceiver::class.java)
 
@@ -45,7 +46,7 @@ class ReminderManager(val context: Context) {
         val pendingIntent = PendingIntent.getBroadcast(context, id, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT)
         val alarmManager = this.context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         // Set the time to send the broadcast at
-        alarmManager.setExact(AlarmManager.RTC_WAKEUP, time.time + 5000, pendingIntent)
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP, time.millis + 3000, pendingIntent)
 
         Log.e("Medicine", "fired")
 
@@ -58,15 +59,15 @@ class ReminderManager(val context: Context) {
     /**
      * Delete the existing pendingIntent at the given ID and replace it with the new one
      */
-    fun editReminder(newTitle: String, newMessage: String, oldId: Int, time: Date) {
-        deleteReminder(oldId, context)
-        addReminder(newTitle, newMessage, time, oldId)
+    fun editReminder(newTitle: String, newMessage: String, id: Int, time: DateTime) {
+        deleteReminder(id)
+        addReminder(newTitle, newMessage, time, id)
     }
 
     /**
      * Delete the reminder for the given ID
      */
-    fun deleteReminder(id: Int, context: Context) {
+    fun deleteReminder(id: Int) {
         // Get reference to original intent by calling getBroadcast on a new one with the same data (considered equal)
         val cancelIntent = Intent(context, ReminderBroadcastReceiver::class.java)
         val pendingIntent = PendingIntent.getBroadcast(context, id, cancelIntent, PendingIntent.FLAG_UPDATE_CURRENT)
@@ -108,8 +109,32 @@ class ReminderManager(val context: Context) {
     }
 
     // Schedule the next reminder for this medication using addReminder
-    fun scheduleReminder(medication: Medication) {
+    fun scheduleReminder(medication: Medication, title: String, message: String) {
+        if (!medication.days.isEmpty()) {
+            var day = DateTime()
 
+            // If the medication needs to be taken later today
+            if (medication.times.size > 1 && medication.days.contains(day.dayOfWeek)) {
+                // TODO: Find earliest time AFTER current time to schedule reminder for
+
+                return
+            }
+
+            // If the next reminder is on a different day
+            day = DateTime().plusDays(1)
+            for (i in 2..7) {
+                // If the medication needs to be taken on this day, schedule for the earliest time
+                if (medication.days.contains(day.dayOfWeek)) {
+                    val time = medication.times.first()
+                    val nextReminderTime = DateTime(day.year, day.monthOfYear, day.dayOfMonth,
+                        time.hourOfDay, time.minuteOfHour, time.secondOfMinute)
+                    addReminder(title, message, nextReminderTime)
+                    return
+                }
+
+                day = DateTime().plusDays(1)
+            }
+        }
     }
 
     /**

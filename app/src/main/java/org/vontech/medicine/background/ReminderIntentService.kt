@@ -5,6 +5,8 @@ import android.content.Intent
 import android.support.v4.app.NotificationManagerCompat
 import android.app.Notification
 import android.util.Log
+import org.vontech.medicine.MainActivity
+import org.vontech.medicine.reminders.ReminderManager
 
 
 /**
@@ -14,8 +16,10 @@ class ReminderIntentService: IntentService("ReminderIntentService") {
 
     override fun onHandleIntent(intent: Intent?) {
         val builder = Notification.Builder(this)
-        builder.setContentTitle(intent!!.getStringExtra("title"))
-        builder.setContentText(intent.getStringExtra("message"))
+        val title = intent!!.getStringExtra("title")
+        val message = intent.getStringExtra("message")
+        builder.setContentTitle(title)
+        builder.setContentText(message)
 
         builder.setSmallIcon(android.R.drawable.sym_def_app_icon)
 //        val notifyIntent = Intent(this, MainActivity::class.java)
@@ -24,7 +28,9 @@ class ReminderIntentService: IntentService("ReminderIntentService") {
 //        builder.setContentIntent(pendingIntent)
         val notificationCompat = builder.build()
         val managerCompat = NotificationManagerCompat.from(this)
-        managerCompat.notify(1, notificationCompat)
+        managerCompat.notify(intent.getIntExtra("id", 1), notificationCompat)
+        val reminderManager = ReminderManager(this)
+        reminderManager.scheduleReminder(medication, title, message)
 
         Log.e("Medicine", "showed notification")
     }

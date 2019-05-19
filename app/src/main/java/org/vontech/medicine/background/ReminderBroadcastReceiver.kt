@@ -22,7 +22,8 @@ class ReminderBroadcastReceiver: BroadcastReceiver() {
 
         // Add the title and message from the ReminderManager to the intent passed to the ReminderIntentService
         val extras = Bundle()
-        extras.putString("title", intent!!.getStringExtra("title"))
+        extras.putInt("id", intent!!.getIntExtra("id", 0))
+        extras.putString("title", intent.getStringExtra("title"))
         extras.putString("message", intent.getStringExtra("message"))
 
         remindIntent.putExtras(extras)

@@ -4,10 +4,13 @@ import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import org.vontech.medicine.reminders.ReminderManager
-import java.util.*
+import java.util.Calendar
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import kotlinx.android.synthetic.main.activity_main.*
+import org.joda.time.DateTime
+import org.joda.time.DateTimeZone
+import org.joda.time.LocalTime
 import org.vontech.medicine.pokos.Medication
 import org.vontech.medicine.utils.MedicationStore
 
@@ -50,10 +53,10 @@ class MainActivity : AppCompatActivity() {
             Log.i("MainActivity.kt", app.userSession.toString())
         }
 
-        // TODO Test ReminderManager methods
-        val reminderManager = ReminderManager(this)
-        reminderManager.addReminder("My title", "My message", Calendar.getInstance().time)
-        Log.d("Reminder IDs", reminderManager.getReminderIDs().toString())
+//        val reminderManager = ReminderManager(this)
+//        reminderManager.addReminder("My title", "My message", DateTime(), 12)
+//        reminderManager.editReminder("Edited title", "Edited message", 12, DateTime())
+        Log.i("Time", DateTimeZone.UTC.convertUTCToLocal(LocalTime().millisOfDay.toLong()).toString())
     }
 
     override fun onResume() {
