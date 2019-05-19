@@ -5,6 +5,7 @@ import android.app.Application
 import android.content.Intent
 import android.util.Log
 import com.github.kittinunf.fuel.core.FuelManager
+import net.danlew.android.joda.JodaTimeAndroid
 import org.vontech.medicine.auth.UserSession
 import org.vontech.medicine.utils.*
 
@@ -34,6 +35,9 @@ class MedicineApplication : Application() {
 
         // Background task to read medicine
         loadMedicineNames()
+
+        // Needed for Joda to work properly
+        JodaTimeAndroid.init(this)
 
     }
 

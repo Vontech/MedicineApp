@@ -14,7 +14,7 @@ class MedicationStore(context: Context) {
     private val LT = "MedicationStore" // Logging tag
     private val MEDICATIONS_KEY = context.getString(R.string.medication_list)
     private var prefs = SecurePreferencesBuilder(context).build()//context.getSharedPreferences(MED_KEY, Context.MODE_PRIVATE)
-    private val gson = Gson()
+    private val gson = getSpecialGson()
 
     /**
      * Saves a new medication to the list of medications
@@ -54,10 +54,10 @@ class MedicationStore(context: Context) {
         Log.d(LT, "getMedications()")
         val json = prefs.getString(MEDICATIONS_KEY, null)
         val type = object : TypeToken<ArrayList<Medication>>() {}.type
-        return if (Gson().fromJson<ArrayList<Medication>>(json, type) == null) {
+        return if (getSpecialGson().fromJson<ArrayList<Medication>>(json, type) == null) {
             return arrayListOf()
         } else {
-            Gson().fromJson<ArrayList<Medication>>(json, type)
+            getSpecialGson().fromJson<ArrayList<Medication>>(json, type)
         }
     }
 

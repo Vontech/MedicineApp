@@ -9,10 +9,12 @@ import android.util.Log
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import org.joda.time.DateTime
+import org.joda.time.LocalTime
 import org.vontech.medicine.R
 import org.vontech.medicine.background.ReminderBroadcastReceiver
 import org.vontech.medicine.pokos.Medication
 import org.vontech.medicine.security.SecurePreferencesBuilder
+import org.vontech.medicine.utils.getSpecialGson
 import java.lang.IllegalArgumentException
 import java.lang.RuntimeException
 import java.util.ArrayList
@@ -21,7 +23,7 @@ class ReminderManager(val context: Context) {
 
     private val REMINDER_IDS_KEY = context.getString(R.string.reminder_id_list)
     private var prefs = SecurePreferencesBuilder(context).build()//context.getSharedPreferences(IDS_KEY, Context.MODE_PRIVATE)
-    private val gson = Gson()
+    private val gson = getSpecialGson()
 
     /**
      * Adds a new reminder to the list of reminders
@@ -130,27 +132,45 @@ class ReminderManager(val context: Context) {
             return null
         }
 
-        var day = DateTime()
+        var today = DateTime()
 
-        // If the medication needs to be taken later today
-        val remainingTimes = medication.times.filter { it.isAfter(day.toLocalTime()) }.sorted()
-        if (remainingTimes.isNotEmpty() && medication.days.contains(day.dayOfWeek)) {
-            return remainingTimes.first().toDateTimeToday()
-        }
-
-        // If the next reminder is on a different day
-        day = DateTime().plusDays(1)
-        for (i in 2..7) {
-            // If the medication needs to be taken on this day, schedule for the earliest time
-            if (medication.days.contains(day.dayOfWeek)) {
-                val time = medication.times.sorted().first()
-                return DateTime(day.year, day.monthOfYear, day.dayOfMonth,
-                    time.hourOfDay, time.minuteOfHour, time.secondOfMinute)
+        val times = ArrayList<DateTime>()
+        medication.days.sorted().forEach {day ->
+            medication.times.sorted().forEach {time ->
+                var daysToAdd = day - today.dayOfWeek
+                if (daysToAdd < 0) { daysToAdd += 7 }
+                var newDay = DateTime.now().plusDays(daysToAdd)
+                newDay = newDay.withTime(time.hourOfDay, time.minuteOfHour, time.secondOfMinute, 0)
+                times.add(newDay)
             }
-
-            day = DateTime().plusDays(1)
         }
 
-        throw RuntimeException("SOMEHOW REACHED BOTTOM OF getNextTime")
+        val nextTime = times.sorted().firstOrNull()
+        Log.d("NEXT TIME:", nextTime.toString())
+
+        return nextTime
+
+//
+//
+//        // If the medication needs to be taken later today
+//        val remainingTimes = medication.times.filter { it.isAfter(day.toLocalTime()) }.sorted()
+//        if (remainingTimes.isNotEmpty() && medication.days.contains(day.dayOfWeek)) {
+//            return remainingTimes.first().toDateTimeToday()
+//        }
+//
+//        // If the next reminder is on a different day
+//        day = DateTime().plusDays(1)
+//        for (i in 2..9) {
+//            // If the medication needs to be taken on this day, schedule for the earliest time
+//            if (medication.days.contains(day.dayOfWeek)) {
+//                val time = medication.times.sorted().first()
+//                return DateTime(day.year, day.monthOfYear, day.dayOfMonth,
+//                    time.hourOfDay, time.minuteOfHour, time.secondOfMinute)
+//            }
+//
+//            day = DateTime().plusDays(1)
+//        }
+//
+//        throw RuntimeException("SOMEHOW REACHED BOTTOM OF getNextTime")
     }
 }

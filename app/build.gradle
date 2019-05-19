@@ -61,6 +61,9 @@ dependencies {
     // Security
     implementation 'com.scottyab:secure-preferences-lib:0.1.7'
 
+    // GSON Converters
+    // implementation 'com.fatboyindustrial.gson-jodatime-serialisers:gson-jodatime-serialisers:1.7.1'
+
 }
 
 apply plugin: 'com.google.gms.google-services'
