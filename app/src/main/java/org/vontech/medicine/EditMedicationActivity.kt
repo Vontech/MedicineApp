@@ -66,7 +66,7 @@ class EditMedicationActivity : AppCompatActivity() {
 
         // Create a new Medication object from the fields
         val newMedication = Medication(nameEditText.text.toString(), dose, notesEditText.text.toString())
-        newMedication.calendarToJoda(dayPicker.selectedDays)
+        //newMedication.calendarToJoda(dayPicker.selectedDays)
 
         val now = DateTime.now()
         newMedication.times.add(now.plusSeconds(3).toLocalTime())
@@ -102,7 +102,7 @@ class EditMedicationActivity : AppCompatActivity() {
         if (medication.notes != null) {
             notesEditText.setText(medication.notes)
         }
-        dayPicker.selectedDays = medication.jodaToCalendar()
+        //dayPicker.selectedDays = medication.jodaToCalendar()
     }
 
     /**

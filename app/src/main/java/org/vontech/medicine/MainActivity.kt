@@ -70,6 +70,7 @@ class MainActivity : AppCompatActivity() {
 
         // Render things
         renderHeader()
+        renderButton()
 
     }
 
@@ -78,6 +79,15 @@ class MainActivity : AppCompatActivity() {
         val dayOfWeek = DateTime().dayOfWeek()
         val day = dayOfWeek.getAsText(Locale.getDefault()).toUpperCase()
         this.headerDay.text = day
+
+    }
+
+    private fun renderButton() {
+
+        createMedicationButton.setOnClickListener {
+            val intent = Intent(this, EditMedicationActivity::class.java)
+            startActivity(intent)
+        }
 
     }
 
