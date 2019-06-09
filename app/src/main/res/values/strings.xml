@@ -33,4 +33,6 @@
     <!-- REMINDER KEYS -->
     <string name="reminder_id_list">REMINDER_ID_LIST</string>
 
+    <string name="medication_days">You take this medication on:</string>
+
 </resources>
