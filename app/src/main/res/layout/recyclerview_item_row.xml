@@ -1,35 +1,55 @@
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:padding="8dp"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:background="@android:color/background_light"
-    android:layout_marginTop="4dp"
-    android:layout_marginLeft="4dp"
-    android:layout_marginRight="4dp">
-
-    <TextView
-        android:layout_width="match_parent"
+<android.support.v7.widget.CardView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:padding="8dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/nameTextView"
-        android:textSize="18sp"
-        android:hint="Medication Name"
-        android:textStyle="bold"
-        android:textColor="@android:color/black"/>
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="18dp"
+        android:layout_marginStart="0dp"
+        android:outlineSpotShadowColor="#AA000000"
+        android:outlineAmbientShadowColor="#AA000000"
+        android:layout_marginEnd="24dp" app:cardElevation="8dp" app:cardBackgroundColor="#F8F8F8">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/doseTextView"
-        android:textSize="12sp"
-        android:hint="Dose amount"/>
+    <LinearLayout
+            android:background="#F8F8F8"
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:padding="16dp">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/notesTextView"
-        android:textSize="12sp"
-        android:hint="Sample description"/>
+        <ImageView
+                android:layout_width="@dimen/mainScreenPillSize"
+                android:layout_height="@dimen/mainScreenPillSize" app:srcCompat="@drawable/placeholder"
+                android:id="@+id/imageView"/>
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/nameTextView"
+                android:textSize="18sp"
+                android:text="Medication Name"
+                android:textStyle="bold"
+                android:textColor="@color/textColor"
+                android:fontFamily="@font/open_sans_bold" android:textAlignment="viewStart"
+                android:paddingTop="8dp"/>
 
-</LinearLayout>
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/doseTextView"
+                android:textSize="16sp"
+                android:text="Dose amount" android:fontFamily="@font/open_sans" android:textColor="@color/textColor"
+                android:textAlignment="viewStart"/>
+
+        <Button
+                android:text="@string/mark_as_done"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:id="@+id/markAsDoneButton"
+                android:layout_marginTop="8dp"
+                android:minHeight="0dp"
+                android:fontFamily="@font/open_sans_semibold" android:layout_marginLeft="-4dp"
+                android:layout_marginRight="-4dp"/>
+
+    </LinearLayout>
+
+
+</android.support.v7.widget.CardView>

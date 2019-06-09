@@ -33,4 +33,8 @@
     <!-- REMINDER KEYS -->
     <string name="reminder_id_list">REMINDER_ID_LIST</string>
 
+    <!-- MAIN SCREEN -->
+    <string name="main_next_reminder">Next reminder:</string>
+    <string name="mark_as_done">MARK AS DONE</string>
+
 </resources>

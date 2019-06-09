@@ -47,7 +47,7 @@ class RecyclerAdapter(private val medications: List<Medication>)
             this.medication = medication
             view.nameTextView.text = medication.name
             view.doseTextView.text = medication.dose.toString() + " mL"
-            view.notesTextView.text = medication.notes
+            //view.notesTextView.text = medication.notes
         }
     }
 }

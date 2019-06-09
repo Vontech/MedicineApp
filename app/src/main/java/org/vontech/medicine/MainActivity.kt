@@ -4,7 +4,6 @@ import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import org.vontech.medicine.reminders.ReminderManager
-import java.util.Calendar
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import kotlinx.android.synthetic.main.activity_main.*
@@ -13,6 +12,9 @@ import org.joda.time.DateTimeZone
 import org.joda.time.LocalTime
 import org.vontech.medicine.pokos.Medication
 import org.vontech.medicine.utils.MedicationStore
+import org.joda.time.DateTimeFieldType.dayOfWeek
+import java.util.*
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -40,7 +42,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         // Instantiate RecyclerView and set its adapter
-        linearLayoutManager = LinearLayoutManager(this)
+        linearLayoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         recyclerView.layoutManager = linearLayoutManager
         adapter = RecyclerAdapter(medicineList)
         recyclerView.adapter = adapter
@@ -57,6 +59,7 @@ class MainActivity : AppCompatActivity() {
 //        reminderManager.addReminder("My title", "My message", DateTime(), 12)
 //        reminderManager.editReminder("Edited title", "Edited message", 12, DateTime())
         Log.i("Time", DateTimeZone.UTC.convertUTCToLocal(LocalTime().millisOfDay.toLong()).toString())
+
     }
 
     override fun onResume() {
@@ -64,6 +67,18 @@ class MainActivity : AppCompatActivity() {
         medicineList = medicationStore.getMedications()
         adapter.notifyDataSetChanged()
         recyclerView
+
+        // Render things
+        renderHeader()
+
+    }
+
+    private fun renderHeader() {
+
+        val dayOfWeek = DateTime().dayOfWeek()
+        val day = dayOfWeek.getAsText(Locale.getDefault()).toUpperCase()
+        this.headerDay.text = day
+
     }
 
 }
