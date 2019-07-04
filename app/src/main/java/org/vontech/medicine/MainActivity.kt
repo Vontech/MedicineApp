@@ -48,7 +48,9 @@ class MainActivity : AppCompatActivity() {
         recyclerView.adapter = adapter
 
         app = this.application as MedicineApplication
-        val isLoggedIn = app.attemptToLoadExistingSession(this)
+//        val isLoggedIn = app.attemptToLoadExistingSession(this)
+        val isLoggedIn = true // TODO remove this later
+
 
         if (isLoggedIn) {
             Log.i("MainActivity.kt", "Logged in!")

@@ -3,13 +3,18 @@ package org.vontech.medicine
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
 import android.view.View
+import android.widget.TextView
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_add_medication.*
+import kotlinx.android.synthetic.main.activity_main.view.*
 import org.joda.time.DateTime
 import org.vontech.medicine.pokos.Medication
 import org.vontech.medicine.reminders.ReminderManager
 import org.vontech.medicine.utils.MedicationStore
+import java.lang.IllegalArgumentException
+import java.util.*
 
 val NOTIFICATION_TITLE = "Time to take your medicine, hoe!"
 val NOTIFICATION_MESSAGE = "Click to view this medication"
@@ -21,6 +26,8 @@ class EditMedicationActivity : AppCompatActivity() {
     private var edit: Boolean = false
     private lateinit var oldMedication: Medication
     private lateinit var reminderManager: ReminderManager
+    private lateinit var weekdayTextViews: List<TextView>
+    var selectedDays = mutableListOf<Int>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,9 +52,44 @@ class EditMedicationActivity : AppCompatActivity() {
             populateViews(medication)
         }
 
+        weekdayTextViews = arrayListOf(mondayTextView, tuesdayTextView, wednesdayTextView, thursdayTextView,
+            fridayTextView, saturdayTextView, sundayTextView)
+        // Set onClickListeners for TextViews
+        weekdayTextViews.forEach {
+            it.setOnClickListener{ clickWeekday(it as TextView) }
+        }
+
         // Set onClickListeners for buttons
         saveMedicationButton.setOnClickListener { saveMedication() }
         deleteMedicationButton.setOnClickListener { deleteMedication(oldMedication) }
+    }
+
+    // Change the color of the weekday TextView when clicked
+    // Add/remove the corresponding Calendar weekday from the list of selected days
+    private fun clickWeekday(textView: TextView) {
+        // Remove this day from selectedDays
+        if (textView.currentTextColor == ContextCompat.getColor(this, R.color.textColor)) {
+            textView.setTextColor(ContextCompat.getColor(this, R.color.disabledTextColor))
+            selectedDays.remove(textViewToCalendar(textView))
+        } else {
+            textView.setTextColor(ContextCompat.getColor(this, R.color.textColor))
+            selectedDays.add(textViewToCalendar(textView))
+        }
+        println("SelectedDays: $selectedDays")
+    }
+
+    // Convert the given TextView to its corresponding Calendar day to be saved
+    private fun textViewToCalendar(textView: TextView): Int {
+        when (textView) {
+            mondayTextView -> return Calendar.MONDAY
+            tuesdayTextView -> return Calendar.TUESDAY
+            wednesdayTextView -> return Calendar.WEDNESDAY
+            thursdayTextView -> return Calendar.THURSDAY
+            fridayTextView -> return Calendar.FRIDAY
+            saturdayTextView -> return Calendar.SATURDAY
+            sundayTextView -> return Calendar.SUNDAY
+        }
+        throw IllegalArgumentException("Invalid weekday name")
     }
 
     /**
@@ -66,7 +108,7 @@ class EditMedicationActivity : AppCompatActivity() {
 
         // Create a new Medication object from the fields
         val newMedication = Medication(nameEditText.text.toString(), dose, notesEditText.text.toString())
-        //newMedication.calendarToJoda(dayPicker.selectedDays)
+        newMedication.toJoda(selectedDays)
 
         val now = DateTime.now()
         newMedication.times.add(now.plusSeconds(3).toLocalTime())

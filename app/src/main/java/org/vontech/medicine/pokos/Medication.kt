@@ -10,10 +10,10 @@ import kotlin.random.Random
 data class Medication(var name: String?, var dose: Float?, var notes: String?) : Serializable {
     val id = Random.nextInt()
     var days = mutableSetOf<Int>()
-    var times = mutableSetOf<LocalTime>()
+    var times = mutableSetOf<LocalTime>() // JodaTime object
 
-    // Add adapter methods for converting to and from days
-    fun jodaToCalendar() : List<Int> {
+    // Adapter methods for converting to and from JodaTime and Java Calendar weekdays
+    fun fromJoda() : List<Int> {
         val calendarList = arrayListOf<Int>()
         // for each day in days, add a calendar constant to the list
         days.forEach {
@@ -25,13 +25,13 @@ data class Medication(var name: String?, var dose: Float?, var notes: String?) :
                 DateTimeConstants.FRIDAY -> calendarList.add(Calendar.FRIDAY)
                 DateTimeConstants.SATURDAY -> calendarList.add(Calendar.SATURDAY)
                 DateTimeConstants.SUNDAY -> calendarList.add(Calendar.SUNDAY)
-                else -> throw IllegalArgumentException("Invalid week day name")
+                else -> throw IllegalArgumentException("Invalid weekday name")
             }
         }
         return calendarList
     }
 
-    fun calendarToJoda(selectedDays : List<Int>) {
+    fun toJoda(selectedDays : List<Int>) {
         selectedDays.forEach {
             when (it) {
                 Calendar.MONDAY -> days.add(DateTimeConstants.MONDAY)
@@ -44,4 +44,8 @@ data class Medication(var name: String?, var dose: Float?, var notes: String?) :
             }
         }
     }
+    // TODO Add TextViews for the medication name and dose fields to the add medication activity layout.
+    // TODO Add an 'Edit Medication' button to the non-editing state of this activity
+    // TODO When the activity is in the editing state, hide the TextViews and show the EditTexts, also show all the weekday TextViews
+    // TODO When in the viewing state, show only the TextViews and hide the disabled weekday TextViews
 }

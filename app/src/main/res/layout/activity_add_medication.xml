@@ -27,23 +27,41 @@
             android:textSize="24sp"
             android:textStyle="bold"
             android:textColor="@color/black"
-            android:layout_marginBottom="12dp" />
+            android:layout_marginBottom="12dp"
+                android:editable="false"/>
 
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/doseEditText"
-            android:inputType="numberDecimal"
-            android:hint="DOSE (mg)"
-            android:textColor="@color/black"
-            android:layout_marginBottom="12dp"/>
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Dose: "
+                    android:textSize="20sp"
+                    android:textColor="@color/textColor"/>
+
+            <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/doseEditText"
+                    android:inputType="numberDecimal"
+                    android:hint="(mg)"
+                    android:textColor="@color/black"
+                    android:layout_marginBottom="12dp"
+                    android:textStyle="bold"/>
+
+        </LinearLayout>
+
+
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
             android:text="@string/medication_days"
-            android:textSize="16sp"/>
+            android:textSize="18sp"/>
 
         <LinearLayout
                 android:layout_width="match_parent"
@@ -58,7 +76,8 @@
                     android:text="MONDAY"
                     android:textStyle="bold"
                     android:textSize="20sp"
-                    android:textColor="@color/black"/>
+                    android:textColor="@color/black"
+                    android:clickable="true"/>
 
             <TextView
                     android:layout_width="match_parent"

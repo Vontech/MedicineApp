@@ -5,6 +5,7 @@
     <color name="colorAccent">#D81B60</color>
 
     <color name="textColor">#21252A</color>
+    <color name="disabledTextColor">#757575</color>
     <color name="mainCardBackground">#ffffff</color>
 
     <color name="blueButtonColor">#5AA3FF</color>
