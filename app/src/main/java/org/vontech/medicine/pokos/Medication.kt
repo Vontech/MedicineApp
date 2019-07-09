@@ -9,7 +9,7 @@ import kotlin.random.Random
 
 data class Medication(var name: String?, var dose: Float?, var notes: String?) : Serializable {
     val id = Random.nextInt()
-    var days = mutableSetOf<Int>()
+    var days = mutableSetOf<Int>() // JodaTime weekday constants
     var times = mutableSetOf<LocalTime>() // JodaTime object
 
     // Adapter methods for converting to and from JodaTime and Java Calendar weekdays
@@ -31,21 +31,22 @@ data class Medication(var name: String?, var dose: Float?, var notes: String?) :
         return calendarList
     }
 
-    fun toJoda(selectedDays : List<Int>) {
-        selectedDays.forEach {
-            when (it) {
-                Calendar.MONDAY -> days.add(DateTimeConstants.MONDAY)
-                Calendar.TUESDAY -> days.add(DateTimeConstants.TUESDAY)
-                Calendar.WEDNESDAY -> days.add(DateTimeConstants.WEDNESDAY)
-                Calendar.THURSDAY -> days.add(DateTimeConstants.THURSDAY)
-                Calendar.FRIDAY -> days.add(DateTimeConstants.FRIDAY)
-                Calendar.SATURDAY -> days.add(DateTimeConstants.SATURDAY)
-                Calendar.SUNDAY -> days.add(DateTimeConstants.SUNDAY)
-            }
-        }
-    }
+//    fun toJoda(selectedDays : List<Int>) {
+//        selectedDays.forEach {
+//            when (it) {
+//                Calendar.MONDAY -> days.add(DateTimeConstants.MONDAY)
+//                Calendar.TUESDAY -> days.add(DateTimeConstants.TUESDAY)
+//                Calendar.WEDNESDAY -> days.add(DateTimeConstants.WEDNESDAY)
+//                Calendar.THURSDAY -> days.add(DateTimeConstants.THURSDAY)
+//                Calendar.FRIDAY -> days.add(DateTimeConstants.FRIDAY)
+//                Calendar.SATURDAY -> days.add(DateTimeConstants.SATURDAY)
+//                Calendar.SUNDAY -> days.add(DateTimeConstants.SUNDAY)
+//            }
+//        }
+//    }
     // TODO Add TextViews for the medication name and dose fields to the add medication activity layout.
     // TODO Add an 'Edit Medication' button to the non-editing state of this activity
+
     // TODO When the activity is in the editing state, hide the TextViews and show the EditTexts, also show all the weekday TextViews
     // TODO When in the viewing state, show only the TextViews and hide the disabled weekday TextViews
 }

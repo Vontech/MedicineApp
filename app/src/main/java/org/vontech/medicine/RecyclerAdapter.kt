@@ -35,7 +35,7 @@ class RecyclerAdapter(private val medications: List<Medication>)
             // Open EditMedicationActivity with medication contents on item click
             val context = itemView.context
             val editMedicationIntent = Intent(context, EditMedicationActivity::class.java)
-            editMedicationIntent.putExtra(context.getString(R.string.edit_medication), medication)
+            editMedicationIntent.putExtra(context.getString(R.string.view_medication), medication)
             context.startActivity(editMedicationIntent)
         }
 

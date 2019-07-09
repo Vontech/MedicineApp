@@ -27,8 +27,18 @@
             android:textSize="24sp"
             android:textStyle="bold"
             android:textColor="@color/black"
-            android:layout_marginBottom="12dp"
-                android:editable="false"/>
+            android:layout_marginBottom="12dp"/>
+
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/nameTextView"
+                android:text="MEDICATION NAME"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:layout_marginBottom="12dp"
+                android:visibility="gone"/>
 
         <LinearLayout
                 android:layout_width="match_parent"
@@ -51,6 +61,18 @@
                     android:textColor="@color/black"
                     android:layout_marginBottom="12dp"
                     android:textStyle="bold"/>
+
+            <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/doseTextView"
+                    android:inputType="numberDecimal"
+                    android:text="100 (mg)"
+                    android:textColor="@color/black"
+                    android:layout_marginBottom="12dp"
+                    android:textStyle="bold"
+                    android:textSize="20sp"
+                    android:visibility="gone"/>
 
         </LinearLayout>
 
@@ -145,6 +167,12 @@
             android:layout_height="200dp"
             android:id="@+id/notesEditText"
             android:hint="Notes/Extra Instructions"/>
+
+        <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Edit Medication"
+                android:id="@+id/editMedicationButton"/>
 
         <Button
             android:layout_width="match_parent"

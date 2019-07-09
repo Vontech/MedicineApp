@@ -61,7 +61,6 @@ class MainActivity : AppCompatActivity() {
 //        reminderManager.addReminder("My title", "My message", DateTime(), 12)
 //        reminderManager.editReminder("Edited title", "Edited message", 12, DateTime())
         Log.i("Time", DateTimeZone.UTC.convertUTCToLocal(LocalTime().millisOfDay.toLong()).toString())
-
     }
 
     override fun onResume() {
@@ -73,24 +72,18 @@ class MainActivity : AppCompatActivity() {
         // Render things
         renderHeader()
         renderButton()
-
     }
 
     private fun renderHeader() {
-
         val dayOfWeek = DateTime().dayOfWeek()
         val day = dayOfWeek.getAsText(Locale.getDefault()).toUpperCase()
         this.headerDay.text = day
-
     }
 
     private fun renderButton() {
-
         createMedicationButton.setOnClickListener {
             val intent = Intent(this, EditMedicationActivity::class.java)
             startActivity(intent)
         }
-
     }
-
 }
