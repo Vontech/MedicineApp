@@ -44,9 +44,4 @@ data class Medication(var name: String?, var dose: Float?, var notes: String?) :
 //            }
 //        }
 //    }
-    // TODO Add TextViews for the medication name and dose fields to the add medication activity layout.
-    // TODO Add an 'Edit Medication' button to the non-editing state of this activity
-
-    // TODO When the activity is in the editing state, hide the TextViews and show the EditTexts, also show all the weekday TextViews
-    // TODO When in the viewing state, show only the TextViews and hide the disabled weekday TextViews
 }

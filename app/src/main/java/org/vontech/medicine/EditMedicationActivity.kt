@@ -1,5 +1,6 @@
 package org.vontech.medicine
 
+import android.content.Context
 import android.content.Intent
 import android.graphics.Paint
 import android.support.v7.app.AppCompatActivity
@@ -16,7 +17,12 @@ import org.vontech.medicine.reminders.ReminderManager
 import org.vontech.medicine.utils.MedicationStore
 import java.lang.IllegalArgumentException
 import android.graphics.Paint.UNDERLINE_TEXT_FLAG
+import android.support.v4.content.res.ResourcesCompat
 import android.text.Html
+import org.joda.time.LocalTime
+import org.joda.time.format.DateTimeFormat
+
+
 
 
 val NOTIFICATION_TITLE = "Time to take your medicine, hoe!"
@@ -46,6 +52,7 @@ class EditMedicationActivity : AppCompatActivity() {
         // Underline header TextViews
         doseHeaderTextView.text = Html.fromHtml("<u>Dose:</u> ")
         weekdayHeaderTextView.paintFlags = weekdayHeaderTextView.paintFlags or UNDERLINE_TEXT_FLAG
+        medicationTimesHeaderTextView.paintFlags = weekdayHeaderTextView.paintFlags or UNDERLINE_TEXT_FLAG
         notesHeaderTextView.paintFlags = notesHeaderTextView.paintFlags or UNDERLINE_TEXT_FLAG
 
 
@@ -61,9 +68,6 @@ class EditMedicationActivity : AppCompatActivity() {
             edit = false
             populateViews(medication)
         }
-
-        // Set the visibility of the name, dose, and weekday views based on if the medication is being edited
-//        setViewVisibility(edit)
 
         // Set onClickListeners for TextViews
         weekdayTextViews.forEach {
@@ -81,13 +85,13 @@ class EditMedicationActivity : AppCompatActivity() {
         // Save button should be hidden unless medication is being edited, vice versa for edit button
         // Make a corresponding notes text view for the read only mode
         // Add underline to the dose, weekday, and notes headers
+        // Style bottom buttons of EditMedicationActivity
+        // Add medication times to EditMedicationActivity
 
-        // TODO Add medication times to EditMedicationActivity
-        // TODO Add back button to EditMedicationActivity
-        // TODO Add ability to take a picture of a medication and have it show up in EditMedicationActivity imageview
+        // TODO Hook up scanner to EditMedicationActivity
         // TODO add (today!) to today's textView
-        // TODO Style bottom buttons of EditMedicationActivity
         // TODO Make 'next reminder' widget of MainActivity update programmatically
+        // TODO Medication card button should change when taken
     }
 
     /**
@@ -249,9 +253,22 @@ class EditMedicationActivity : AppCompatActivity() {
             notesEditText.setText(medication.notes)
             notesTextView.text = medication.notes
         }
+        if (medication.times.isNotEmpty()) {
+            medication.times.forEach { time -> addTimeTextView(time) }
+        }
         // Set the visibility of the name, dose, and weekday views based on if the medication is being edited
         selectedDays = medication.days
         setViewVisibility()
+    }
+
+    private fun addTimeTextView(time: LocalTime) {
+        var textView = TextView(this)
+        val fmt = DateTimeFormat.forPattern("HH:mm a")
+        textView.text = fmt.print(time)
+        textView.setTextColor(ContextCompat.getColor(this, R.color.textColor))
+        textView.textSize = 20f
+        textView.typeface = ResourcesCompat.getFont(this, R.font.open_sans_bold)
+        medicationTimesLinearLayout.addView(textView)
     }
 
     /**
