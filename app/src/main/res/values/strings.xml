@@ -35,7 +35,8 @@
 
     <!-- MAIN SCREEN -->
     <string name="main_next_reminder">Next reminder:</string>
-    <string name="mark_as_done">MARK AS DONE</string>
+    <string name="click_once_taken">CLICK ONCE TAKEN</string>
     <string name="medication_days">You take this medication on:</string>
+    <string name="notes_extra_instructions">Add notes or extra instructions here</string>
 
 </resources>

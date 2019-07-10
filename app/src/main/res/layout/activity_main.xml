@@ -1,69 +1,112 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="20dp"
+    android:paddingTop="20dp"
+    tools:context=".MainActivity"
+    android:background="#F8F8F8"
+    android:orientation="vertical">
+
+    <TextView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingBottom="20dp"
-        android:paddingTop="20dp"
-        tools:context=".MainActivity"
-        android:background="#F8F8F8"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:textColor="@color/textColor"
+        android:text="MONDAY"
+        android:textSize="28sp"
+        android:paddingRight="26dp"
+        android:paddingLeft="26dp"
+        android:textStyle="bold"
+        android:fontFamily="@font/open_sans_extrabold"
+        android:id="@+id/headerDay"/>
 
-    <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/textColor"
-            android:text="MONDAY"
-            android:textSize="28sp"
-            android:paddingRight="26dp"
-            android:paddingLeft="26dp"
-            android:textStyle="bold"
-            android:fontFamily="@font/open_sans_extrabold"
-            android:id="@+id/headerDay"/>
-
-    <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingRight="26dp"
-            android:paddingLeft="26dp"
-            android:textColor="@color/textColor"
-            android:text="@string/main_next_reminder"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:fontFamily="@font/open_sans_semibold"
-            android:layout_marginTop="20dp"/>
 
     <LinearLayout
-            android:paddingRight="26dp"
-            android:paddingLeft="26dp"
-            android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal"
+        android:paddingLeft="26dp">
+
+        <LinearLayout
+            android:layout_width="8dp"
+            android:layout_height="match_parent"
+            android:background="@color/blueButtonColor"
+            android:layout_marginTop="4dp"/>
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingRight="10dp"
+            android:paddingLeft="10dp">
 
-        <TextView
-                android:text="8pm "
-                android:layout_width="wrap_content"
+            <TextView
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/textView"
-                android:textSize="22sp"
                 android:textColor="@color/textColor"
-                android:textAlignment="viewStart"
-                android:layout_weight="0"
+                android:text="@string/main_next_reminder"
+                android:textSize="20sp"
                 android:textStyle="bold"
-                android:fontFamily="@font/open_sans_bold"/>
+                android:fontFamily="@font/open_sans_semibold"/>
 
-        <TextView
-                android:text="tonight, 3 medications"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/textView2"
-                android:layout_weight="1"
-                android:textSize="22sp"
-                android:textColor="@color/textColor"
-                android:textAlignment="viewStart"
-                android:fontFamily="@font/open_sans"/>
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:text="8pm "
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/textView"
+                    android:textSize="22sp"
+                    android:textColor="@color/textColor"
+                    android:textAlignment="viewStart"
+                    android:layout_weight="0"
+                    android:textStyle="bold"
+                    android:fontFamily="@font/open_sans_bold"/>
+
+                <TextView
+                    android:text="tonight, "
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="22sp"
+                    android:textColor="@color/textColor"
+                    android:textAlignment="viewStart"
+                    android:layout_weight="0"
+                    android:fontFamily="@font/open_sans"/>
+
+                <TextView
+                    android:text="3 "
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/textView2"
+                    android:layout_weight="0"
+                    android:textStyle="bold"
+                    android:textSize="22sp"
+                    android:textColor="@color/textColor"
+                    android:textAlignment="viewStart"
+                    android:fontFamily="@font/open_sans"/>
+
+                <TextView
+                    android:text="medications"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="22sp"
+                    android:textColor="@color/textColor"
+                    android:textAlignment="viewStart"
+                    android:layout_weight="0"
+                    android:fontFamily="@font/open_sans"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+
     </LinearLayout>
+
 
     <android.support.v7.widget.RecyclerView
             android:layout_width="match_parent"
@@ -118,6 +161,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/open_sans_bold"
             android:textColor="@color/blueButtonColor"
+            android:textSize="18sp"
             android:minHeight="0dp"
             android:paddingTop="4dp"
             android:paddingBottom="4dp"

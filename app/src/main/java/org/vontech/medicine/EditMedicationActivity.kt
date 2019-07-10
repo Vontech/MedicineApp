@@ -1,6 +1,7 @@
 package org.vontech.medicine
 
 import android.content.Intent
+import android.graphics.Paint
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
@@ -14,6 +15,9 @@ import org.vontech.medicine.pokos.Medication
 import org.vontech.medicine.reminders.ReminderManager
 import org.vontech.medicine.utils.MedicationStore
 import java.lang.IllegalArgumentException
+import android.graphics.Paint.UNDERLINE_TEXT_FLAG
+import android.text.Html
+
 
 val NOTIFICATION_TITLE = "Time to take your medicine, hoe!"
 val NOTIFICATION_MESSAGE = "Click to view this medication"
@@ -38,6 +42,12 @@ class EditMedicationActivity : AppCompatActivity() {
         medications = medicationStore.getMedications()
         weekdayTextViews = arrayListOf(mondayTextView, tuesdayTextView, wednesdayTextView, thursdayTextView,
                                         fridayTextView, saturdayTextView, sundayTextView)
+
+        // Underline header TextViews
+        doseHeaderTextView.text = Html.fromHtml("<u>Dose:</u> ")
+        weekdayHeaderTextView.paintFlags = weekdayHeaderTextView.paintFlags or UNDERLINE_TEXT_FLAG
+        notesHeaderTextView.paintFlags = notesHeaderTextView.paintFlags or UNDERLINE_TEXT_FLAG
+
 
         // Populate TextViews with medication values if viewing an existing medication
         if (intent.getSerializableExtra(this.getString(R.string.view_medication)) is Medication) {
@@ -65,12 +75,19 @@ class EditMedicationActivity : AppCompatActivity() {
         saveMedicationButton.setOnClickListener { saveMedication() }
         deleteMedicationButton.setOnClickListener { deleteMedication(oldMedication) }
 
-        // TODO Create onClickListener for edit button
-        // TODO when you click on a card on the main activity, should open EditMedicationActivity in view only mode
-        // TODO edit functionality only happens when the user clicks the edit button on the activity
-        // TODO Save button should be hidden unless medication is being edited, vice versa for edit button
+        // Create onClickListener for edit button
+        // when you click on a card on the main activity, should open EditMedicationActivity in view only mode
+        // edit functionality only happens when the user clicks the edit button on the activity
+        // Save button should be hidden unless medication is being edited, vice versa for edit button
+        // Make a corresponding notes text view for the read only mode
+        // Add underline to the dose, weekday, and notes headers
 
-        // TODO Make a corresponding notes text view for the read only mode
+        // TODO Add medication times to EditMedicationActivity
+        // TODO Add back button to EditMedicationActivity
+        // TODO Add ability to take a picture of a medication and have it show up in EditMedicationActivity imageview
+        // TODO add (today!) to today's textView
+        // TODO Style bottom buttons of EditMedicationActivity
+        // TODO Make 'next reminder' widget of MainActivity update programmatically
     }
 
     /**
@@ -81,8 +98,10 @@ class EditMedicationActivity : AppCompatActivity() {
         if (edit) {
             nameEditText.visibility = View.VISIBLE
             doseEditText.visibility = View.VISIBLE
+            notesEditText.visibility = View.VISIBLE
             nameTextView.visibility = View.GONE
             doseTextView.visibility = View.GONE
+            notesTextView.visibility = View.GONE
 
             // Make all weekday TextViews visible and set their text colors based on if they had been selected or not
             weekdayTextViews.forEach { textView ->
@@ -96,8 +115,10 @@ class EditMedicationActivity : AppCompatActivity() {
         } else {
             nameEditText.visibility = View.GONE
             doseEditText.visibility = View.GONE
+            notesEditText.visibility = View.GONE
             nameTextView.visibility = View.VISIBLE
             doseTextView.visibility = View.VISIBLE
+            notesTextView.visibility = View.VISIBLE
 
             // Show only the TextViews that are in selectedDays
             weekdayTextViews.forEach{ textView ->
@@ -217,15 +238,16 @@ class EditMedicationActivity : AppCompatActivity() {
      */
     private fun populateViews(medication: Medication) {
         if (medication.name != null) {
-            nameEditText.setText(medication.name)
-            nameTextView.text = medication.name
+            nameEditText.setText(medication.name!!.toUpperCase())
+            nameTextView.text = medication.name!!.toUpperCase()
         }
         if (medication.dose != null) {
             doseEditText.setText(medication.dose.toString())
-            doseTextView.text = medication.dose.toString()
+            doseTextView.text = "${medication.dose.toString()} mL"
         }
         if (medication.notes != null) {
             notesEditText.setText(medication.notes)
+            notesTextView.text = medication.notes
         }
         // Set the visibility of the name, dose, and weekday views based on if the medication is being edited
         selectedDays = medication.days
