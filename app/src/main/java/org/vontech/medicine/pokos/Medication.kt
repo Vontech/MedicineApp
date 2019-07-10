@@ -12,24 +12,26 @@ data class Medication(var name: String?, var dose: Float?, var notes: String?) :
     var days = mutableSetOf<Int>() // JodaTime weekday constants
     var times = mutableSetOf<LocalTime>() // JodaTime object
 
-    // Adapter methods for converting to and from JodaTime and Java Calendar weekdays
-    fun fromJoda() : List<Int> {
-        val calendarList = arrayListOf<Int>()
-        // for each day in days, add a calendar constant to the list
-        days.forEach {
-            when (it) {
-                DateTimeConstants.MONDAY -> calendarList.add(Calendar.MONDAY)
-                DateTimeConstants.TUESDAY -> calendarList.add(Calendar.TUESDAY)
-                DateTimeConstants.WEDNESDAY -> calendarList.add(Calendar.WEDNESDAY)
-                DateTimeConstants.THURSDAY -> calendarList.add(Calendar.THURSDAY)
-                DateTimeConstants.FRIDAY -> calendarList.add(Calendar.FRIDAY)
-                DateTimeConstants.SATURDAY -> calendarList.add(Calendar.SATURDAY)
-                DateTimeConstants.SUNDAY -> calendarList.add(Calendar.SUNDAY)
-                else -> throw IllegalArgumentException("Invalid weekday name")
-            }
-        }
-        return calendarList
-    }
+    /**
+     *  Adapter method for converting from Joda weekdays to Calendar weekdays
+     */
+//    fun fromJoda() : List<Int> {
+//        val calendarList = arrayListOf<Int>()
+//        // for each day in days, add a calendar constant to the list
+//        days.forEach {
+//            when (it) {
+//                DateTimeConstants.MONDAY -> calendarList.add(Calendar.MONDAY)
+//                DateTimeConstants.TUESDAY -> calendarList.add(Calendar.TUESDAY)
+//                DateTimeConstants.WEDNESDAY -> calendarList.add(Calendar.WEDNESDAY)
+//                DateTimeConstants.THURSDAY -> calendarList.add(Calendar.THURSDAY)
+//                DateTimeConstants.FRIDAY -> calendarList.add(Calendar.FRIDAY)
+//                DateTimeConstants.SATURDAY -> calendarList.add(Calendar.SATURDAY)
+//                DateTimeConstants.SUNDAY -> calendarList.add(Calendar.SUNDAY)
+//                else -> throw IllegalArgumentException("Invalid weekday name")
+//            }
+//        }
+//        return calendarList
+//    }
 
 //    fun toJoda(selectedDays : List<Int>) {
 //        selectedDays.forEach {

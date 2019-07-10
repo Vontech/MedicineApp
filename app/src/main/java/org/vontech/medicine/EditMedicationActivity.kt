@@ -1,8 +1,6 @@
 package org.vontech.medicine
 
-import android.content.Context
 import android.content.Intent
-import android.graphics.Paint
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
@@ -22,9 +20,6 @@ import android.text.Html
 import org.joda.time.LocalTime
 import org.joda.time.format.DateTimeFormat
 
-
-
-
 val NOTIFICATION_TITLE = "Time to take your medicine, hoe!"
 val NOTIFICATION_MESSAGE = "Click to view this medication"
 
@@ -33,6 +28,7 @@ class EditMedicationActivity : AppCompatActivity() {
     private lateinit var medicationStore: MedicationStore
     private lateinit var medications: List<Medication>
     private var edit: Boolean = false
+    private var todayShowing: Boolean = false
     private lateinit var oldMedication: Medication
     private lateinit var reminderManager: ReminderManager
     private lateinit var weekdayTextViews: List<TextView>
@@ -87,11 +83,12 @@ class EditMedicationActivity : AppCompatActivity() {
         // Add underline to the dose, weekday, and notes headers
         // Style bottom buttons of EditMedicationActivity
         // Add medication times to EditMedicationActivity
+        // add (today!) to today's textView
 
-        // TODO Hook up scanner to EditMedicationActivity
-        // TODO add (today!) to today's textView
+        // TODO Add UI controls for setting reminder times in EditMedicationActivity
         // TODO Make 'next reminder' widget of MainActivity update programmatically
-        // TODO Medication card button should change when taken
+        // TODO Medication card button should change when taken; also need to add data to track this
+        // TODO Hook up scanner to EditMedicationActivity (Aaron)
     }
 
     /**
@@ -134,6 +131,14 @@ class EditMedicationActivity : AppCompatActivity() {
                 }
             }
         }
+
+        // Add the "(today!)" text to the current TextView  text
+        if (selectedDays.contains(DateTime().dayOfWeek) && !todayShowing) {
+            val text = "<font color=#5AA3FF>(today!)</font>"
+            calendarToTextView(DateTime().dayOfWeek).append(" ")
+            calendarToTextView(DateTime().dayOfWeek).append(Html.fromHtml(text))
+            todayShowing = true
+        }
     }
 
     /**
@@ -169,7 +174,7 @@ class EditMedicationActivity : AppCompatActivity() {
         throw IllegalArgumentException("Invalid weekday name")
     }
 
-    private fun jodaToTextView(weekday: Int): TextView {
+    private fun calendarToTextView(weekday: Int): TextView {
         when (weekday) {
             DateTimeConstants.MONDAY -> return mondayTextView
             DateTimeConstants.TUESDAY -> return tuesdayTextView
