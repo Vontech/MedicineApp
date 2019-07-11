@@ -1,5 +1,8 @@
 package org.vontech.medicine
 
+import android.app.PendingIntent.getActivity
+import android.app.TimePickerDialog
+import android.app.TimePickerDialog.OnTimeSetListener
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -17,8 +20,10 @@ import java.lang.IllegalArgumentException
 import android.graphics.Paint.UNDERLINE_TEXT_FLAG
 import android.support.v4.content.res.ResourcesCompat
 import android.text.Html
+import android.widget.TimePicker
 import org.joda.time.LocalTime
 import org.joda.time.format.DateTimeFormat
+import java.util.*
 
 val NOTIFICATION_TITLE = "Time to take your medicine, hoe!"
 val NOTIFICATION_MESSAGE = "Click to view this medication"
@@ -71,6 +76,7 @@ class EditMedicationActivity : AppCompatActivity() {
         }
 
         // Set onClickListeners for buttons
+        addReminderButton.setOnClickListener { showTimePickerDialog() }
         editMedicationButton.setOnClickListener { editMedication() }
         saveMedicationButton.setOnClickListener { saveMedication() }
         deleteMedicationButton.setOnClickListener { deleteMedication(oldMedication) }
@@ -86,9 +92,33 @@ class EditMedicationActivity : AppCompatActivity() {
         // add (today!) to today's textView
 
         // TODO Add UI controls for setting reminder times in EditMedicationActivity
+        // TODO Fix TimePickerDialog for EditMedicationActivity
         // TODO Make 'next reminder' widget of MainActivity update programmatically
         // TODO Medication card button should change when taken; also need to add data to track this
         // TODO Hook up scanner to EditMedicationActivity (Aaron)
+    }
+
+    private fun showTimePickerDialog() {
+        val time = LocalTime()
+        val hour = time.hourOfDay
+        val minute = time.minuteOfHour
+//        val myCalender = Calendar.getInstance()
+//        val hour = myCalender.get(Calendar.HOUR_OF_DAY)
+//        val minute = myCalender.get(Calendar.MINUTE)
+
+
+        val myTimeListener = OnTimeSetListener { _: TimePicker, _: Int, _: Int ->
+            @Override
+            fun onTimeSet(view: TimePicker, hourOfDay: Int, minute: Int) {
+                if (view.isShown) {
+                    val reminderTime = LocalTime(hourOfDay, minute)
+                }
+            }
+        }
+        val timePickerDialog = TimePickerDialog(this, myTimeListener, hour, minute, false)
+        timePickerDialog.setTitle("Choose time for reminder")
+        timePickerDialog.window.setBackgroundDrawableResource(R.color.mainCardBackground)
+        timePickerDialog.show()
     }
 
     /**
@@ -194,6 +224,7 @@ class EditMedicationActivity : AppCompatActivity() {
         editMedicationButton.visibility = View.GONE
         saveMedicationButton.visibility = View.VISIBLE
         deleteMedicationButton.visibility = View.VISIBLE
+        addReminderButton.visibility = View.VISIBLE
         edit = true
         // The EditTexts and TextViews were already populated when onCreate() called populateViews()
         // Only need to set the correct visibility for editing
@@ -235,6 +266,7 @@ class EditMedicationActivity : AppCompatActivity() {
 
         editMedicationButton.visibility = View.VISIBLE
         saveMedicationButton.visibility = View.GONE
+        addReminderButton.visibility = View.VISIBLE
 
         // Return to MainActivity
         val intent = Intent(this, MainActivity::class.java)

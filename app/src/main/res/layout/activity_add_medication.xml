@@ -183,6 +183,19 @@
                 android:fontFamily="@font/open_sans"/>
 
             <!--Programmatically add textviews for the times-->
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="38dp"
+                android:text="@string/add_reminder_time"
+                android:background="@drawable/outline_button"
+                android:textColor="@color/blueButtonColor"
+                android:fontFamily="@font/open_sans_bold"
+                android:id="@+id/addReminderButton"
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="3dp"
+                android:layout_marginRight="3dp"
+                android:textSize="14sp"
+                android:visibility="gone"/>
         </LinearLayout>
 
         <TextView
