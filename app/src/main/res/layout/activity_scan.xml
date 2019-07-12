@@ -19,11 +19,14 @@
 
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
-                <TextView
+s                <TextView
                         android:text="No fields found"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" android:id="@+id/tempFields" android:padding="8dp"
-                        android:textStyle="bold" android:textColor="@color/colorPrimaryDark"/>
+                        android:layout_height="wrap_content"
+                        android:id="@+id/tempFields"
+                        android:padding="8dp"
+                        android:textStyle="bold"
+                        android:textColor="@color/textColor"/>
             </com.otaliastudios.cameraview.CameraView>
 
         </RelativeLayout>

@@ -3,7 +3,6 @@ package org.vontech.medicine.pokos
 import org.joda.time.DateTimeConstants
 import org.joda.time.LocalTime
 import java.io.Serializable
-import java.lang.IllegalArgumentException
 import java.util.Calendar
 import kotlin.random.Random
 

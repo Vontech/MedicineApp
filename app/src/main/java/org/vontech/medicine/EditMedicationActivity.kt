@@ -1,6 +1,5 @@
 package org.vontech.medicine
 
-import android.app.PendingIntent.getActivity
 import android.app.TimePickerDialog
 import android.app.TimePickerDialog.OnTimeSetListener
 import android.content.Intent
@@ -20,10 +19,10 @@ import java.lang.IllegalArgumentException
 import android.graphics.Paint.UNDERLINE_TEXT_FLAG
 import android.support.v4.content.res.ResourcesCompat
 import android.text.Html
+import android.util.Log
 import android.widget.TimePicker
 import org.joda.time.LocalTime
 import org.joda.time.format.DateTimeFormat
-import java.util.*
 
 val NOTIFICATION_TITLE = "Time to take your medicine, hoe!"
 val NOTIFICATION_MESSAGE = "Click to view this medication"
@@ -31,10 +30,10 @@ val NOTIFICATION_MESSAGE = "Click to view this medication"
 class EditMedicationActivity : AppCompatActivity() {
 
     private lateinit var medicationStore: MedicationStore
-    private lateinit var medications: List<Medication>
+//    private lateinit var medications: List<Medication>
     private var edit: Boolean = false
     private var todayShowing: Boolean = false
-    private lateinit var oldMedication: Medication
+    private lateinit var medication: Medication
     private lateinit var reminderManager: ReminderManager
     private lateinit var weekdayTextViews: List<TextView>
     private var selectedDays = mutableSetOf<Int>()
@@ -46,7 +45,7 @@ class EditMedicationActivity : AppCompatActivity() {
         medicationStore = MedicationStore(this)
         reminderManager = ReminderManager(this)
         // Get list of medications
-        medications = medicationStore.getMedications()
+//        medications = medicationStore.getMedications()
         weekdayTextViews = arrayListOf(mondayTextView, tuesdayTextView, wednesdayTextView, thursdayTextView,
                                         fridayTextView, saturdayTextView, sundayTextView)
 
@@ -59,15 +58,15 @@ class EditMedicationActivity : AppCompatActivity() {
 
         // Populate TextViews with medication values if viewing an existing medication
         if (intent.getSerializableExtra(this.getString(R.string.view_medication)) is Medication) {
-            oldMedication = intent.getSerializableExtra(this.getString(R.string.view_medication)) as Medication
-            populateViews(oldMedication)
+            medication = intent.getSerializableExtra(this.getString(R.string.view_medication)) as Medication
+            populateViews()
         }
 
         // Populate TextViews found by scanning a medication (creating new medication)
-        if (intent.getSerializableExtra(this.getString(R.string.scan_medication)) is Medication) {
-            val medication = intent.getSerializableExtra(this.getString(R.string.scan_medication)) as Medication
+        else if (intent.getSerializableExtra(this.getString(R.string.scan_medication)) is Medication) {
+            medication = intent.getSerializableExtra(this.getString(R.string.scan_medication)) as Medication
             edit = false
-            populateViews(medication)
+            populateViews()
         }
 
         // Set onClickListeners for TextViews
@@ -79,7 +78,7 @@ class EditMedicationActivity : AppCompatActivity() {
         addReminderButton.setOnClickListener { showTimePickerDialog() }
         editMedicationButton.setOnClickListener { editMedication() }
         saveMedicationButton.setOnClickListener { saveMedication() }
-        deleteMedicationButton.setOnClickListener { deleteMedication(oldMedication) }
+        deleteMedicationButton.setOnClickListener { deleteMedication() }
 
         // Create onClickListener for edit button
         // when you click on a card on the main activity, should open EditMedicationActivity in view only mode
@@ -90,10 +89,12 @@ class EditMedicationActivity : AppCompatActivity() {
         // Style bottom buttons of EditMedicationActivity
         // Add medication times to EditMedicationActivity
         // add (today!) to today's textView
+        // Add UI controls for setting reminder times in EditMedicationActivity
 
-        // TODO Add UI controls for setting reminder times in EditMedicationActivity
-        // TODO Fix TimePickerDialog for EditMedicationActivity
+        // TODO Add ability to edit or delete reminder times in EditMedicationActivity
+        // TODO fix 'Add reminder' button placement in EditMedicationActivity
         // TODO Make 'next reminder' widget of MainActivity update programmatically
+        // TODO prevent app from being in landscape mode
         // TODO Medication card button should change when taken; also need to add data to track this
         // TODO Hook up scanner to EditMedicationActivity (Aaron)
     }
@@ -102,20 +103,12 @@ class EditMedicationActivity : AppCompatActivity() {
         val time = LocalTime()
         val hour = time.hourOfDay
         val minute = time.minuteOfHour
-//        val myCalender = Calendar.getInstance()
-//        val hour = myCalender.get(Calendar.HOUR_OF_DAY)
-//        val minute = myCalender.get(Calendar.MINUTE)
 
-
-        val myTimeListener = OnTimeSetListener { _: TimePicker, _: Int, _: Int ->
-            @Override
-            fun onTimeSet(view: TimePicker, hourOfDay: Int, minute: Int) {
-                if (view.isShown) {
-                    val reminderTime = LocalTime(hourOfDay, minute)
-                }
-            }
+        val myTimeListener = OnTimeSetListener { timePicker: TimePicker, hour: Int, minute: Int ->
+            medication.times.add(LocalTime(hour, minute))
+            addTimeTextView(LocalTime(hour, minute))
         }
-        val timePickerDialog = TimePickerDialog(this, myTimeListener, hour, minute, false)
+        val timePickerDialog = TimePickerDialog(this, R.style.DialogTheme, myTimeListener, hour, minute, false)
         timePickerDialog.setTitle("Choose time for reminder")
         timePickerDialog.window.setBackgroundDrawableResource(R.color.mainCardBackground)
         timePickerDialog.show()
@@ -248,15 +241,15 @@ class EditMedicationActivity : AppCompatActivity() {
         // Create a new Medication object from the fields
         val newMedication = Medication(nameEditText.text.toString(), dose, notesEditText.text.toString())
         newMedication.days = selectedDays
-
-        val now = DateTime.now()
-        newMedication.times.add(now.plusSeconds(3).toLocalTime())
-        newMedication.times.add(now.plusSeconds(7).toLocalTime())
-        newMedication.times.add(now.plusSeconds(12).toLocalTime())
+        newMedication.times = medication.times
+//        val now = DateTime.now()
+//        newMedication.times.add(now.plusSeconds(3).toLocalTime())
+//        newMedication.times.add(now.plusSeconds(7).toLocalTime())
+//        newMedication.times.add(now.plusSeconds(12).toLocalTime())
 
         // If editing a medication, replace the old medication with a new one. Otherwise, add it to the list
         if (edit) {
-            medicationStore.replaceMedication(oldMedication, newMedication)
+            medicationStore.replaceMedication(medication, newMedication)
             scheduleReminder(newMedication, isReplacing = true)
         }
         else {
@@ -275,9 +268,8 @@ class EditMedicationActivity : AppCompatActivity() {
 
     /**
      * Populates the activity's views with the values from the given Medication
-     * @param medication the Medication used to populate the TextViews
      */
-    private fun populateViews(medication: Medication) {
+    private fun populateViews() {
         if (medication.name != null) {
             nameEditText.setText(medication.name!!.toUpperCase())
             nameTextView.text = medication.name!!.toUpperCase()
@@ -300,7 +292,7 @@ class EditMedicationActivity : AppCompatActivity() {
 
     private fun addTimeTextView(time: LocalTime) {
         var textView = TextView(this)
-        val fmt = DateTimeFormat.forPattern("HH:mm a")
+        val fmt = DateTimeFormat.forPattern("hh:mm a")
         textView.text = fmt.print(time)
         textView.setTextColor(ContextCompat.getColor(this, R.color.textColor))
         textView.textSize = 20f
@@ -310,9 +302,8 @@ class EditMedicationActivity : AppCompatActivity() {
 
     /**
      * Deletes a medication from the ArrayList and re-saves it to SharedPreferences
-     * @param medication the Medication to remove from the ArrayList
      */
-    private fun deleteMedication(medication: Medication) {
+    private fun deleteMedication() {
         medicationStore.deleteMedication(medication)
 
         scheduleReminder(medication, isDeleting = true)
