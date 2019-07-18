@@ -17,10 +17,9 @@ import org.vontech.medicine.reminders.ReminderManager
 import org.vontech.medicine.utils.MedicationStore
 import java.lang.IllegalArgumentException
 import android.graphics.Paint.UNDERLINE_TEXT_FLAG
-import android.support.v4.content.res.ResourcesCompat
 import android.text.Html
-import android.util.Log
 import android.widget.TimePicker
+import kotlinx.android.synthetic.main.time_layout.view.*
 import org.joda.time.LocalTime
 import org.joda.time.format.DateTimeFormat
 
@@ -37,6 +36,7 @@ class EditMedicationActivity : AppCompatActivity() {
     private lateinit var reminderManager: ReminderManager
     private lateinit var weekdayTextViews: List<TextView>
     private var selectedDays = mutableSetOf<Int>()
+    private var timeViews = mutableSetOf<View>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,7 +54,6 @@ class EditMedicationActivity : AppCompatActivity() {
         weekdayHeaderTextView.paintFlags = weekdayHeaderTextView.paintFlags or UNDERLINE_TEXT_FLAG
         medicationTimesHeaderTextView.paintFlags = weekdayHeaderTextView.paintFlags or UNDERLINE_TEXT_FLAG
         notesHeaderTextView.paintFlags = notesHeaderTextView.paintFlags or UNDERLINE_TEXT_FLAG
-
 
         // Populate TextViews with medication values if viewing an existing medication
         if (intent.getSerializableExtra(this.getString(R.string.view_medication)) is Medication) {
@@ -79,24 +78,6 @@ class EditMedicationActivity : AppCompatActivity() {
         editMedicationButton.setOnClickListener { editMedication() }
         saveMedicationButton.setOnClickListener { saveMedication() }
         deleteMedicationButton.setOnClickListener { deleteMedication() }
-
-        // Create onClickListener for edit button
-        // when you click on a card on the main activity, should open EditMedicationActivity in view only mode
-        // edit functionality only happens when the user clicks the edit button on the activity
-        // Save button should be hidden unless medication is being edited, vice versa for edit button
-        // Make a corresponding notes text view for the read only mode
-        // Add underline to the dose, weekday, and notes headers
-        // Style bottom buttons of EditMedicationActivity
-        // Add medication times to EditMedicationActivity
-        // add (today!) to today's textView
-        // Add UI controls for setting reminder times in EditMedicationActivity
-
-        // TODO Add ability to edit or delete reminder times in EditMedicationActivity
-        // TODO fix 'Add reminder' button placement in EditMedicationActivity
-        // TODO Make 'next reminder' widget of MainActivity update programmatically
-        // TODO prevent app from being in landscape mode
-        // TODO Medication card button should change when taken; also need to add data to track this
-        // TODO Hook up scanner to EditMedicationActivity (Aaron)
     }
 
     private fun showTimePickerDialog() {
@@ -136,6 +117,9 @@ class EditMedicationActivity : AppCompatActivity() {
                     textView.setTextColor(ContextCompat.getColor(this, R.color.disabledTextColor))
                 }
             }
+
+            // Show the delete reminder icons for each time of this medication
+            timeViews.forEach { view -> view.deleteReminderImgView.visibility = View.VISIBLE }
         } else {
             nameEditText.visibility = View.GONE
             doseEditText.visibility = View.GONE
@@ -153,6 +137,9 @@ class EditMedicationActivity : AppCompatActivity() {
                     textView.visibility = View.GONE
                 }
             }
+
+            // Hide the delete reminder icons for each time of this medication
+            timeViews.forEach { view -> view.deleteReminderImgView.visibility = View.GONE }
         }
 
         // Add the "(today!)" text to the current TextView  text
@@ -291,13 +278,24 @@ class EditMedicationActivity : AppCompatActivity() {
     }
 
     private fun addTimeTextView(time: LocalTime) {
-        var textView = TextView(this)
+        val view = medicationTimesLinearLayout.inflate(R.layout.time_layout, false)
         val fmt = DateTimeFormat.forPattern("hh:mm a")
-        textView.text = fmt.print(time)
-        textView.setTextColor(ContextCompat.getColor(this, R.color.textColor))
-        textView.textSize = 20f
-        textView.typeface = ResourcesCompat.getFont(this, R.font.open_sans_bold)
-        medicationTimesLinearLayout.addView(textView)
+        view.timeTextView.text = fmt.print(time)
+        medicationTimesLinearLayout.addView(view)
+        view.deleteReminderImgView.setOnClickListener { deleteReminder(time, view) }
+        if (edit) view.deleteReminderImgView.visibility = View.VISIBLE else view.deleteReminderImgView.visibility = View.GONE
+        timeViews.add(view)
+
+        // Implement onClickListener method to actually remove time from medication's list of times when the remove button is clicked
+        // Also remove it from the timeViews list and that the view is removed from the Activity frontend
+        // TODO When a new reminder time is added in the editing medication view, it is added without the trash can icon
+    }
+
+    private fun deleteReminder(time: LocalTime, view: View) {
+        medication.times.remove(time)
+        timeViews.remove(view)
+        medicationTimesLinearLayout.removeView(view)
+        scheduleReminder(medication, isDeleting = true)
     }
 
     /**
@@ -321,11 +319,12 @@ class EditMedicationActivity : AppCompatActivity() {
      * @param isDeleting whether the reminder needs to be removed or not
      */
     private fun scheduleReminder(medication: Medication, isReplacing: Boolean = false, isDeleting: Boolean = false) {
-        if (isDeleting) {
+        val nextTime = reminderManager.getNextTime(medication)
+
+        if (isDeleting || nextTime == null) {
             reminderManager.deleteReminder(medication.id)
             return
         }
-        val nextTime = reminderManager.getNextTime(medication)
 
         if (isReplacing) {
             reminderManager.editReminder(NOTIFICATION_TITLE, NOTIFICATION_MESSAGE, medication.id, nextTime!!)
