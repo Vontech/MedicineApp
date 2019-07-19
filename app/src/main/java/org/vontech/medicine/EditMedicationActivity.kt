@@ -288,7 +288,7 @@ class EditMedicationActivity : AppCompatActivity() {
 
         // Implement onClickListener method to actually remove time from medication's list of times when the remove button is clicked
         // Also remove it from the timeViews list and that the view is removed from the Activity frontend
-        // TODO When a new reminder time is added in the editing medication view, it is added without the trash can icon
+        // TODO Style add reminder button
     }
 
     private fun deleteReminder(time: LocalTime, view: View) {

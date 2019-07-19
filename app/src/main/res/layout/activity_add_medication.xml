@@ -5,7 +5,8 @@
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     android:fillViewport="true"
-    tools:context=".EditMedicationActivity">
+    tools:context=".EditMedicationActivity"
+    android:background="@color/mainCardBackground">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -184,18 +185,21 @@
 
             <!--Programmatically add textviews for the times-->
             <Button
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="38dp"
                 android:text="@string/add_reminder_time"
-                android:background="@drawable/outline_button"
+                android:drawableStart="@drawable/ic_add"
+                android:drawablePadding="10dp"
+                android:background="@color/mainCardBackground"
                 android:textColor="@color/blueButtonColor"
                 android:fontFamily="@font/open_sans_bold"
                 android:id="@+id/addReminderButton"
-                android:layout_marginTop="20dp"
                 android:layout_marginLeft="3dp"
                 android:layout_marginRight="3dp"
                 android:textSize="14sp"
-                android:visibility="gone"/>
+                android:visibility="gone"
+                android:gravity="center_vertical"
+                style="?android:attr/borderlessButtonStyle"/>
         </LinearLayout>
 
         <TextView
