@@ -22,6 +22,7 @@ import android.widget.TimePicker
 import kotlinx.android.synthetic.main.time_layout.view.*
 import org.joda.time.LocalTime
 import org.joda.time.format.DateTimeFormat
+import java.util.*
 
 val NOTIFICATION_TITLE = "Time to take your medicine, hoe!"
 val NOTIFICATION_MESSAGE = "Click to view this medication"
@@ -80,6 +81,10 @@ class EditMedicationActivity : AppCompatActivity() {
         deleteMedicationButton.setOnClickListener { deleteMedication() }
     }
 
+    /**
+     * Displays the time picker dialog, and adds the selected time to this medication's list of reminder times.
+     * Also displays the newly set reminder time in the list of all of the reminders
+     */
     private fun showTimePickerDialog() {
         val time = LocalTime()
         val hour = time.hourOfDay
@@ -229,10 +234,6 @@ class EditMedicationActivity : AppCompatActivity() {
         val newMedication = Medication(nameEditText.text.toString(), dose, notesEditText.text.toString())
         newMedication.days = selectedDays
         newMedication.times = medication.times
-//        val now = DateTime.now()
-//        newMedication.times.add(now.plusSeconds(3).toLocalTime())
-//        newMedication.times.add(now.plusSeconds(7).toLocalTime())
-//        newMedication.times.add(now.plusSeconds(12).toLocalTime())
 
         // If editing a medication, replace the old medication with a new one. Otherwise, add it to the list
         if (edit) {
@@ -270,7 +271,7 @@ class EditMedicationActivity : AppCompatActivity() {
             notesTextView.text = medication.notes
         }
         if (medication.times.isNotEmpty()) {
-            medication.times.forEach { time -> addTimeTextView(time) }
+            medication.times.toList().sorted().forEach { time -> addTimeTextView(time) }
         }
         // Set the visibility of the name, dose, and weekday views based on if the medication is being edited
         selectedDays = medication.days
@@ -285,10 +286,6 @@ class EditMedicationActivity : AppCompatActivity() {
         view.deleteReminderImgView.setOnClickListener { deleteReminder(time, view) }
         if (edit) view.deleteReminderImgView.visibility = View.VISIBLE else view.deleteReminderImgView.visibility = View.GONE
         timeViews.add(view)
-
-        // Implement onClickListener method to actually remove time from medication's list of times when the remove button is clicked
-        // Also remove it from the timeViews list and that the view is removed from the Activity frontend
-        // TODO Style add reminder button
     }
 
     private fun deleteReminder(time: LocalTime, view: View) {
