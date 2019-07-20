@@ -116,3 +116,120 @@ fun remainingFields(extraction: MedicineDocumentExtraction): List<MedicineField>
     if (extraction.applicationAction.isNullOrBlank()) remaining.add(MedicineField.APPLICATION_ACTION)
     return remaining
 }
+
+// TODO: Eventually put this into string resource file
+val medicineNames = mapOf(
+    MedicineField.NAME to "Medicine Name",
+    MedicineField.DOSAGE_AMOUNT to "Dosage Amount",
+    MedicineField.DOSAGE_TYPE to "Dosage Type",
+    MedicineField.DOSAGE_FREQUENCY to "Dosage Frequency",
+    MedicineField.DOSAGE_TIMES to "Dosage Times",
+    MedicineField.TOTAL_QUANTITY to "Total Quantity",
+    MedicineField.QUANTITY_TYPE to "Quantity Type",
+    MedicineField.RX_IDENTIFIER to "Prescription No. (Rx #)",
+    MedicineField.FILL_DATE to "Fill Date",
+    MedicineField.DISCARD_DATE to "Expiration Date",
+    MedicineField.CONTACT_NUMBERS to "Contact Phone Number",
+    MedicineField.CONTACT_NAMES to "Contact Name",
+    MedicineField.MEDICATION_DESCRIPTION to "Description",
+    MedicineField.APPLICATION_ACTION to "Application Method"
+)
+
+data class MedicationDisplayInformation(
+    val name: String,
+    val value: String,
+    val byline: String?
+)
+
+fun getDisplayInformation(extraction: MedicineDocumentExtraction): List<MedicationDisplayInformation> {
+
+    val infos = mutableListOf<MedicationDisplayInformation>()
+    if (!extraction.name.isNullOrBlank()) {
+        infos.add(
+            MedicationDisplayInformation(
+                medicineNames.getValue(MedicineField.NAME),
+                extraction.name.toString(),
+                null
+        ))
+    }
+    if (extraction.dosageAmount != null) {
+        infos.add(
+            MedicationDisplayInformation(
+                medicineNames.getValue(MedicineField.DOSAGE_AMOUNT),
+                extraction.dosageAmount.toString(),
+                null
+            ))
+    }
+    if (extraction.dosageType != null) {
+        infos.add(
+            MedicationDisplayInformation(
+                medicineNames.getValue(MedicineField.DOSAGE_TYPE),
+                extraction.dosageType.toString(),
+                null
+            ))
+    }
+    if (extraction.dosageFrequency != null) {
+        infos.add(
+            MedicationDisplayInformation(
+                medicineNames.getValue(MedicineField.DOSAGE_FREQUENCY),
+                extraction.dosageFrequency.toString(),
+                null
+            ))
+    }
+    if (extraction.dosageTimes != null) {
+        infos.add(
+            MedicationDisplayInformation(
+                medicineNames.getValue(MedicineField.DOSAGE_TIMES),
+                extraction.dosageTimes.toString(),
+                null
+            ))
+    }
+    if (extraction.totalQuantity != null) {
+        infos.add(
+            MedicationDisplayInformation(
+                medicineNames.getValue(MedicineField.TOTAL_QUANTITY),
+                extraction.totalQuantity.toString(),
+                null
+            ))
+    }
+    if (extraction.quantityType != null) {
+        infos.add(
+            MedicationDisplayInformation(
+                medicineNames.getValue(MedicineField.QUANTITY_TYPE),
+                extraction.quantityType.toString(),
+                null
+            ))
+    }
+    if (extraction.rxIdentifier != null) {
+        infos.add(
+            MedicationDisplayInformation(
+                medicineNames.getValue(MedicineField.RX_IDENTIFIER),
+                extraction.rxIdentifier.toString(),
+                null
+            ))
+    }
+    if (extraction.fillDate != null) {
+        infos.add(
+            MedicationDisplayInformation(
+                medicineNames.getValue(MedicineField.FILL_DATE),
+                extraction.fillDate.toString(),
+                null
+            ))
+    }
+    if (extraction.discardDate != null) {
+        infos.add(
+            MedicationDisplayInformation(
+                medicineNames.getValue(MedicineField.DISCARD_DATE),
+                extraction.discardDate.toString(),
+                null
+            ))
+    }
+//    if (!extraction.contactNumbers.isNullOrEmpty()) remaining.add(MedicineField.CONTACT_NUMBERS)
+//    if (!extraction.contactEmails.isNullOrEmpty()) remaining.add(MedicineField.CONTACT_EMAILS)
+//    if (!extraction.contactNames.isNullOrEmpty()) remaining.add(MedicineField.CONTACT_NAMES)
+//    if (!extraction.medicationDescription.isNullOrBlank()) remaining.add(MedicineField.MEDICATION_DESCRIPTION)
+//    if (!extraction.applicationAction.isNullOrBlank()) remaining.add(MedicineField.APPLICATION_ACTION)
+    return infos
+
+}
+

@@ -144,18 +144,21 @@
             android:visibility="gone"/>
 
     <Button
+            android:text="NEW MEDICATION"
+            android:background="@drawable/outline_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/scanMedicationButton"
+            android:fontFamily="@font/open_sans_bold"
+            android:textColor="@color/blueButtonColor"
+            android:minHeight="0dp"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
             android:layout_marginRight="26dp"
             android:layout_marginLeft="26dp"
-            android:text="Scan New Medication"
-            android:fontFamily="@font/open_sans_semibold"
-            android:backgroundTint="@color/blueButtonColor"
-            android:visibility="gone"/>
+            android:id="@+id/createMedicationButton"/>
 
     <Button
-            android:text="NEW MEDICATION"
+            android:text="SCAN MEDICATION"
             android:background="@drawable/outline_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -167,6 +170,6 @@
             android:paddingBottom="4dp"
             android:layout_marginRight="26dp"
             android:layout_marginLeft="26dp"
-            android:id="@+id/createMedicationButton"/>
+            android:id="@+id/scanMedicationButton"/>
 
 </LinearLayout>
