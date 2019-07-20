@@ -3,6 +3,7 @@
     <color name="colorAccent">#D81B60</color>
 
     <color name="textColor">#21252A</color>
+    <color name="negativeTextColor">#BC3B3C</color>
     <color name="disabledTextColor">#757575</color>
     <color name="mainCardBackground">#ffffff</color>
 
