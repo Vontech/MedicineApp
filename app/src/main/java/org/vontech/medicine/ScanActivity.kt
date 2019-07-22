@@ -6,12 +6,13 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
 import com.otaliastudios.cameraview.CameraListener
 import kotlinx.android.synthetic.main.activity_scan.*
-import org.vontech.medicine.ocr.MedicineDocumentExtraction
-import org.vontech.medicine.ocr.ScanBuilder
+import kotlinx.android.synthetic.main.scan_result_item.view.*
+import org.vontech.medicine.ocr.*
 import org.vontech.medicine.ocr.models.getModel
-import org.vontech.medicine.ocr.remainingFields
 import org.vontech.medicine.pokos.Medication
 import org.vontech.medicine.utils.MedicationStore
 import java.util.*
@@ -49,6 +50,7 @@ class ScanActivity : AppCompatActivity() {
         scanCamera.setLifecycleOwner(this)
         scanCamera.addCameraListener(object: CameraListener() {
             override fun onPictureTaken(jpeg: ByteArray?) {
+                Log.i("ScanActivity.kt", "PICTURE TAKEN")
                 scanBuilder!!.processImage(jpeg!!) {
                     Log.i("ScanActivity.kt","PROCESSED IMAGE")
                     attemptMedicationExtraction()
@@ -69,14 +71,12 @@ class ScanActivity : AppCompatActivity() {
 
     private fun setupViews() {
 
-        scanButton.setOnClickListener {
+        medicineScanHeader.setOnClickListener {
             if (!isCapturing) {
                 isCapturing = true
-                scanButton.text = resources.getString(R.string.scan_button_scan_stop)
                 startCapturing()
             } else {
                 isCapturing = false
-                scanButton.text = resources.getString(R.string.scan_button_scan)
                 stopCapture()
             }
 
@@ -124,9 +124,38 @@ class ScanActivity : AppCompatActivity() {
             Log.i("ScanActivity.kt", extraction.toString())
             val remaining = remainingFields(extraction)
             val toShow = "REMAINING:\n" + remaining.joinToString("\n")
-            tempFields.text = toShow
+            Log.e("RESULTS", toShow)
+            updateResultViews(extraction)
         }
         return extraction
+    }
+
+    private fun updateResultViews(extraction: MedicineDocumentExtraction) {
+
+        val remaining: MedicineField = remainingFields(extraction).first()
+        val viewsToShow = mutableListOf<View>()
+
+        // First attach remaining
+        scanCallToAction.text = "Looking for " + medicineNames[remaining]
+        Log.i("RESULTS", "Adding as remaining: " + medicineNames[remaining])
+
+        // Attach found views
+        getDisplayInformation(extraction).forEach {
+            val resultView = LayoutInflater.from(this).inflate(R.layout.scan_result_item, null)
+            resultView.scan_result_name.text = it.name
+            resultView.scan_result_value.text = it.value
+            Log.i("RESULTS", "Adding as result: " + it.name)
+            viewsToShow.add(resultView)
+        }
+
+
+        // Show all views
+        scanResultsList.removeAllViews()
+        Log.i("RESULTS", viewsToShow.size.toString())
+        viewsToShow.forEach {
+            scanResultsList.addView(it)
+        }
+
     }
 
     private fun moveToEditing() {

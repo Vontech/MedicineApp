@@ -79,7 +79,7 @@ class MainActivity : AppCompatActivity() {
 
         // Render things
         renderHeader()
-        renderButton()
+        renderButtons()
     }
 
     private fun renderHeader() {
@@ -88,9 +88,14 @@ class MainActivity : AppCompatActivity() {
         this.headerDay.text = day
     }
 
-    private fun renderButton() {
+    private fun renderButtons() {
         createMedicationButton.setOnClickListener {
             val intent = Intent(this, EditMedicationActivity::class.java)
+            startActivity(intent)
+        }
+
+        scanMedicationButton.setOnClickListener {
+            val intent = Intent(this, ScanActivity::class.java)
             startActivity(intent)
         }
     }
