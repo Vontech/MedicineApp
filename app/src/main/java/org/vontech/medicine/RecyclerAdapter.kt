@@ -17,7 +17,7 @@ class RecyclerAdapter(private val medications: List<Medication>)
 
     override fun getItemCount(): Int { return medications.size }
 
-    override fun onBindViewHolder(holder: RecyclerAdapter.MedicationHolder, position: Int) {
+    override fun onBindViewHolder(holder: MedicationHolder, position: Int) {
         val itemMedication = medications[position]
         holder.bindMedication(itemMedication)
     }

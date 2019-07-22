@@ -28,6 +28,7 @@
     <string name="medication_prefs">MEDICATION_PREFS</string>
     <string name="view_medication">VIEW_MEDICATION</string>
     <string name="scan_medication">SCAN_MEDICATION</string>
+    <string name="add_medication">ADD_MEDICATION</string>
     <string name="medication_list">MEDICATION_LIST</string>
 
     <!-- REMINDER KEYS -->

@@ -22,7 +22,6 @@ import android.widget.TimePicker
 import kotlinx.android.synthetic.main.time_layout.view.*
 import org.joda.time.LocalTime
 import org.joda.time.format.DateTimeFormat
-import java.util.*
 
 val NOTIFICATION_TITLE = "Time to take your medicine, hoe!"
 val NOTIFICATION_MESSAGE = "Click to view this medication"
@@ -67,6 +66,10 @@ class EditMedicationActivity : AppCompatActivity() {
             medication = intent.getSerializableExtra(this.getString(R.string.scan_medication)) as Medication
             edit = false
             populateViews()
+        }
+
+        else if (intent.getSerializableExtra(this.getString(R.string.add_medication)) is Medication) {
+            editMedication()
         }
 
         // Set onClickListeners for TextViews
