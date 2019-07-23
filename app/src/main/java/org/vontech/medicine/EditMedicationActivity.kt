@@ -18,6 +18,7 @@ import org.vontech.medicine.utils.MedicationStore
 import java.lang.IllegalArgumentException
 import android.graphics.Paint.UNDERLINE_TEXT_FLAG
 import android.text.Html
+import android.util.Log
 import android.widget.TimePicker
 import kotlinx.android.synthetic.main.time_layout.view.*
 import org.joda.time.LocalTime
@@ -68,8 +69,8 @@ class EditMedicationActivity : AppCompatActivity() {
             populateViews()
         }
 
-        else if (intent.getSerializableExtra(this.getString(R.string.add_medication)) is Medication) {
-            medication = Medication(nameEditText.text.toString(), doseEditText.toString().toFloat(), notesEditText.text.toString())
+        else if (intent.getSerializableExtra(this.getString(R.string.add_medication)) == 1) {
+            medication = Medication(nameEditText.text.toString(), 0f, notesEditText.text.toString())
             editMedication()
         }
 
