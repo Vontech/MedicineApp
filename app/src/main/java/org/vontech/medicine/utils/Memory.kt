@@ -32,7 +32,12 @@ class MedicationStore(context: Context) {
     fun replaceMedication(old: Medication, new: Medication) {
         Log.d(LT, "replaceMedication($old, $new)")
         val medications = getMedications().toMutableList()
-        medications[medications.indexOf(old)] = new
+        val indexOfOld = medications.indexOf(old)
+        if (indexOfOld < 0) {
+            saveMedication(new)
+            return
+        }
+        medications[indexOfOld] = new
         saveMedicationList(medications)
     }
 
