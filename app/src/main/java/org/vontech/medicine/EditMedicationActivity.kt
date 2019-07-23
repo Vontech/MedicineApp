@@ -69,6 +69,7 @@ class EditMedicationActivity : AppCompatActivity() {
         }
 
         else if (intent.getSerializableExtra(this.getString(R.string.add_medication)) is Medication) {
+            medication = Medication(nameEditText.text.toString(), doseEditText.toString().toFloat(), notesEditText.text.toString())
             editMedication()
         }
 

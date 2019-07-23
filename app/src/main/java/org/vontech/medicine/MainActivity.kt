@@ -3,18 +3,18 @@ package org.vontech.medicine
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import org.vontech.medicine.reminders.ReminderManager
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
+import android.view.View
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.time_layout.view.*
 import org.joda.time.DateTime
 import org.joda.time.DateTimeZone
 import org.joda.time.LocalTime
+import org.joda.time.Minutes
 import org.vontech.medicine.pokos.Medication
 import org.vontech.medicine.utils.MedicationStore
-import org.joda.time.DateTimeFieldType.dayOfWeek
 import org.joda.time.format.DateTimeFormat
+import java.time.temporal.ChronoUnit
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
@@ -36,6 +36,11 @@ class MainActivity : AppCompatActivity() {
             intent.putExtra(this.getString(R.string.add_medication), 1)
             startActivity(intent)
         }
+        // TODO Figure out why this onclickListener code is not running
+        // TODO Once this is working, make sure 'add_medication' is being caught and run in edit activity
+        // TODO should not get 'lateinit var not assigned' error anymore, and should also have edit activity in edit mode
+        // TODO test that widget updates programmatically again
+        // TODO set the 'tonight' text in the widget to change dynamically based on the next reminder time
 
         Log.d("Medications", medicationList.toString())
         scanMedicationButton.setOnClickListener {
@@ -44,16 +49,20 @@ class MainActivity : AppCompatActivity() {
         }
 
         val nextBatch = getNextReminder()
+        if (nextBatch.reminderTime == null) {
+            nextReminderWidget.visibility = View.GONE
+        } else {
+            nextReminderWidget.visibility = View.VISIBLE
+            // Instantiate RecyclerView and set its adapter
+            linearLayoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+            recyclerView.layoutManager = linearLayoutManager
+            adapter = RecyclerAdapter(nextBatch.medicationList)
+            recyclerView.adapter = adapter
 
-        // Instantiate RecyclerView and set its adapter
-        linearLayoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        recyclerView.layoutManager = linearLayoutManager
-        adapter = RecyclerAdapter(nextBatch.medicationList)
-        recyclerView.adapter = adapter
-
-        val fmt = DateTimeFormat.forPattern("hh:mm a")
-        nextReminderTimeTextView.text = fmt.print(nextBatch.reminderTime)
-        nextReminderNumMedsTextView.text = nextBatch.medicationList.size.toString()
+            val fmt = DateTimeFormat.forPattern("hh:mm a")
+            nextReminderTimeTextView.text = fmt.print(nextBatch.reminderTime)
+            nextReminderNumMedsTextView.text = nextBatch.medicationList.size.toString()
+        }
 
         app = this.application as MedicineApplication
 //        val isLoggedIn = app.attemptToLoadExistingSession(this)
@@ -71,10 +80,16 @@ class MainActivity : AppCompatActivity() {
         Log.i("Time", DateTimeZone.UTC.convertUTCToLocal(LocalTime().millisOfDay.toLong()).toString())
     }
 
+    private fun myFunction() {
+        val intent = Intent(this, EditMedicationActivity::class.java)
+        intent.putExtra(this.getString(R.string.add_medication), 1)
+        startActivity(intent)
+    }
+
     override fun onResume() {
         super.onResume()
         medicationList = medicationStore.getMedications()
-        adapter.notifyDataSetChanged()
+        if (nextReminderWidget.visibility == View.VISIBLE) adapter.notifyDataSetChanged()
         recyclerView
 
         // Render things
@@ -104,25 +119,33 @@ class MainActivity : AppCompatActivity() {
      * Returns all of the medications that have the closest upcoming reminders (same time)
      */
     private fun getNextReminder(): ReminderBatch {
-        // For each medication, sort its reminder times in order, pick the first time and compare it to a temp variable that is storing the earliest time seen so far
-        // if this time is closer, replace that temp variable and replace the temp list medications with this medication, then start looking for this time in the rest
-        var closestReminder = medicationList.first().times.min()
-        var nextReminderMedications = mutableSetOf(medicationList.first())
+        val now = LocalTime.now()
+        var overallClosestReminder = medicationList.first().times.min()
+        val nextReminderMedications = mutableSetOf(medicationList.first())
+
+        for (medication in medicationList) {
+            if (medication.times.isEmpty()) continue
+
+            val currentMedTimesList = medication.times.toMutableList()
+            currentMedTimesList.add(now)
+            currentMedTimesList.sort()
+
+            val nextTime =
+                if (currentMedTimesList.indexOf(now) == currentMedTimesList.size - 1) currentMedTimesList.first()
+                else currentMedTimesList[currentMedTimesList.indexOf(now) + 1]
 
 
-        medicationList.forEach { medication ->
-            val minTime = medication.times.min()!!
-            if (minTime < closestReminder) {
-                closestReminder = minTime
+            if (Minutes.minutesBetween(overallClosestReminder, now) > Minutes.minutesBetween(nextTime, now)) {
+                overallClosestReminder = nextTime
                 nextReminderMedications.clear()
                 nextReminderMedications.add(medication)
-            } else if (minTime == closestReminder) {
+            } else if (nextTime == overallClosestReminder) {
                 nextReminderMedications.add(medication)
             }
         }
-        return ReminderBatch(nextReminderMedications.toList(), closestReminder!!)
+        return ReminderBatch(nextReminderMedications.toList(), overallClosestReminder)
     }
 
-    data class ReminderBatch (val medicationList: List<Medication>, val reminderTime: LocalTime)
+    data class ReminderBatch (val medicationList: List<Medication>, val reminderTime: LocalTime?)
     // TODO test the widget to ensure it updates properly and shows the most recent time with all the proper cards
 }
