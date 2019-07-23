@@ -241,7 +241,7 @@ class EditMedicationActivity : AppCompatActivity() {
         newMedication.times = medication.times
 
         // If editing a medication, replace the old medication with a new one. Otherwise, add it to the list
-        if (edit) {
+        if (edit) { // TODO Fix this to not be called when first making a medication (edit state)
             medicationStore.replaceMedication(medication, newMedication)
             scheduleReminder(newMedication, isReplacing = true)
         }
