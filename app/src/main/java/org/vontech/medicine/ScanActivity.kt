@@ -14,6 +14,7 @@ import kotlinx.android.synthetic.main.scan_result_item.view.*
 import org.vontech.medicine.ocr.*
 import org.vontech.medicine.ocr.models.getModel
 import org.vontech.medicine.pokos.Medication
+import org.vontech.medicine.utils.EditState
 import org.vontech.medicine.utils.MedicationStore
 import java.util.*
 
@@ -166,6 +167,7 @@ class ScanActivity : AppCompatActivity() {
             notes=""
         )
         val editMedicationIntent = Intent(this, EditMedicationActivity::class.java)
+        intent.putExtra(this.getString(R.string.edit_screen_state), EditState.SCANNING)
         editMedicationIntent.putExtra(getString(R.string.scan_medication), medicineToEdit)
         startActivity(editMedicationIntent)
         finish()

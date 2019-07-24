@@ -14,14 +14,17 @@ import org.joda.time.Minutes
 import org.vontech.medicine.pokos.Medication
 import org.vontech.medicine.utils.MedicationStore
 import org.joda.time.format.DateTimeFormat
+import org.vontech.medicine.utils.EditState
 import java.time.temporal.ChronoUnit
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var app: MedicineApplication
-    private lateinit var linearLayoutManager: LinearLayoutManager
-    private lateinit var adapter: RecyclerAdapter
+
+    // Upcoming medications
+    private lateinit var upcomingLinearLayoutManager: LinearLayoutManager
+    private lateinit var upcomingAdapter: RecyclerAdapter
     private lateinit var medicationList: List<Medication>
     private lateinit var medicationStore: MedicationStore
 
@@ -31,78 +34,69 @@ class MainActivity : AppCompatActivity() {
         medicationStore = MedicationStore(this)
         medicationList = medicationStore.getMedications()
 
-        // TODO Figure out why this onclickListener code is not running
-        // TODO Once this is working, make sure 'add_medication' is being caught and run in edit activity
         // TODO should not get 'lateinit var not assigned' error anymore, and should also have edit activity in edit mode
-        // TODO test that widget updates programmatically again
         // TODO set the 'tonight' text in the widget to change dynamically based on the next reminder time
 
-        linearLayoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        recyclerView.layoutManager = linearLayoutManager
-        adapter = RecyclerAdapter(medicationList)
-        recyclerView.adapter = adapter
-
-        Log.d("Medications", medicationList.toString())
-        scanMedicationButton.setOnClickListener {
-            val intent = Intent(this, ScanActivity::class.java)
-            startActivity(intent)
-        }
-
-        renderNextMedication()
+        upcomingLinearLayoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        recyclerView.layoutManager = upcomingLinearLayoutManager
+        upcomingAdapter = RecyclerAdapter(medicationList)
+        recyclerView.adapter = upcomingAdapter
 
         app = this.application as MedicineApplication
-//        val isLoggedIn = app.attemptToLoadExistingSession(this)
+        // val isLoggedIn = app.attemptToLoadExistingSession(this)
         val isLoggedIn = true // TODO remove this later
 
-
-        if (isLoggedIn) {
-            Log.i("MainActivity.kt", "Logged in!")
-            Log.i("MainActivity.kt", app.userSession.toString())
-        }
-
-//        val reminderManager = ReminderManager(this)
-//        reminderManager.addReminder("My title", "My message", DateTime(), 12)
-//        reminderManager.editReminder("Edited title", "Edited message", 12, DateTime())
-        Log.i("Time", DateTimeZone.UTC.convertUTCToLocal(LocalTime().millisOfDay.toLong()).toString())
-    }
-
-    private fun myFunction() {
-        val intent = Intent(this, EditMedicationActivity::class.java)
-        intent.putExtra(this.getString(R.string.add_medication), 1)
-        startActivity(intent)
     }
 
     override fun onResume() {
         super.onResume()
         medicationList = medicationStore.getMedications()
-        if (nextReminderWidget.visibility == View.VISIBLE) adapter.notifyDataSetChanged()
-        recyclerView
+        if (nextReminderWidget.visibility == View.VISIBLE) upcomingAdapter.notifyDataSetChanged()
 
-        // Render things
+        // Render things ----------------------------
         renderHeader()
         renderButtons()
+        renderNextMedication()
     }
 
+    /**
+     * Setup all buttons on the main page
+     */
+    private fun renderButtons() {
+        createMedicationButton.setOnClickListener {
+            val intent = Intent(this, EditMedicationActivity::class.java)
+            intent.putExtra(this.getString(R.string.edit_screen_state), EditState.ADDING)
+            startActivity(intent)
+        }
+        scanMedicationButton.setOnClickListener {
+            val intent = Intent(this, ScanActivity::class.java)
+            startActivity(intent)
+        }
+        scanMedicationButton.setOnClickListener {
+            val intent = Intent(this, ScanActivity::class.java)
+            startActivity(intent)
+        }
+    }
+
+    /**
+     * Renders the main widget for the next medication to take
+     */
     private fun renderNextMedication() {
 
-        if (medicationList.isNotEmpty()) {
-            val nextBatch = getNextReminder()
-            if (nextBatch.reminderTime == null) {
-                nextReminderWidget.visibility = View.GONE
-            } else {
-                nextReminderWidget.visibility = View.VISIBLE
-                // Instantiate RecyclerView and set its adapter
-                linearLayoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-                recyclerView.layoutManager = linearLayoutManager
-                adapter = RecyclerAdapter(nextBatch.medicationList)
-                recyclerView.adapter = adapter
-
-                val fmt = DateTimeFormat.forPattern("hh:mm a")
-                nextReminderTimeTextView.text = fmt.print(nextBatch.reminderTime)
-                nextReminderNumMedsTextView.text = nextBatch.medicationList.size.toString()
-            }
-        } else {
+        val nextBatch = getNextReminder()
+        if (nextBatch?.reminderTime == null) {
             nextReminderWidget.visibility = View.GONE
+        } else {
+            nextReminderWidget.visibility = View.VISIBLE
+            // Instantiate RecyclerView and set its adapter
+            upcomingLinearLayoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+            recyclerView.layoutManager = upcomingLinearLayoutManager
+            upcomingAdapter = RecyclerAdapter(nextBatch.medicationList)
+            recyclerView.adapter = upcomingAdapter
+
+            val fmt = DateTimeFormat.forPattern("hh:mm a")
+            nextReminderTimeTextView.text = fmt.print(nextBatch.reminderTime)
+            nextReminderNumMedsTextView.text = nextBatch.medicationList.size.toString()
         }
 
     }
@@ -113,27 +107,22 @@ class MainActivity : AppCompatActivity() {
         this.headerDay.text = day
     }
 
-    private fun renderButtons() {
-        createMedicationButton.setOnClickListener {
-            val intent = Intent(this, EditMedicationActivity::class.java)
-            intent.putExtra(this.getString(R.string.add_medication), 1)
-            startActivity(intent)
-        }
-
-        scanMedicationButton.setOnClickListener {
-            val intent = Intent(this, ScanActivity::class.java)
-            startActivity(intent)
-        }
-    }
 
     /**
      * Returns all of the medications that have the closest upcoming reminders (same time)
      */
-    private fun getNextReminder(): ReminderBatch {
+    private fun getNextReminder(): ReminderBatch? {
+
+        if (medicationList.isEmpty()) {
+            return null
+        }
+
         val now = LocalTime.now()
         var overallClosestReminder = medicationList.first().times.min()
         val nextReminderMedications = mutableSetOf(medicationList.first())
 
+        // Find the closest time to now, and return the list of medications
+        // that are taken at that time
         for (medication in medicationList) {
             if (medication.times.isEmpty()) continue
 
@@ -158,5 +147,5 @@ class MainActivity : AppCompatActivity() {
     }
 
     data class ReminderBatch (val medicationList: List<Medication>, val reminderTime: LocalTime?)
-    // TODO test the widget to ensure it updates properly and shows the most recent time with all the proper cards
+
 }

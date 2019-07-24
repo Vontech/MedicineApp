@@ -42,4 +42,7 @@
     <string name="add_reminder_time">Add Reminder Time</string>
     <string name="create_new_medication">CREATE NEW MEDICATION</string>
 
+    <!-- DETAILED MEDICATION SCREEN -->
+    <string name="edit_screen_state">EDIT_SCREEN_STATE</string>
+
 </resources>

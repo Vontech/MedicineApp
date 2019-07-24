@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.recyclerview_item_row.view.*
 import org.vontech.medicine.pokos.Medication
+import org.vontech.medicine.utils.EditState
 
 class RecyclerAdapter(private val medications: List<Medication>)
     : RecyclerView.Adapter<RecyclerAdapter.MedicationHolder>() {
@@ -34,9 +35,10 @@ class RecyclerAdapter(private val medications: List<Medication>)
         override fun onClick(v: View) {
             // Open EditMedicationActivity with medication contents on item click
             val context = itemView.context
-            val editMedicationIntent = Intent(context, EditMedicationActivity::class.java)
-            editMedicationIntent.putExtra(context.getString(R.string.view_medication), medication)
-            context.startActivity(editMedicationIntent)
+            val viewMedicationIntent = Intent(context, EditMedicationActivity::class.java)
+            viewMedicationIntent.putExtra(context.getString(R.string.edit_screen_state), EditState.READ)
+            viewMedicationIntent.putExtra(context.getString(R.string.view_medication), medication)
+            context.startActivity(viewMedicationIntent)
         }
 
         /**

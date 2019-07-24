@@ -45,4 +45,19 @@ data class Medication(var name: String?, var dose: Float?, var notes: String?) :
 //            }
 //        }
 //    }
+
+    override fun equals(other: Any?): Boolean{
+        if (this === other) return true
+        if (other?.javaClass != javaClass) return false
+
+        other as Medication
+
+        return this.id == other.id
+
+    }
+
+    override fun hashCode(): Int{
+        return this.id.hashCode()
+    }
+
 }
