@@ -27,6 +27,7 @@ import org.vontech.medicine.utils.EditState
 
 val NOTIFICATION_TITLE = "Time to take your medicine, hoe!"
 val NOTIFICATION_MESSAGE = "Click to view this medication"
+val FN = "EditMedicationActivity"
 
 class EditMedicationActivity : AppCompatActivity() {
 
@@ -125,7 +126,7 @@ class EditMedicationActivity : AppCompatActivity() {
     private fun setupViewingState() {
         medication = intent.getSerializableExtra(this.getString(R.string.view_medication)) as Medication
         isEditing = false
-        isReplacing = false
+        isReplacing = true
         populateViews()
     }
 
@@ -153,6 +154,9 @@ class EditMedicationActivity : AppCompatActivity() {
      * Also shows all weekday TextViews if editing, only selected day TextViews if not
      */
     private fun setViewVisibility() {
+
+        editMedicationButton.visibility = if (isReplacing) View.VISIBLE else View.GONE
+
         if (isEditing) {
             nameEditText.visibility = View.VISIBLE
             doseEditText.visibility = View.VISIBLE
@@ -161,6 +165,8 @@ class EditMedicationActivity : AppCompatActivity() {
             doseTextView.visibility = View.GONE
             notesTextView.visibility = View.GONE
             saveMedicationButton.visibility = View.VISIBLE
+            deleteMedicationButton.visibility = if (isReplacing) View.VISIBLE else View.GONE
+
 
             // Make all weekday TextViews visible and set their text colors based on if they had been selected or not
             weekdayTextViews.forEach { textView ->
@@ -182,6 +188,7 @@ class EditMedicationActivity : AppCompatActivity() {
             nameTextView.visibility = View.VISIBLE
             doseTextView.visibility = View.VISIBLE
             notesTextView.visibility = View.VISIBLE
+            deleteMedicationButton.visibility = View.GONE
 
             // Show only the TextViews that are in selectedDays
             weekdayTextViews.forEach{ textView ->
@@ -255,10 +262,12 @@ class EditMedicationActivity : AppCompatActivity() {
 
         // If editing a medication, replace the old medication with a new one. Otherwise, add it to the list
         if (isReplacing) { // TODO Fix this to not be called when first making a medication (edit state)
+            Log.i(FN, "Replacing an existing mediciation")
             medicationStore.replaceMedication(medication, newMedication)
             scheduleReminder(newMedication, isReplacing = true)
         }
         else {
+            Log.i(FN, "Saving a new medication")
             medicationStore.saveMedication(newMedication)
             scheduleReminder(newMedication)
         }
