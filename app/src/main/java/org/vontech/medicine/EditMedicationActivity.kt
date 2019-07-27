@@ -272,13 +272,18 @@ class EditMedicationActivity : AppCompatActivity() {
             scheduleReminder(newMedication)
         }
 
-        editMedicationButton.visibility = View.VISIBLE
-        saveMedicationButton.visibility = View.GONE
-        addReminderButton.visibility = View.VISIBLE
+        // If adding, simply move back to home
+        // If replacing, turn off editing
+        if (!isReplacing) {
+            val intent = Intent(this, MainActivity::class.java)
+            this.startActivity(intent)
+        }
+        else {
+            isReplacing = true
+            medication = newMedication
+            editMedication(false)
+        }
 
-        // Return to MainActivity
-        val intent = Intent(this, MainActivity::class.java)
-        this.startActivity(intent)
     }
 
     /**

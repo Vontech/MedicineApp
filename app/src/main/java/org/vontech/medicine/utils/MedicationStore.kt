@@ -13,7 +13,7 @@ class MedicationStore(context: Context) {
 
     private val LT = "MedicationStore" // Logging tag
     private val MEDICATIONS_KEY = context.getString(R.string.medication_list)
-    private var prefs = SecurePreferencesBuilder(context).build()//context.getSharedPreferences(MED_KEY, Context.MODE_PRIVATE)
+    private var prefs = SecurePreferencesBuilder(context).build()//context.getSharedPreferences(MED_KEY, Context.MODE_PRIVATE) //SecurePreferencesBuilder(context).build()
     private val gson = getSpecialGson()
 
     /**

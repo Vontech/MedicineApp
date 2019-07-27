@@ -24,6 +24,25 @@
 
 
     <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/noMedicinesContainer">
+
+        <TextView
+                android:text="@string/main_no_meds"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView"
+                android:fontFamily="@font/open_sans_bold"
+                android:textSize="24sp"
+                tools:text="@string/main_no_meds"
+                android:textAlignment="center"
+                android:paddingTop="32dp"
+                android:paddingBottom="32dp"/>
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"

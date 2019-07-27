@@ -30,6 +30,7 @@
     <string name="scan_medication">SCAN_MEDICATION</string>
     <string name="add_medication">ADD_MEDICATION</string>
     <string name="medication_list">MEDICATION_LIST</string>
+    <string name="medication_history">MEDICATION_HISTORY</string>
 
     <!-- REMINDER KEYS -->
     <string name="reminder_id_list">REMINDER_ID_LIST</string>
@@ -41,6 +42,7 @@
     <string name="notes_extra_instructions">Add notes or extra instructions here</string>
     <string name="add_reminder_time">Add Reminder Time</string>
     <string name="create_new_medication">CREATE NEW MEDICATION</string>
+    <string name="main_no_meds">No medications!\nAdd a new medication below</string>
 
     <!-- DETAILED MEDICATION SCREEN -->
     <string name="edit_screen_state">EDIT_SCREEN_STATE</string>

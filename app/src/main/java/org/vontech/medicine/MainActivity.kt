@@ -57,6 +57,7 @@ class MainActivity : AppCompatActivity() {
         renderHeader()
         renderButtons()
         renderNextMedication()
+        renderMissingPane()
     }
 
     /**
@@ -72,9 +73,13 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, ScanActivity::class.java)
             startActivity(intent)
         }
-        scanMedicationButton.setOnClickListener {
-            val intent = Intent(this, ScanActivity::class.java)
-            startActivity(intent)
+    }
+
+    private fun renderMissingPane() {
+        if (medicationList.isEmpty()) {
+            noMedicinesContainer.visibility = View.VISIBLE
+        } else {
+            noMedicinesContainer.visibility = View.GONE
         }
     }
 
