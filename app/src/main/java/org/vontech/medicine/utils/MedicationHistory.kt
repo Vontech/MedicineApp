@@ -5,7 +5,6 @@ import android.util.Log
 import com.google.gson.reflect.TypeToken
 import org.joda.time.LocalTime
 import org.vontech.medicine.R
-import org.vontech.medicine.pokos.Medication
 import org.vontech.medicine.pokos.MedicationEvent
 import org.vontech.medicine.pokos.MedicationEventType
 import org.vontech.medicine.security.SecurePreferencesBuilder
@@ -17,6 +16,13 @@ class MedicationHistory(context: Context) {
     private val MEDICATIONS_HISTORY_KEY = context.getString(R.string.medication_list)
     private var prefs = SecurePreferencesBuilder(context).build()//context.getSharedPreferences(MED_KEY, Context.MODE_PRIVATE) //SecurePreferencesBuilder(context).build()
     private val gson = getSpecialGson()
+
+    fun addEvent(medicationEvent: MedicationEvent) {
+        Log.d(LT, "Adding event $medicationEvent")
+        val events = getAllEvents()
+        events.add(medicationEvent)
+        saveMedicationHistoryList(events)
+    }
 
     /**
      * Returns a list of medication events given a medication id. Optionally
@@ -52,7 +58,7 @@ class MedicationHistory(context: Context) {
     /**
      * Returns the list of all events that have occurred
      */
-    fun getAllEvents(): List<MedicationEvent> {
+    fun getAllEvents(): MutableList<MedicationEvent> {
         Log.d(LT, "getAllEvents()")
         val json = prefs.getString(MEDICATIONS_HISTORY_KEY, null)
         val type = object : TypeToken<ArrayList<MedicationEvent>>() {}.type
@@ -61,6 +67,17 @@ class MedicationHistory(context: Context) {
         } else {
             getSpecialGson().fromJson<ArrayList<MedicationEvent>>(json, type)
         }
+    }
+
+    /**
+     * Saves the list of medications to memory
+     */
+    private fun saveMedicationHistoryList(medicationHistory: List<MedicationEvent>) {
+        Log.d(LT, "saveMedicationHistoryList()")
+        val editor = prefs.edit()
+        val json = gson.toJson(medicationHistory)
+        editor.putString(MEDICATIONS_HISTORY_KEY, json)
+        editor.apply()
     }
 
 }

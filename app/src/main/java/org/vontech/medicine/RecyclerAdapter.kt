@@ -6,7 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.recyclerview_item_row.view.*
 import org.vontech.medicine.pokos.Medication
+import org.vontech.medicine.pokos.MedicationEvent
+import org.vontech.medicine.pokos.MedicationEventType
 import org.vontech.medicine.utils.EditState
+import org.vontech.medicine.utils.MedicationHistory
 
 class RecyclerAdapter(private val medications: List<Medication>)
     : RecyclerView.Adapter<RecyclerAdapter.MedicationHolder>() {
@@ -28,6 +31,7 @@ class RecyclerAdapter(private val medications: List<Medication>)
         // References to the inflated view to allow MedicationHolder to access textviews
         private var view: View = v
         private var medication: Medication? = null
+        private val medicationHistoryStore = MedicationHistory(itemView.context)
 
         // Implement a custom onClickListener, since ViewHolders are responsible for their own event handling
         init { v.setOnClickListener(this) }
@@ -50,6 +54,20 @@ class RecyclerAdapter(private val medications: List<Medication>)
             view.nameTextView.text = medication.name
             view.doseTextView.text = medication.dose.toString() + " mL"
             //view.notesTextView.text = medication.notes
+            view.markAsDoneButton.setOnClickListener {
+                handleMedicineTaken(medication)
+            }
         }
+
+        private fun handleMedicineTaken(medication: Medication) {
+
+            // Log this as taken
+            medicationHistoryStore.addEvent(MedicationEvent(
+                medication.id,
+                MedicationEventType.TAKEN
+            ))
+
+        }
+
     }
 }
