@@ -166,6 +166,7 @@ class EditMedicationActivity : AppCompatActivity() {
             notesTextView.visibility = View.GONE
             saveMedicationButton.visibility = View.VISIBLE
             deleteMedicationButton.visibility = if (isReplacing) View.VISIBLE else View.GONE
+            addReminderButton.visibility = View.VISIBLE
 
 
             // Make all weekday TextViews visible and set their text colors based on if they had been selected or not
@@ -189,6 +190,7 @@ class EditMedicationActivity : AppCompatActivity() {
             doseTextView.visibility = View.VISIBLE
             notesTextView.visibility = View.VISIBLE
             deleteMedicationButton.visibility = View.GONE
+            addReminderButton.visibility = View.GONE
 
             // Show only the TextViews that are in selectedDays
             weekdayTextViews.forEach{ textView ->

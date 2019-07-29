@@ -1,9 +1,7 @@
 package org.vontech.medicine.pokos
 
-import org.joda.time.DateTimeConstants
 import org.joda.time.LocalTime
 import java.io.Serializable
-import java.util.Calendar
 import kotlin.random.Random
 
 data class Medication(var name: String?, var dose: Float?, var notes: String?) : Serializable {
