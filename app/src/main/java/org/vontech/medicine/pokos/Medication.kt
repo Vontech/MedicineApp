@@ -4,8 +4,7 @@ import org.joda.time.LocalTime
 import java.io.Serializable
 import kotlin.random.Random
 
-data class Medication(var name: String?, var dose: Float?, var notes: String?) : Serializable {
-    val id = Random.nextInt()
+data class Medication(var name: String?, var dose: Float?, var notes: String, val id: Int = Random.nextInt()) : Serializable {
     var days = mutableSetOf<Int>() // JodaTime weekday constants
     var times = mutableSetOf<LocalTime>() // JodaTime object
 

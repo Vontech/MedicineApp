@@ -24,6 +24,7 @@ import kotlinx.android.synthetic.main.time_layout.view.*
 import org.joda.time.LocalTime
 import org.joda.time.format.DateTimeFormat
 import org.vontech.medicine.utils.EditState
+import java.util.*
 
 val NOTIFICATION_TITLE = "Time to take your medicine, hoe!"
 val NOTIFICATION_MESSAGE = "Click to view this medication"
@@ -36,6 +37,7 @@ class EditMedicationActivity : AppCompatActivity() {
     private var isReplacing: Boolean = false
     private var todayShowing: Boolean = false
     private lateinit var medication: Medication
+    private var preservedMedication: Medication? = null
     private lateinit var reminderManager: ReminderManager
     private lateinit var weekdayTextViews: List<TextView>
     private var selectedDays = mutableSetOf<Int>()
@@ -62,6 +64,25 @@ class EditMedicationActivity : AppCompatActivity() {
             EditState.EDITING -> setupEditingState()
         }
 
+        // Preserve the original medication
+        preserveMedication()
+
+    }
+
+    private fun preserveMedication() {
+        preservedMedication = Medication(
+            medication.name,
+            medication.dose,
+            medication.notes,
+            medication.id
+        )
+        preservedMedication!!.days = medication.days.filter {true}.toMutableSet()
+        preservedMedication!!.times = medication.times.filter {true}.toMutableSet()
+        Log.e(FN, "SAVED IT!")
+    }
+
+    private fun loadOriginalMedication() {
+        medication = preservedMedication!!
     }
 
     private fun setupStyles() {
@@ -240,6 +261,13 @@ class EditMedicationActivity : AppCompatActivity() {
         isEditing = editing
         // The EditTexts and TextViews were already populated when onCreate() called populateViews()
         // Only need to set the correct visibility for editing
+
+        if (isEditing) {
+            preserveMedication()
+        } else {
+            loadOriginalMedication()
+        }
+
         setViewVisibility()
     }
 
@@ -283,6 +311,7 @@ class EditMedicationActivity : AppCompatActivity() {
         else {
             isReplacing = true
             medication = newMedication
+            preserveMedication()
             editMedication(false)
         }
 
@@ -292,6 +321,7 @@ class EditMedicationActivity : AppCompatActivity() {
      * Populates the activity's views with the values from the given Medication
      */
     private fun populateViews() {
+
         if (medication.name != null) {
             nameEditText.setText(medication.name!!)
             nameTextView.text = medication.name!!.toUpperCase()
