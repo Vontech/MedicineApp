@@ -18,19 +18,21 @@ import org.vontech.medicine.utils.MedicationStore
 import java.lang.IllegalArgumentException
 import android.graphics.Paint.UNDERLINE_TEXT_FLAG
 import android.text.Html
+import android.text.TextWatcher
 import android.util.Log
 import android.widget.TimePicker
 import kotlinx.android.synthetic.main.time_layout.view.*
 import org.joda.time.LocalTime
 import org.joda.time.format.DateTimeFormat
 import org.vontech.medicine.utils.EditState
-import java.util.*
-
-val NOTIFICATION_TITLE = "Time to take your medicine, hoe!"
-val NOTIFICATION_MESSAGE = "Click to view this medication"
-val FN = "EditMedicationActivity"
 
 class EditMedicationActivity : AppCompatActivity() {
+
+    val NOTIFICATION_TITLE = "Time to take your medicine, hoe!"
+    val NOTIFICATION_MESSAGE = "Click to view this medication"
+    val FN = "EditMedicationActivity"
+
+    val TODAY_TEXT = "<font color=#5AA3FF>(today!)</font>"
 
     private lateinit var medicationStore: MedicationStore
     private var isEditing: Boolean = false
@@ -39,24 +41,33 @@ class EditMedicationActivity : AppCompatActivity() {
     private lateinit var medication: Medication
     private var preservedMedication: Medication? = null
     private lateinit var reminderManager: ReminderManager
+
+    private lateinit var viewsShownDuringEditing: MutableList<View>
+    private lateinit var viewsShownDuringViewing: MutableList<View>
     private lateinit var weekdayTextViews: List<TextView>
-    private var selectedDays = mutableSetOf<Int>()
-    private var timeViews = mutableSetOf<View>()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_medication)
 
+        // Create access to storage operations
         medicationStore = MedicationStore(this)
         reminderManager = ReminderManager(this)
+
+        // Create lists of views for convenience
         weekdayTextViews = arrayListOf(mondayTextView, tuesdayTextView, wednesdayTextView, thursdayTextView,
                                         fridayTextView, saturdayTextView, sundayTextView)
+        viewsShownDuringEditing = arrayListOf(nameEditText, doseEditText, notesEditText, saveMedicationButton,
+                                                addReminderButton)
+        viewsShownDuringEditing.addAll(weekdayTextViews)
+        viewsShownDuringViewing = arrayListOf(nameTextView, doseTextView, notesTextView)
 
+        // Setup basic styles and interactions
         setupStyles()
         setupOnClickListeners()
 
         // Setup based on state
-
         when (intent.getSerializableExtra(getString(R.string.edit_screen_state))) {
             EditState.ADDING -> setupAddingState()
             EditState.SCANNING -> setupScanningState()
@@ -64,8 +75,62 @@ class EditMedicationActivity : AppCompatActivity() {
             EditState.EDITING -> setupEditingState()
         }
 
-        // Preserve the original medication
+        // Preserve whichever current medication is being held
         preserveMedication()
+
+        refreshUI()
+
+    }
+
+    private fun refreshUI() {
+
+        // First, hide and show primary form views based on editing and viewing state
+        viewsShownDuringEditing.forEach {it.visibility = if (isEditing) View.VISIBLE else View.GONE}
+        viewsShownDuringViewing.forEach {it.visibility = if (isEditing) View.GONE else View.VISIBLE}
+
+        // Show buttons based on state
+        editMedicationButton.visibility = if (isReplacing) View.VISIBLE else View.GONE
+        deleteMedicationButton.visibility = if (isReplacing && isEditing) View.VISIBLE else View.GONE
+        editMedicationButton.text = if (isEditing) "Cancel Edits" else "Edit Medication"
+
+        if (medication.name != null) {
+            nameEditText.setText(medication.name!!)
+            nameTextView.text = medication.name!!.toUpperCase()
+        }
+        if (medication.dose != null) {
+            doseEditText.setText(medication.dose.toString())
+            doseTextView.text = "${medication.dose.toString()} mL"
+        }
+        if (medication.notes != null) {
+            notesEditText.setText(medication.notes)
+            notesTextView.text = medication.notes
+        }
+
+        // Show each time
+        medicationTimesLinearLayout.removeAllViews()
+        medication.times.toList().sorted().forEach { time -> medicationTimesLinearLayout.addView(getTimeTextView(time)) }
+
+        // Show the delete reminder icons for each time of this medication
+        (0 until medicationTimesLinearLayout.childCount).forEach {
+            medicationTimesLinearLayout.getChildAt(it).deleteReminderImgView.visibility = if (isEditing) View.VISIBLE else View.GONE
+        }
+
+        // Change the styling of each weekday for the medication
+        weekdayTextViews.forEach { textView ->
+            if (medication.days.contains(textViewToJoda(textView))) {
+                textView.visibility = View.VISIBLE
+                textView.setTextColor(ContextCompat.getColor(this, R.color.textColor))
+            } else {
+                textView.setTextColor(ContextCompat.getColor(this, R.color.disabledTextColor))
+            }
+        }
+
+        // Add the "(today!)" text to the current TextView  text
+        if (medication.days.contains(DateTime().dayOfWeek) && !todayShowing) {
+            calendarToTextView(DateTime().dayOfWeek).append(" ")
+            calendarToTextView(DateTime().dayOfWeek).append(Html.fromHtml(TODAY_TEXT))
+            todayShowing = true
+        }
 
     }
 
@@ -78,11 +143,11 @@ class EditMedicationActivity : AppCompatActivity() {
         )
         preservedMedication!!.days = medication.days.filter {true}.toMutableSet()
         preservedMedication!!.times = medication.times.filter {true}.toMutableSet()
-        Log.e(FN, "SAVED IT!")
     }
 
     private fun loadOriginalMedication() {
         medication = preservedMedication!!
+
     }
 
     private fun setupStyles() {
@@ -105,15 +170,21 @@ class EditMedicationActivity : AppCompatActivity() {
         // Set onClickListeners for buttons
         addReminderButton.setOnClickListener { showTimePickerDialog() }
         editMedicationButton.setOnClickListener {
-            if (isEditing) {
-                editMedicationButton.text = "Edit Medication"
-            } else {
-                editMedicationButton.text = "Cancel Edits"
-            }
             editMedication(!isEditing)
         }
         saveMedicationButton.setOnClickListener { saveMedication() }
         deleteMedicationButton.setOnClickListener { deleteMedication() }
+
+        // Set edit text listeners
+        nameEditText.afterTextChanged {
+            medication.name = it
+        }
+        doseEditText.afterTextChanged {
+            medication.dose = it.toFloat()
+        }
+        notesEditText.afterTextChanged {
+            medication.notes = it
+        }
 
     }
 
@@ -121,24 +192,17 @@ class EditMedicationActivity : AppCompatActivity() {
         isEditing = true
         isReplacing = false
         medication = Medication(nameEditText.text.toString(), 0f, notesEditText.text.toString())
-        populateViews()
     }
 
-    /**
-     * Populate TextViews found by scanning a medication (creating new medication)
-     */
     private fun setupScanningState() {
         medication = intent.getSerializableExtra(this.getString(R.string.scan_medication)) as Medication
         isEditing = false
         isReplacing = false
-        populateViews()
-
     }
 
     private fun setupEditingState() {
         isEditing = true
         isReplacing = true
-        populateViews()
     }
 
     /**
@@ -148,7 +212,6 @@ class EditMedicationActivity : AppCompatActivity() {
         medication = intent.getSerializableExtra(this.getString(R.string.view_medication)) as Medication
         isEditing = false
         isReplacing = true
-        populateViews()
     }
 
     /**
@@ -162,78 +225,12 @@ class EditMedicationActivity : AppCompatActivity() {
 
         val myTimeListener = OnTimeSetListener { timePicker: TimePicker, hour: Int, minute: Int ->
             medication.times.add(LocalTime(hour, minute))
-            addTimeTextView(LocalTime(hour, minute))
+            refreshUI()
         }
         val timePickerDialog = TimePickerDialog(this, R.style.DialogTheme, myTimeListener, hour, minute, false)
         timePickerDialog.setTitle("Choose time for reminder")
         timePickerDialog.window.setBackgroundDrawableResource(R.color.mainCardBackground)
         timePickerDialog.show()
-    }
-
-    /**
-     * Only shows the name and dose EditTexts if the medication is being edited, and only shows the TextViews if not.
-     * Also shows all weekday TextViews if editing, only selected day TextViews if not
-     */
-    private fun setViewVisibility() {
-
-        editMedicationButton.visibility = if (isReplacing) View.VISIBLE else View.GONE
-
-        if (isEditing) {
-            nameEditText.visibility = View.VISIBLE
-            doseEditText.visibility = View.VISIBLE
-            notesEditText.visibility = View.VISIBLE
-            nameTextView.visibility = View.GONE
-            doseTextView.visibility = View.GONE
-            notesTextView.visibility = View.GONE
-            saveMedicationButton.visibility = View.VISIBLE
-            deleteMedicationButton.visibility = if (isReplacing) View.VISIBLE else View.GONE
-            addReminderButton.visibility = View.VISIBLE
-
-
-            // Make all weekday TextViews visible and set their text colors based on if they had been selected or not
-            weekdayTextViews.forEach { textView ->
-                textView.visibility = View.VISIBLE
-                if (selectedDays.contains(textViewToJoda(textView))) {
-                    textView.setTextColor(ContextCompat.getColor(this, R.color.textColor))
-                } else {
-                    textView.setTextColor(ContextCompat.getColor(this, R.color.disabledTextColor))
-                }
-            }
-
-            // Show the delete reminder icons for each time of this medication
-            timeViews.forEach { view -> view.deleteReminderImgView.visibility = View.VISIBLE }
-        } else {
-            nameEditText.visibility = View.GONE
-            doseEditText.visibility = View.GONE
-            notesEditText.visibility = View.GONE
-            saveMedicationButton.visibility = View.GONE
-            nameTextView.visibility = View.VISIBLE
-            doseTextView.visibility = View.VISIBLE
-            notesTextView.visibility = View.VISIBLE
-            deleteMedicationButton.visibility = View.GONE
-            addReminderButton.visibility = View.GONE
-
-            // Show only the TextViews that are in selectedDays
-            weekdayTextViews.forEach{ textView ->
-                if (selectedDays.contains(textViewToJoda(textView))) {
-                    textView.visibility = View.VISIBLE
-                    textView.setTextColor(ContextCompat.getColor(this, R.color.textColor))
-                } else {
-                    textView.visibility = View.GONE
-                }
-            }
-
-            // Hide the delete reminder icons for each time of this medication
-            timeViews.forEach { view -> view.deleteReminderImgView.visibility = View.GONE }
-        }
-
-        // Add the "(today!)" text to the current TextView  text
-        if (selectedDays.contains(DateTime().dayOfWeek) && !todayShowing) {
-            val text = "<font color=#5AA3FF>(today!)</font>"
-            calendarToTextView(DateTime().dayOfWeek).append(" ")
-            calendarToTextView(DateTime().dayOfWeek).append(Html.fromHtml(text))
-            todayShowing = true
-        }
     }
 
     /**
@@ -244,12 +241,12 @@ class EditMedicationActivity : AppCompatActivity() {
         // Remove this day from selectedDays
         if (textView.currentTextColor == ContextCompat.getColor(this, R.color.textColor)) {
             textView.setTextColor(ContextCompat.getColor(this, R.color.disabledTextColor))
-            selectedDays.remove(textViewToJoda(textView))
+            medication.days.remove(textViewToJoda(textView))
         } else {
             textView.setTextColor(ContextCompat.getColor(this, R.color.textColor))
-            selectedDays.add(textViewToJoda(textView))
+            medication.days.add(textViewToJoda(textView))
         }
-        println("SelectedDays: $selectedDays")
+        refreshUI()
     }
 
 
@@ -267,8 +264,8 @@ class EditMedicationActivity : AppCompatActivity() {
         } else {
             loadOriginalMedication()
         }
+        refreshUI()
 
-        setViewVisibility()
     }
 
     /**
@@ -287,11 +284,11 @@ class EditMedicationActivity : AppCompatActivity() {
 
         // Create a new Medication object from the fields
         val newMedication = Medication(nameEditText.text.toString(), dose, notesEditText.text.toString())
-        newMedication.days = selectedDays
+        newMedication.days = medication.days
         newMedication.times = medication.times
 
         // If editing a medication, replace the old medication with a new one. Otherwise, add it to the list
-        if (isReplacing) { // TODO Fix this to not be called when first making a medication (edit state)
+        if (isReplacing) {
             Log.i(FN, "Replacing an existing mediciation")
             medicationStore.replaceMedication(medication, newMedication)
             scheduleReminder(newMedication, isReplacing = true)
@@ -315,48 +312,22 @@ class EditMedicationActivity : AppCompatActivity() {
             editMedication(false)
         }
 
+        refreshUI()
+
     }
 
-    /**
-     * Populates the activity's views with the values from the given Medication
-     */
-    private fun populateViews() {
-
-        if (medication.name != null) {
-            nameEditText.setText(medication.name!!)
-            nameTextView.text = medication.name!!.toUpperCase()
-        }
-        if (medication.dose != null) {
-            doseEditText.setText(medication.dose.toString())
-            doseTextView.text = "${medication.dose.toString()} mL"
-        }
-        if (medication.notes != null) {
-            notesEditText.setText(medication.notes)
-            notesTextView.text = medication.notes
-        }
-        if (medication.times.isNotEmpty()) {
-            medication.times.toList().sorted().forEach { time -> addTimeTextView(time) }
-        }
-        // Set the visibility of the name, dose, and weekday views based on if the medication is being edited
-        selectedDays = medication.days
-        setViewVisibility()
-    }
-
-    private fun addTimeTextView(time: LocalTime) {
+    private fun getTimeTextView(time: LocalTime): View {
         val view = medicationTimesLinearLayout.inflate(R.layout.time_layout, false)
         val fmt = DateTimeFormat.forPattern("hh:mm a")
         view.timeTextView.text = fmt.print(time)
-        medicationTimesLinearLayout.addView(view)
         view.deleteReminderImgView.setOnClickListener { deleteReminder(time, view) }
-        if (isEditing) view.deleteReminderImgView.visibility = View.VISIBLE else view.deleteReminderImgView.visibility = View.GONE
-        timeViews.add(view)
+        return view
     }
 
     private fun deleteReminder(time: LocalTime, view: View) {
         medication.times.remove(time)
-        timeViews.remove(view)
-        medicationTimesLinearLayout.removeView(view)
         scheduleReminder(medication, isDeleting = true)
+        refreshUI()
     }
 
     /**
@@ -392,6 +363,8 @@ class EditMedicationActivity : AppCompatActivity() {
             return
         }
         reminderManager.addReminder(NOTIFICATION_TITLE, NOTIFICATION_MESSAGE, medication.id, nextTime!!)
+
+        refreshUI()
     }
 
 
