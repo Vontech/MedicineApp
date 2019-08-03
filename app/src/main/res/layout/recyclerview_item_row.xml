@@ -4,7 +4,9 @@
     android:orientation="vertical"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:padding="16dp">
+    android:elevation="10dp"
+    android:layout_marginTop="8dp"
+    android:layout_marginBottom="16dp">
 
     <ImageView
             android:layout_width="@dimen/mainScreenPillSize"
@@ -16,23 +18,25 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/nameTextView"
-            android:textSize="20sp"
+            android:textSize="24sp"
             android:text="Medication Name"
             android:textStyle="bold"
             android:textColor="@color/textColor"
-            android:fontFamily="@font/open_sans_bold"
+            android:fontFamily="@font/sf_bold"
             android:textAlignment="viewStart"
-            android:paddingTop="8dp"/>
+            android:paddingTop="8dp"
+            android:paddingLeft="16dp"/>
 
     <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/doseTextView"
-            android:textSize="18sp"
+            android:textSize="20sp"
             android:text="Dose amount"
-            android:fontFamily="@font/open_sans"
-            android:textColor="@color/textColor"
-            android:textAlignment="viewStart"/>
+            android:fontFamily="@font/sf_regular"
+            android:textColor="@color/disabledTextColor"
+            android:textAlignment="viewStart"
+            android:paddingLeft="16dp"/>
 
     <Button
             android:text="@string/click_once_taken"
@@ -45,6 +49,17 @@
             android:fontFamily="@font/open_sans_semibold"
             android:layout_marginTop="10dp"
             android:layout_marginLeft="-4dp"
-            android:layout_marginRight="-4dp"/>
+            android:layout_marginRight="-4dp"
+            android:visibility='gone'/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/card_background"
+        android:backgroundTint="@color/blueButtonColor">
+
+
+
+    </LinearLayout>
 
 </LinearLayout>

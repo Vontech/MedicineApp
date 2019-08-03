@@ -11,4 +11,8 @@
 
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
+    <color name="orange">#F3B03D</color>
+    <color name="red">#E06352</color>
+    <color name="purple">#7978E6</color>
+
 </resources>
