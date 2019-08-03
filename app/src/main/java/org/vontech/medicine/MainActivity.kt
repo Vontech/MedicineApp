@@ -99,7 +99,7 @@ class MainActivity : AppCompatActivity() {
             upcomingAdapter = RecyclerAdapter(nextBatch.medicationList)
             recyclerView.adapter = upcomingAdapter
 
-            val fmt = DateTimeFormat.forPattern("hh:mm a")
+            val fmt = DateTimeFormat.forPattern("h:mm aa")
             nextReminderTimeTextView.text = fmt.print(nextBatch.reminderTime)
             nextReminderNumMedsTextView.text = nextBatch.medicationList.size.toString()
         }

@@ -34,74 +34,81 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/textView"
-                android:fontFamily="@font/open_sans_bold"
+                android:fontFamily="@font/sf_medium"
                 android:textSize="24sp"
                 tools:text="@string/main_no_meds"
+                android:textColor="@color/disabledTextColor"
                 android:textAlignment="center"
-                android:paddingTop="32dp"
-                android:paddingBottom="32dp"/>
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="24dp"/>
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:orientation="horizontal"
-        android:paddingLeft="26dp"
-        android:id='@+id/nextReminderWidget'>
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingLeft="26dp"
+            android:id='@+id/nextReminderWidget'>
 
         <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/widget_background"
                 android:orientation="vertical"
-                android:paddingRight="10dp"
-                android:paddingLeft="10dp">
+                android:paddingRight="48dp"
+                android:paddingLeft="18dp">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="14sp"
-                android:textColor="@color/textColor"
-                android:text="@string/main_next_reminder"/>
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp"
+                    android:textColor="@color/textColor"
+                    android:text="@string/main_next_reminder"
+                    android:fontFamily="@font/sf_regular"
+                    android:layout_marginBottom="-8dp"/>
 
             <LinearLayout
                     android:orientation="horizontal"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="-8dp">
 
                 <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/nextReminderTimeTextView"
-                        android:textSize="18sp"
+                        android:textSize="20sp"
                         android:textColor="@color/textColor"
-                        android:textAlignment="viewStart"/>
+                        android:textAlignment="viewStart"
+                        android:fontFamily="@font/sf_heavy"/>
 
                 <TextView
-                    android:text=" tonight, "
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="18sp"
-                    android:textColor="@color/textColor"
-                    android:textAlignment="viewStart"/>
+                        android:text=" tonight, "
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="20sp"
+                        android:textColor="@color/textColor"
+                        android:textAlignment="viewStart"
+                        android:fontFamily="@font/sf_regular"/>
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/nextReminderNumMedsTextView"
-                    android:textStyle="bold"
-                    android:textSize="18sp"
-                    android:textColor="@color/textColor"
-                    android:textAlignment="viewStart"/>
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/nextReminderNumMedsTextView"
+                        android:textStyle="bold"
+                        android:textSize="20sp"
+                        android:textColor="@color/textColor"
+                        android:textAlignment="viewStart"
+                        android:fontFamily="@font/sf_heavy"/>
 
                 <TextView
-                    android:text=" medications"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="18sp"
-                    android:textColor="@color/textColor"
-                    android:textAlignment="viewStart"/>
+                        android:text=" medications"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="20sp"
+                        android:textColor="@color/textColor"
+                        android:textAlignment="viewStart"
+                        android:fontFamily="@font/sf_regular"/>
             </LinearLayout>
 
         </LinearLayout>
