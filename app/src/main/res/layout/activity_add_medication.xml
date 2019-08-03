@@ -90,82 +90,109 @@
             android:fontFamily="@font/open_sans"/>
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginBottom="12dp">
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginBottom="12dp">
 
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/mondayTextView"
-                android:text="MONDAY"
-                android:textStyle="bold"
-                android:textSize="20sp"
-                android:textColor="@color/black"
-                android:clickable="true"
-                android:fontFamily="@font/open_sans_bold"/>
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/mondayTextView"
+                    android:text="MONDAY"
+                    android:textStyle="bold"
+                    android:textSize="20sp"
+                    android:textColor="@color/black"
+                    android:clickable="true"
+                    android:fontFamily="@font/open_sans_bold"/>
 
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/tuesdayTextView"
-                android:text="TUESDAY"
-                android:textStyle="bold"
-                android:textSize="20sp"
-                android:textColor="@color/black"
-                android:fontFamily="@font/open_sans_bold"/>
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tuesdayTextView"
+                    android:text="TUESDAY"
+                    android:textStyle="bold"
+                    android:textSize="20sp"
+                    android:textColor="@color/black"
+                    android:fontFamily="@font/open_sans_bold"/>
 
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/wednesdayTextView"
-                android:text="WEDNESDAY"
-                android:textStyle="bold"
-                android:textSize="20sp"
-                android:textColor="@color/black"
-                android:fontFamily="@font/open_sans_bold"/>
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/wednesdayTextView"
+                    android:text="WEDNESDAY"
+                    android:textStyle="bold"
+                    android:textSize="20sp"
+                    android:textColor="@color/black"
+                    android:fontFamily="@font/open_sans_bold"/>
 
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/thursdayTextView"
-                android:text="THURSDAY"
-                android:textStyle="bold"
-                android:textSize="20sp"
-                android:textColor="@color/black"
-                android:fontFamily="@font/open_sans_bold"/>
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/thursdayTextView"
+                    android:text="THURSDAY"
+                    android:textStyle="bold"
+                    android:textSize="20sp"
+                    android:textColor="@color/black"
+                    android:fontFamily="@font/open_sans_bold"/>
 
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/fridayTextView"
-                android:text="FRIDAY"
-                android:textStyle="bold"
-                android:textSize="20sp"
-                android:textColor="@color/black"
-                android:fontFamily="@font/open_sans_bold"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/saturdayTextView"
-                android:text="SATURDAY"
-                android:textStyle="bold"
-                android:textSize="20sp"
-                android:textColor="@color/black"
-                android:fontFamily="@font/open_sans_bold"/>
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/fridayTextView"
+                    android:text="FRIDAY"
+                    android:textStyle="bold"
+                    android:textSize="20sp"
+                    android:textColor="@color/black"
+                    android:fontFamily="@font/open_sans_bold"/>
 
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/sundayTextView"
-                android:text="SUNDAY"
-                android:textStyle="bold"
-                android:textSize="20sp"
-                android:textColor="@color/black"
-                android:fontFamily="@font/open_sans_bold"/>
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/saturdayTextView"
+                    android:text="SATURDAY"
+                    android:textStyle="bold"
+                    android:textSize="20sp"
+                    android:textColor="@color/black"
+                    android:fontFamily="@font/open_sans_bold"/>
+
+            <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/sundayTextView"
+                    android:text="SUNDAY"
+                    android:textStyle="bold"
+                    android:textSize="20sp"
+                    android:textColor="@color/black"
+                    android:fontFamily="@font/open_sans_bold"/>
 
         </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/medicationTimesHeaderTextView"
+            android:text="You take this medication at:"
+            android:textColor="@color/textColor"
+            android:textSize="18sp"
+            android:fontFamily="@font/open_sans"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="38dp"
+            android:text="@string/add_reminder_time"
+            android:drawableStart="@drawable/ic_add"
+            android:drawablePadding="10dp"
+            android:background="@color/mainCardBackground"
+            android:textColor="@color/blueButtonColor"
+            android:fontFamily="@font/open_sans_bold"
+            android:id="@+id/addReminderButton"
+            android:layout_marginLeft="3dp"
+            android:layout_marginRight="3dp"
+            android:textSize="14sp"
+            android:visibility="gone"
+            android:gravity="center_vertical"
+            style="?android:attr/borderlessButtonStyle"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -174,32 +201,7 @@
             android:orientation="vertical">
             <!-- For medication times -->
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/medicationTimesHeaderTextView"
-                android:text="You take this medication at:"
-                android:textColor="@color/textColor"
-                android:textSize="18sp"
-                android:fontFamily="@font/open_sans"/>
-
             <!--Programmatically add textviews for the times-->
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="38dp"
-                android:text="@string/add_reminder_time"
-                android:drawableStart="@drawable/ic_add"
-                android:drawablePadding="10dp"
-                android:background="@color/mainCardBackground"
-                android:textColor="@color/blueButtonColor"
-                android:fontFamily="@font/open_sans_bold"
-                android:id="@+id/addReminderButton"
-                android:layout_marginLeft="3dp"
-                android:layout_marginRight="3dp"
-                android:textSize="14sp"
-                android:visibility="gone"
-                android:gravity="center_vertical"
-                style="?android:attr/borderlessButtonStyle"/>
         </LinearLayout>
 
         <TextView

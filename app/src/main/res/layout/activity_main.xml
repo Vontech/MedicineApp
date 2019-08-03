@@ -122,19 +122,6 @@
             android:layout_marginBottom="16dp"/>
 
     <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/markAsTaken"
-            android:layout_marginRight="26dp"
-            android:layout_marginLeft="26dp"
-            android:minHeight="0dp"
-            android:text="MARK ALL 3 AS TAKEN"
-            android:fontFamily="@font/open_sans_bold"
-            android:backgroundTint="@color/blueButtonColor"
-            android:textColor="@android:color/white"
-            android:textSize="18sp"/>
-
-    <Button
             android:text="@string/create_new_medication"
             android:background="@drawable/outline_button"
             android:layout_width="match_parent"
