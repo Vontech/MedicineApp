@@ -1,6 +1,7 @@
 package org.vontech.medicine
 
 import android.content.Intent
+import android.graphics.*
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +11,7 @@ import org.vontech.medicine.pokos.MedicationEvent
 import org.vontech.medicine.pokos.MedicationEventType
 import org.vontech.medicine.utils.EditState
 import org.vontech.medicine.utils.MedicationHistory
+import android.graphics.BitmapFactory
 
 class RecyclerAdapter(private val medications: List<Medication>)
     : RecyclerView.Adapter<RecyclerAdapter.MedicationHolder>() {
@@ -53,7 +55,10 @@ class RecyclerAdapter(private val medications: List<Medication>)
             this.medication = medication
             view.nameTextView.text = medication.name
             view.doseTextView.text = medication.dose.toString() + " mL"
-            //view.notesTextView.text = medication.notes
+
+            val icon = BitmapFactory.decodeResource(itemView.context.resources, R.drawable.placeholder)
+            view.imageView.setImageBitmap(getRoundedCornerBitmap(icon))
+
             view.markAsDoneButton.setOnClickListener {
                 handleMedicineTaken(medication)
             }
@@ -69,5 +74,29 @@ class RecyclerAdapter(private val medications: List<Medication>)
 
         }
 
+        private fun getRoundedCornerBitmap(bitmap: Bitmap): Bitmap {
+            val output = Bitmap.createBitmap(
+                bitmap.width,
+                bitmap.height, Bitmap.Config.ARGB_8888
+            )
+            val canvas = Canvas(output)
+
+            val color = -0xbdbdbe
+            val paint = Paint()
+            val rect = Rect(0, 0, bitmap.width, bitmap.height)
+            val rectF = RectF(rect)
+            val roundPx = 1000f
+
+            paint.isAntiAlias = true
+            canvas.drawARGB(0, 0, 0, 0)
+            paint.color = color
+            canvas.drawRoundRect(rectF, roundPx, roundPx, paint)
+
+            paint.xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_IN)
+            canvas.drawBitmap(bitmap, rect, rect, paint)
+
+            return output
+        }
     }
+
 }

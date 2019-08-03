@@ -7,7 +7,7 @@
         android:paddingBottom="20dp"
         android:paddingTop="20dp"
         tools:context=".MainActivity"
-        android:background="#F8F8F8"
+        android:background="@color/white"
         android:orientation="vertical">
 
     <TextView
@@ -15,11 +15,11 @@
             android:layout_height="wrap_content"
             android:textColor="@color/textColor"
             android:text="MONDAY"
-            android:textSize="28sp"
+            android:textSize="32sp"
             android:paddingRight="26dp"
             android:paddingLeft="26dp"
             android:textStyle="bold"
-            android:fontFamily="@font/open_sans_extrabold"
+            android:fontFamily="@font/sf_heavy"
             android:id="@+id/headerDay"/>
 
 
@@ -50,65 +50,58 @@
         android:paddingLeft="26dp"
         android:id='@+id/nextReminderWidget'>
 
-
         <LinearLayout
-                android:layout_width="8dp"
-                android:layout_height="match_parent"
-                android:background="@color/blueButtonColor"
-                android:layout_marginTop="4dp"/>
-
-        <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:background="@drawable/widget_background"
                 android:orientation="vertical"
                 android:paddingRight="10dp"
                 android:paddingLeft="10dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/nextReminderTimeTextView"
-                    android:textSize="22sp"
-                    android:textColor="@color/textColor"
-                    android:text="@string/main_next_reminder"
-                    android:textStyle="bold"
-                    android:fontFamily="@font/open_sans_semibold"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:textColor="@color/textColor"
+                android:text="@string/main_next_reminder"/>
 
             <LinearLayout
                     android:orientation="horizontal"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/nextReminderTimeTextView"
+                        android:textSize="18sp"
+                        android:textColor="@color/textColor"
+                        android:textAlignment="viewStart"/>
 
                 <TextView
                     android:text=" tonight, "
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="22sp"
+                    android:textSize="18sp"
                     android:textColor="@color/textColor"
-                    android:textAlignment="viewStart"
-                    android:layout_weight="0"
-                    android:fontFamily="@font/open_sans"/>
+                    android:textAlignment="viewStart"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/nextReminderNumMedsTextView"
-                    android:layout_weight="0"
                     android:textStyle="bold"
-                    android:textSize="22sp"
+                    android:textSize="18sp"
                     android:textColor="@color/textColor"
-                    android:textAlignment="viewStart"
-                    android:fontFamily="@font/open_sans"/>
+                    android:textAlignment="viewStart"/>
 
                 <TextView
                     android:text=" medications"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="22sp"
+                    android:textSize="18sp"
                     android:textColor="@color/textColor"
-                    android:textAlignment="viewStart"
-                    android:layout_weight="0"
-                    android:fontFamily="@font/open_sans"/>
+                    android:textAlignment="viewStart"/>
             </LinearLayout>
 
         </LinearLayout>

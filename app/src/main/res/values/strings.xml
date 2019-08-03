@@ -36,7 +36,7 @@
     <string name="reminder_id_list">REMINDER_ID_LIST</string>
 
     <!-- MAIN SCREEN -->
-    <string name="main_next_reminder">Next reminder:</string>
+    <string name="main_next_reminder">Next reminder</string>
     <string name="click_once_taken">CLICK ONCE TAKEN</string>
     <string name="medication_days">You take this medication on:</string>
     <string name="notes_extra_instructions">Add notes or extra instructions here</string>
