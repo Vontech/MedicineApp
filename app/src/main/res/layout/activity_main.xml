@@ -68,7 +68,7 @@
                         android:layout_height="wrap_content"
                         android:textSize="18sp"
                         android:textColor="@color/textColor"
-                        android:text="@string/main_next_reminder"
+                        android:text="@string/main_next_medication"
                         android:fontFamily="@font/sf_regular"
                         android:layout_marginBottom="-6dp"/>
 
