@@ -140,12 +140,12 @@
                 android:layout_marginLeft="24dp"
                 android:layout_marginRight="24dp"
                 android:layout_marginBottom="24dp"
-                android:elevation="10dp">
+                android:elevation="3dp">
 
             <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="MARK ALL AS DONE"
+                    android:text="MARK ALL AS TAKEN"
                     android:textSize="18sp"
                     android:fontFamily="@font/sf_bold"
                     android:textColor="@color/mainCardBackground"
@@ -177,40 +177,97 @@
                     android:layout_height="150dp"
                     android:background="@drawable/square_button_background"
                     android:backgroundTint="@color/red"
-                    android:layout_marginRight="36dp"
-                    android:padding="16dp"
-                    android:elevation="5dp">
+                    android:layout_marginRight="32dp"
+                    android:paddingTop="18dp"
+                    android:paddingLeft="18dp"
+                    android:elevation="5dp"
+                    android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:src="@drawable/ic_list"/>
 
                 <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="view all medications"
-                        android:fontFamily="@font/sf_regular"
-                        android:textSize="18sp"
-                        android:textColor="@color/mainCardBackground"/>
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="view all\nmedications"
+                    android:fontFamily="@font/sf_medium"
+                    android:textSize="19sp"
+                    android:textColor="@color/mainCardBackground"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="8dp"/>
             </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:background="@drawable/square_button_background"
+                android:backgroundTint="@color/purple"
+                android:paddingTop="18dp"
+                android:paddingLeft="18dp"
+                android:elevation="5dp"
+                android:id="@+id/scanMedicationButton"
+                android:clickable="true"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:src="@drawable/ic_camera"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="scan new medication"
+                    android:fontFamily="@font/sf_medium"
+                    android:textSize="19sp"
+                    android:textColor="@color/mainCardBackground"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="8dp"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="174dp"
+                android:orientation="horizontal"
+                android:gravity="center_horizontal"
+                android:layout_marginTop="8dp">
 
             <LinearLayout
                     android:layout_width="150dp"
                     android:layout_height="150dp"
                     android:background="@drawable/square_button_background"
-                    android:backgroundTint="@color/purple"
-                    android:padding="16dp"
+                    android:backgroundTint="@color/orange"
+                    android:layout_marginRight="36dp"
+                    android:paddingTop="18dp"
+                    android:paddingLeft="18dp"
                     android:elevation="5dp"
-                    android:id="@+id/scanMedicationButton"
-                    android:clickable="true">
+                    android:orientation="vertical">
+
+                <ImageView
+                        android:layout_width="46dp"
+                        android:layout_height="46dp"
+                        android:src="@drawable/ic_create"/>
 
                 <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="scan new medication"
-                        android:fontFamily="@font/sf_regular"
-                        android:textSize="18sp"
-                        android:textColor="@color/mainCardBackground"/>
+                        android:text="add new\nmedication"
+                        android:fontFamily="@font/sf_medium"
+                        android:textSize="19sp"
+                        android:textColor="@color/mainCardBackground"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginTop="8dp"/>
             </LinearLayout>
 
-        </LinearLayout>
+            <LinearLayout
+                android:layout_width="150dp"
+                android:layout_height="150dp" />
 
+        </LinearLayout>
 
     <org.vontech.medicine.views.CalendarView
             android:layout_width="match_parent"

@@ -64,7 +64,6 @@ class EditMedicationActivity : AppCompatActivity() {
         viewsShownDuringViewing = arrayListOf(nameTextView, doseTextView, notesTextView)
 
         // Setup basic styles and interactions
-        setupStyles()
         setupOnClickListeners()
 
         // Setup based on state
@@ -147,16 +146,6 @@ class EditMedicationActivity : AppCompatActivity() {
 
     private fun loadOriginalMedication() {
         medication = preservedMedication!!
-
-    }
-
-    private fun setupStyles() {
-
-        // Underline header TextViews
-        doseHeaderTextView.text = Html.fromHtml("<u>Dose:</u> ")
-        weekdayHeaderTextView.paintFlags = weekdayHeaderTextView.paintFlags or UNDERLINE_TEXT_FLAG
-        medicationTimesHeaderTextView.paintFlags = weekdayHeaderTextView.paintFlags or UNDERLINE_TEXT_FLAG
-        notesHeaderTextView.paintFlags = notesHeaderTextView.paintFlags or UNDERLINE_TEXT_FLAG
 
     }
 

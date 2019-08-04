@@ -15,79 +15,87 @@
         android:padding="32dp">
 
         <ImageView
-            android:layout_width="200dp"
-            android:layout_height="200dp"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
             android:id="@+id/pillImageView"
             android:background="@color/colorAccent"
-            android:layout_marginBottom="16dp"/>
+            android:layout_marginBottom="16dp"
+            android:elevation="3dp"/>
 
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/nameEditText"
-            android:hint="MEDICATION NAME"
-            android:textSize="24sp"
-            android:textColor="@color/black"
+            android:hint="medication name"
+            android:textSize="32sp"
             android:layout_marginBottom="12dp"
-            android:fontFamily="@font/open_sans_bold"/>
+            android:fontFamily="@font/sf_heavy"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/nameTextView"
             android:text="MEDICATION NAME"
-            android:textSize="24sp"
-            android:textColor="@color/black"
-            android:layout_marginBottom="12dp"
+            android:textSize="32sp"
+            android:textColor="@color/textColor"
+            android:layout_marginBottom="4dp"
             android:visibility="gone"
-            android:fontFamily="@font/open_sans_bold"/>
+            android:fontFamily="@font/sf_heavy"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="vertical">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/doseHeaderTextView"
-                android:textSize="20sp"
-                android:textColor="@color/textColor"
-                android:fontFamily="@font/open_sans"/>
-            <!--Text is set programmatically for custom underline-->
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Dose"
+                    android:textColor="@color/disabledTextColor"
+                    android:fontFamily="@font/sf_medium"
+                    android:textSize="20sp"
+                    android:layout_marginBottom="-12dp"/>
 
             <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/doseEditText"
-                android:inputType="numberDecimal"
-                android:hint="(mg)"
-                android:textColor="@color/black"
-                android:layout_marginBottom="12dp"
-                android:fontFamily="@font/open_sans_semibold"/>
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/doseEditText"
+                    android:inputType="numberDecimal"
+                    android:hint="(mg)"
+                    android:textColor="@color/textColor"
+                    android:layout_marginBottom="12dp"
+                    android:fontFamily="@font/sf_medium"/>
 
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/doseTextView"
-                android:inputType="numberDecimal"
-                android:textColor="@color/black"
-                android:layout_marginBottom="12dp"
-                android:textSize="20sp"
-                android:visibility="gone"
-                android:fontFamily="@font/open_sans_bold"/>
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/doseTextView"
+                    android:inputType="numberDecimal"
+                    android:textColor="@color/textColor"
+                    android:layout_marginBottom="12dp"
+                    android:textSize="24sp"
+                    android:visibility="gone"
+                    android:fontFamily="@font/open_sans_bold"/>
 
         </LinearLayout>
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Reminders"
+                android:textColor="@color/textColor"
+                android:textSize="24sp"
+                android:fontFamily="@font/sf_bold"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/weekdayHeaderTextView"
-            android:textColor="@color/black"
+            android:textColor="@color/disabledTextColor"
             android:text="@string/medication_days"
-            android:textSize="18sp"
-            android:layout_marginTop="10dp"
-            android:fontFamily="@font/open_sans"/>
+            android:textSize="20sp"
+            android:layout_marginBottom="-12dp"
+            android:fontFamily="@font/sf_medium"/>
 
         <LinearLayout
                 android:layout_width="match_parent"
@@ -99,72 +107,66 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/mondayTextView"
-                    android:text="MONDAY"
-                    android:textStyle="bold"
+                    android:text="monday"
                     android:textSize="20sp"
-                    android:textColor="@color/black"
+                    android:textColor="@color/textColor"
                     android:clickable="true"
-                    android:fontFamily="@font/open_sans_bold"/>
+                    android:fontFamily="@font/sf_medium"
+                    android:layout_marginBottom="-8dp"/>
 
             <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/tuesdayTextView"
-                    android:text="TUESDAY"
-                    android:textStyle="bold"
+                    android:text="tuesday"
                     android:textSize="20sp"
-                    android:textColor="@color/black"
-                    android:fontFamily="@font/open_sans_bold"/>
+                    android:textColor="@color/textColor"
+                    android:fontFamily="@font/sf_medium"/>
 
             <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/wednesdayTextView"
-                    android:text="WEDNESDAY"
-                    android:textStyle="bold"
+                    android:text="wednesday"
                     android:textSize="20sp"
-                    android:textColor="@color/black"
-                    android:fontFamily="@font/open_sans_bold"/>
+                    android:textColor="@color/textColor"
+                    android:fontFamily="@font/sf_medium"/>
 
             <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/thursdayTextView"
-                    android:text="THURSDAY"
-                    android:textStyle="bold"
+                    android:text="thursday"
                     android:textSize="20sp"
-                    android:textColor="@color/black"
-                    android:fontFamily="@font/open_sans_bold"/>
+                    android:textColor="@color/textColor"
+                    android:fontFamily="@font/sf_medium"/>
 
             <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/fridayTextView"
-                    android:text="FRIDAY"
-                    android:textStyle="bold"
+                    android:text="friday"
                     android:textSize="20sp"
-                    android:textColor="@color/black"
-                    android:fontFamily="@font/open_sans_bold"/>
+                    android:textColor="@color/textColor"
+                    android:fontFamily="@font/sf_medium"/>
 
             <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/saturdayTextView"
-                    android:text="SATURDAY"
-                    android:textStyle="bold"
+                    android:text="saturday"
                     android:textSize="20sp"
-                    android:textColor="@color/black"
-                    android:fontFamily="@font/open_sans_bold"/>
+                    android:textColor="@color/textColor"
+                    android:fontFamily="@font/sf_medium"/>
 
             <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/sundayTextView"
-                    android:text="SUNDAY"
-                    android:textStyle="bold"
+                    android:text="sunday"
                     android:textSize="20sp"
-                    android:textColor="@color/black"
-                    android:fontFamily="@font/open_sans_bold"/>
+                    android:textColor="@color/textColor"
+                    android:fontFamily="@font/sf_medium"/>
 
         </LinearLayout>
 

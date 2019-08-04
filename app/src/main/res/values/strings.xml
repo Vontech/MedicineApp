@@ -38,7 +38,7 @@
     <!-- MAIN SCREEN -->
     <string name="main_next_medication">Next medication</string>
     <string name="click_once_taken">CLICK ONCE TAKEN</string>
-    <string name="medication_days">You take this medication on:</string>
+    <string name="medication_days">Days</string>
     <string name="notes_extra_instructions">Add notes or extra instructions here</string>
     <string name="add_reminder_time">Add Reminder Time</string>
     <string name="create_new_medication">CREATE NEW MEDICATION</string>
