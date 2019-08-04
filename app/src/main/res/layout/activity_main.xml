@@ -13,7 +13,8 @@
             android:paddingTop="20dp"
             tools:context=".MainActivity"
             android:background="@color/white"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:id="@+id/mainActivityLayout">
 
         <TextView
                 android:layout_width="match_parent"
@@ -209,6 +210,11 @@
             </LinearLayout>
 
         </LinearLayout>
+
+
+    <org.vontech.medicine.views.CalendarView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
 
     </LinearLayout>

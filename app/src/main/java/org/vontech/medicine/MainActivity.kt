@@ -4,18 +4,12 @@ import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
 import android.view.View
 import kotlinx.android.synthetic.main.activity_main.*
-import org.joda.time.DateTime
-import org.joda.time.DateTimeZone
-import org.joda.time.LocalTime
-import org.joda.time.Minutes
+import org.joda.time.*
 import org.vontech.medicine.pokos.Medication
 import org.vontech.medicine.utils.MedicationStore
 import org.joda.time.format.DateTimeFormat
-import org.vontech.medicine.utils.EditState
-import java.time.temporal.ChronoUnit
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
@@ -64,11 +58,11 @@ class MainActivity : AppCompatActivity() {
      * Setup all buttons on the main page
      */
     private fun renderButtons() {
-        createMedicationButton.setOnClickListener {
-            val intent = Intent(this, EditMedicationActivity::class.java)
-            intent.putExtra(this.getString(R.string.edit_screen_state), EditState.ADDING)
-            startActivity(intent)
-        }
+//        createMedicationButton.setOnClickListener {
+//            val intent = Intent(this, EditMedicationActivity::class.java)
+//            intent.putExtra(this.getString(R.string.edit_screen_state), EditState.ADDING)
+//            startActivity(intent)
+//        }
         scanMedicationButton.setOnClickListener {
             val intent = Intent(this, ScanActivity::class.java)
             startActivity(intent)
