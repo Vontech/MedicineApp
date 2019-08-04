@@ -61,7 +61,7 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/doseEditText"
                     android:inputType="numberDecimal"
-                    android:hint="(mg)"
+                    android:hint="in mL"
                     android:textColor="@color/textColor"
                     android:layout_marginBottom="12dp"
                     android:fontFamily="@font/sf_medium"/>
@@ -75,7 +75,7 @@
                     android:layout_marginBottom="12dp"
                     android:textSize="24sp"
                     android:visibility="gone"
-                    android:fontFamily="@font/open_sans_bold"/>
+                    android:fontFamily="@font/sf_medium"/>
 
         </LinearLayout>
 
@@ -87,97 +87,126 @@
                 android:textSize="24sp"
                 android:fontFamily="@font/sf_bold"/>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/weekdayHeaderTextView"
-            android:textColor="@color/disabledTextColor"
-            android:text="@string/medication_days"
-            android:textSize="20sp"
-            android:layout_marginBottom="-12dp"
-            android:fontFamily="@font/sf_medium"/>
-
         <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginBottom="12dp">
+                android:orientation="horizontal">
 
-            <TextView
+            <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/mondayTextView"
-                    android:text="monday"
-                    android:textSize="20sp"
-                    android:textColor="@color/textColor"
-                    android:clickable="true"
-                    android:fontFamily="@font/sf_medium"
-                    android:layout_marginBottom="-8dp"/>
+                    android:orientation="vertical"
+                    android:layout_weight="1">
 
-            <TextView
+                <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/weekdayHeaderTextView"
+                        android:textColor="@color/disabledTextColor"
+                        android:text="@string/medication_days"
+                        android:textSize="20sp"
+                        android:layout_marginBottom="-12dp"
+                        android:fontFamily="@font/sf_medium"/>
+
+                <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginBottom="12dp">
+
+                    <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/mondayTextView"
+                            android:text="monday"
+                            android:textSize="24sp"
+                            android:textColor="@color/textColor"
+                            android:clickable="true"
+                            android:fontFamily="@font/sf_medium"
+                            android:layout_marginBottom="-16dp"/>
+
+                    <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/tuesdayTextView"
+                            android:text="tuesday"
+                            android:textSize="24sp"
+                            android:textColor="@color/textColor"
+                            android:fontFamily="@font/sf_medium"
+                            android:layout_marginBottom="-16dp"/>
+
+                    <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/wednesdayTextView"
+                            android:text="wednesday"
+                            android:textSize="24sp"
+                            android:textColor="@color/textColor"
+                            android:fontFamily="@font/sf_medium"
+                            android:layout_marginBottom="-16dp"/>
+
+                    <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/thursdayTextView"
+                            android:text="thursday"
+                            android:textSize="24sp"
+                            android:textColor="@color/textColor"
+                            android:fontFamily="@font/sf_medium"
+                            android:layout_marginBottom="-16dp"/>
+
+                    <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/fridayTextView"
+                            android:text="friday"
+                            android:textSize="24sp"
+                            android:textColor="@color/textColor"
+                            android:fontFamily="@font/sf_medium"
+                            android:layout_marginBottom="-16dp"/>
+
+                    <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/saturdayTextView"
+                            android:text="saturday"
+                            android:textSize="24sp"
+                            android:textColor="@color/textColor"
+                            android:fontFamily="@font/sf_medium"
+                            android:layout_marginBottom="-16dp"/>
+
+                    <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/sundayTextView"
+                            android:text="sunday"
+                            android:textSize="24sp"
+                            android:textColor="@color/textColor"
+                            android:fontFamily="@font/sf_medium"
+                            android:layout_marginBottom="-16dp"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/tuesdayTextView"
-                    android:text="tuesday"
-                    android:textSize="20sp"
-                    android:textColor="@color/textColor"
-                    android:fontFamily="@font/sf_medium"/>
+                    android:orientation="vertical"
+                    android:layout_weight="1">
 
-            <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/wednesdayTextView"
-                    android:text="wednesday"
-                    android:textSize="20sp"
-                    android:textColor="@color/textColor"
-                    android:fontFamily="@font/sf_medium"/>
+                <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/medicationTimesHeaderTextView"
+                        android:text="Times"
+                        android:textColor="@color/disabledTextColor"
+                        android:textSize="20sp"
+                        android:fontFamily="@font/sf_medium"/>
 
-            <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/thursdayTextView"
-                    android:text="thursday"
-                    android:textSize="20sp"
-                    android:textColor="@color/textColor"
-                    android:fontFamily="@font/sf_medium"/>
-
-            <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/fridayTextView"
-                    android:text="friday"
-                    android:textSize="20sp"
-                    android:textColor="@color/textColor"
-                    android:fontFamily="@font/sf_medium"/>
-
-            <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/saturdayTextView"
-                    android:text="saturday"
-                    android:textSize="20sp"
-                    android:textColor="@color/textColor"
-                    android:fontFamily="@font/sf_medium"/>
-
-            <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/sundayTextView"
-                    android:text="sunday"
-                    android:textSize="20sp"
-                    android:textColor="@color/textColor"
-                    android:fontFamily="@font/sf_medium"/>
+            </LinearLayout>
 
         </LinearLayout>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/medicationTimesHeaderTextView"
-            android:text="You take this medication at:"
-            android:textColor="@color/textColor"
-            android:textSize="18sp"
-            android:fontFamily="@font/open_sans"/>
 
         <Button
             android:layout_width="wrap_content"

@@ -84,7 +84,10 @@ class EditMedicationActivity : AppCompatActivity() {
     private fun refreshUI() {
 
         // First, hide and show primary form views based on editing and viewing state
-        viewsShownDuringEditing.forEach {it.visibility = if (isEditing) View.VISIBLE else View.GONE}
+        viewsShownDuringEditing.forEach {
+            it.visibility = if (isEditing) View.VISIBLE else View.GONE
+            it.isClickable = isEditing
+        }
         viewsShownDuringViewing.forEach {it.visibility = if (isEditing) View.GONE else View.VISIBLE}
 
         // Show buttons based on state
