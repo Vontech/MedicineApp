@@ -175,6 +175,7 @@
             <LinearLayout
                     android:layout_width="150dp"
                     android:layout_height="150dp"
+                    android:id="@+id/viewAllMedicationsButton"
                     android:background="@drawable/square_button_background"
                     android:backgroundTint="@color/red"
                     android:layout_marginRight="32dp"

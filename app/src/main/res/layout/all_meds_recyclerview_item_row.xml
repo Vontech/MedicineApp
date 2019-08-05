@@ -1,0 +1,50 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@drawable/card_background"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:elevation="10dp"
+    android:layout_marginTop="16dp"
+    android:layout_marginBottom="16dp"
+    android:layout_marginLeft="16dp"
+    android:layout_marginRight="16dp"
+    android:padding="12dp">
+
+    <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:id="@+id/imageView"
+            android:scaleType="centerCrop"/>
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/nameTextView"
+                android:textSize="24sp"
+                android:text="Medication Name"
+                android:textStyle="bold"
+                android:textColor="@color/textColor"
+                android:fontFamily="@font/sf_bold"
+                android:textAlignment="viewStart"
+                android:paddingTop="8dp"
+                android:paddingLeft="16dp"/>
+
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/doseTextView"
+                android:textSize="20sp"
+                android:text="Dose amount"
+                android:fontFamily="@font/sf_regular"
+                android:textColor="@color/disabledTextColor"
+                android:textAlignment="viewStart"
+                android:paddingLeft="16dp"/>
+    </LinearLayout>
+
+</LinearLayout>

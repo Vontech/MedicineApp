@@ -18,7 +18,7 @@ class MainActivity : AppCompatActivity() {
 
     // Upcoming medications
     private lateinit var upcomingLinearLayoutManager: LinearLayoutManager
-    private lateinit var upcomingAdapter: RecyclerAdapter
+    private lateinit var upcomingAdapterUpcomingMedication: UpcomingRecyclerAdapter
     private lateinit var medicationList: List<Medication>
     private lateinit var medicationStore: MedicationStore
 
@@ -33,8 +33,8 @@ class MainActivity : AppCompatActivity() {
 
         upcomingLinearLayoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         recyclerView.layoutManager = upcomingLinearLayoutManager
-        upcomingAdapter = RecyclerAdapter(medicationList)
-        recyclerView.adapter = upcomingAdapter
+        upcomingAdapterUpcomingMedication = UpcomingRecyclerAdapter(medicationList)
+        recyclerView.adapter = upcomingAdapterUpcomingMedication
 
         app = this.application as MedicineApplication
         // val isLoggedIn = app.attemptToLoadExistingSession(this)
@@ -45,7 +45,7 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         medicationList = medicationStore.getMedications()
-        if (nextReminderWidget.visibility == View.VISIBLE) upcomingAdapter.notifyDataSetChanged()
+        if (nextReminderWidget.visibility == View.VISIBLE) upcomingAdapterUpcomingMedication.notifyDataSetChanged()
 
         // Render things ----------------------------
         renderHeader()
@@ -65,6 +65,10 @@ class MainActivity : AppCompatActivity() {
 //        }
         scanMedicationButton.setOnClickListener {
             val intent = Intent(this, ScanActivity::class.java)
+            startActivity(intent)
+        }
+        viewAllMedicationsButton.setOnClickListener {
+            val intent = Intent(this, ViewAllMedicationsActivity::class.java)
             startActivity(intent)
         }
     }
@@ -90,8 +94,8 @@ class MainActivity : AppCompatActivity() {
             // Instantiate RecyclerView and set its adapter
             upcomingLinearLayoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
             recyclerView.layoutManager = upcomingLinearLayoutManager
-            upcomingAdapter = RecyclerAdapter(nextBatch.medicationList)
-            recyclerView.adapter = upcomingAdapter
+            upcomingAdapterUpcomingMedication = UpcomingRecyclerAdapter(nextBatch.medicationList)
+            recyclerView.adapter = upcomingAdapterUpcomingMedication
 
             val fmt = DateTimeFormat.forPattern("h:mm aa")
             nextReminderTimeTextView.text = fmt.print(nextBatch.reminderTime)

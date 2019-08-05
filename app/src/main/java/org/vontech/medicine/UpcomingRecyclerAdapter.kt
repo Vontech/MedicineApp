@@ -5,7 +5,7 @@ import android.graphics.*
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
-import kotlinx.android.synthetic.main.recyclerview_item_row.view.*
+import kotlinx.android.synthetic.main.upcoming_recyclerview_item_row.view.*
 import org.vontech.medicine.pokos.Medication
 import org.vontech.medicine.pokos.MedicationEvent
 import org.vontech.medicine.pokos.MedicationEventType
@@ -13,11 +13,11 @@ import org.vontech.medicine.utils.EditState
 import org.vontech.medicine.utils.MedicationHistory
 import android.graphics.BitmapFactory
 
-class RecyclerAdapter(private val medications: List<Medication>)
-    : RecyclerView.Adapter<RecyclerAdapter.MedicationHolder>() {
+class UpcomingRecyclerAdapter(private val medications: List<Medication>)
+    : RecyclerView.Adapter<UpcomingRecyclerAdapter.MedicationHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerAdapter.MedicationHolder {
-        val inflatedView = parent.inflate(R.layout.recyclerview_item_row, false)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MedicationHolder {
+        val inflatedView = parent.inflate(R.layout.upcoming_recyclerview_item_row, false)
         return MedicationHolder(inflatedView)
     }
 
@@ -28,7 +28,7 @@ class RecyclerAdapter(private val medications: List<Medication>)
         holder.bindMedication(itemMedication)
     }
 
-    // ViewHolder class for the RecyclerAdapter
+    // ViewHolder class for the UpcomingRecyclerAdapter
     class MedicationHolder(v: View) : RecyclerView.ViewHolder(v), View.OnClickListener {
         // References to the inflated view to allow MedicationHolder to access textviews
         private var view: View = v

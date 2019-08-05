@@ -28,11 +28,9 @@ import org.vontech.medicine.utils.EditState
 
 class EditMedicationActivity : AppCompatActivity() {
 
-    val NOTIFICATION_TITLE = "Time to take your medicine, hoe!"
+    val NOTIFICATION_TITLE = "Time to take your medicine!"
     val NOTIFICATION_MESSAGE = "Click to view this medication"
     val FN = "EditMedicationActivity"
-
-    val TODAY_TEXT = "<font color=#5AA3FF>(today!)</font>"
 
     private lateinit var medicationStore: MedicationStore
     private var isEditing: Boolean = false
@@ -61,7 +59,7 @@ class EditMedicationActivity : AppCompatActivity() {
         viewsShownDuringEditing = arrayListOf(nameEditText, doseEditText, notesEditText, saveMedicationButton,
                                                 addReminderButton)
         viewsShownDuringEditing.addAll(weekdayTextViews)
-        viewsShownDuringViewing = arrayListOf(nameTextView, doseTextView, notesTextView)
+        viewsShownDuringViewing = arrayListOf(nameTextView, doseTextView, notesTextView, todayTextView)
 
         // Setup basic styles and interactions
         setupOnClickListeners()
@@ -93,7 +91,7 @@ class EditMedicationActivity : AppCompatActivity() {
         // Show buttons based on state
         editMedicationButton.visibility = if (isReplacing) View.VISIBLE else View.GONE
         deleteMedicationButton.visibility = if (isReplacing && isEditing) View.VISIBLE else View.GONE
-        editMedicationButton.text = if (isEditing) "Cancel Edits" else "Edit Medication"
+        editMedicationButton.text = if (isEditing) "cancel edits" else "edit medication"
 
         if (medication.name != null) {
             nameEditText.setText(medication.name!!)
@@ -127,10 +125,12 @@ class EditMedicationActivity : AppCompatActivity() {
             }
         }
 
-        // Add the "(today!)" text to the current TextView  text
-        if (medication.days.contains(DateTime().dayOfWeek) && !todayShowing) {
-            calendarToTextView(DateTime().dayOfWeek).append(" ")
-            calendarToTextView(DateTime().dayOfWeek).append(Html.fromHtml(TODAY_TEXT))
+        todayTextView.visibility = View.GONE
+        todayShowing = false
+
+        // Make todayTextView visible if the today is one of the days this medication is taken
+        if (medication.days.contains(DateTime().dayOfWeek)) {
+            todayTextView.visibility = View.VISIBLE
             todayShowing = true
         }
 
@@ -311,7 +311,7 @@ class EditMedicationActivity : AppCompatActivity() {
     private fun getTimeTextView(time: LocalTime): View {
         val view = medicationTimesLinearLayout.inflate(R.layout.time_layout, false)
         val fmt = DateTimeFormat.forPattern("hh:mm a")
-        view.timeTextView.text = fmt.print(time)
+        view.timeTextView.text = fmt.print(time).toLowerCase()
         view.deleteReminderImgView.setOnClickListener { deleteReminder(time, view) }
         return view
     }
