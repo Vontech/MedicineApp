@@ -20,7 +20,7 @@ class ViewAllMedicationsActivity : AppCompatActivity() {
         medicationStore = MedicationStore(this)
         allMedicationsList = medicationStore.getMedications()
 
-        medicationListLinearLayout = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        medicationListLinearLayout = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         recyclerView.layoutManager = medicationListLinearLayout
         recyclerAdapter = AllMedsRecyclerAdapter(allMedicationsList)
         recyclerView.adapter = recyclerAdapter

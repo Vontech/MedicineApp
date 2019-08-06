@@ -18,7 +18,8 @@
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="8dp">
+                android:padding="8dp"
+                android:background="@drawable/card_background">
 
             <ImageView
                     android:layout_width="40dp"
@@ -26,29 +27,34 @@
                     android:id="@+id/scan_result_icon"
                     app:srcCompat="@mipmap/ic_launcher_round"
                     android:layout_marginRight="16dp"
-                    android:layout_gravity="center_vertical"/>
+                    android:layout_gravity="center_vertical"
+                    android:visibility="gone"/>
 
             <LinearLayout
                     android:orientation="vertical"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1">
+                    android:layout_weight="1"
+                    android:layout_marginLeft="8dp">
 
                 <TextView
                         android:text="Looking for Medicine Name..."
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/scan_result_name"
-                        android:fontFamily="@font/open_sans_bold"
-                        android:textStyle="bold"
-                        android:textSize="14sp"
-                        android:textColor="@android:color/black"/>
+                        android:fontFamily="@font/sf_semibold"
+                        android:textSize="20sp"
+                        android:textColor="@color/textColor"/>
 
                 <TextView
                         android:text="TextView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:id="@+id/scan_result_description"/>
+                        android:id="@+id/scan_result_description"
+                        android:fontFamily="@font/sf_regular"
+                        android:textColor="@color/disabledTextColor"
+                        android:textSize="16sp"
+                        />
 
             </LinearLayout>
 
@@ -57,7 +63,10 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:id="@+id/scan_result_value"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1"
+                    android:fontFamily="@font/sf_light"
+                    android:textColor="@color/purple"
+                    android:layout_marginRight="8dp"/>
 
         </LinearLayout>
 

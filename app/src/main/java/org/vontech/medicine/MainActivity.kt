@@ -10,6 +10,7 @@ import org.joda.time.*
 import org.vontech.medicine.pokos.Medication
 import org.vontech.medicine.utils.MedicationStore
 import org.joda.time.format.DateTimeFormat
+import org.vontech.medicine.utils.EditState
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
@@ -63,12 +64,17 @@ class MainActivity : AppCompatActivity() {
 //            intent.putExtra(this.getString(R.string.edit_screen_state), EditState.ADDING)
 //            startActivity(intent)
 //        }
+        viewAllMedicationsButton.setOnClickListener {
+            val intent = Intent(this, ViewAllMedicationsActivity::class.java)
+            startActivity(intent)
+        }
         scanMedicationButton.setOnClickListener {
             val intent = Intent(this, ScanActivity::class.java)
             startActivity(intent)
         }
-        viewAllMedicationsButton.setOnClickListener {
-            val intent = Intent(this, ViewAllMedicationsActivity::class.java)
+        addNewMedicationButton.setOnClickListener {
+            val intent = Intent(this, EditMedicationActivity::class.java)
+            intent.putExtra(getString(R.string.edit_screen_state), EditState.ADDING)
             startActivity(intent)
         }
     }

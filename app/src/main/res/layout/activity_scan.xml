@@ -82,7 +82,8 @@
                                             android:text="Slowly rotate the bottle to scan information"
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
-                                            android:id="@+id/scan_result_description"/>
+                                            android:id="@+id/scan_result_description"
+                                            android:fontFamily=""/>
 
                                 </LinearLayout>
 

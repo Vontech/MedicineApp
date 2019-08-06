@@ -89,6 +89,7 @@ class EditMedicationActivity : AppCompatActivity() {
         editMedicationButton.visibility = if (isReplacing) View.VISIBLE else View.GONE
         deleteMedicationButton.visibility = if (isReplacing && isEditing) View.VISIBLE else View.GONE
         editMedicationButton.text = if (isEditing) "cancel edits" else "edit medication"
+        // if isEditing && !isReplacing, show the cancel adding button and return to MainActivity
 
         if (medication.name != null) {
             nameEditText.setText(medication.name!!)
