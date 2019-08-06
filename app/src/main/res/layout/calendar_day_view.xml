@@ -14,10 +14,11 @@
             android:text="30"
             android:background="@drawable/calendar_ignore_taken"
             android:gravity="center_horizontal|center_vertical"
-            android:fontFamily="@font/sf_heavy"
+            android:fontFamily="@font/sf_regular"
             android:layout_gravity="center_horizontal"
             android:textSize="24sp"
             android:padding="0dp"
+            android:textColor="@color/mainCardBackground"
             />
 
 </FrameLayout>

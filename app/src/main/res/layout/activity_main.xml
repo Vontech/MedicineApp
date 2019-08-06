@@ -28,7 +28,6 @@
                 android:fontFamily="@font/sf_heavy"
                 android:id="@+id/headerDay"/>
 
-
         <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="match_parent"
@@ -89,7 +88,7 @@
                             android:fontFamily="@font/sf_bold"/>
 
                     <TextView
-                            android:text=" tonight, "
+                            android:text=" today, "
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="20sp"

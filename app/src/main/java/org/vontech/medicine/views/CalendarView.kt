@@ -82,11 +82,11 @@ class CalendarView: LinearLayout {
         val date = LocalDate(year, month, 1)
         val daysAcrossWeeks = getArrayOfDates(date)
 
-        // Add the month
+        // Add the month above the calendar
         val titleTextView = TextView(context)
         titleTextView.text = YearMonth(date.year, date.monthOfYear).monthOfYear().asText.toUpperCase()
         _makeFillParentWidth(titleTextView)
-        _makeCenterGravity(titleTextView)
+//        _makeCenterGravity(titleTextView)
         _makeTitle(titleTextView)
         _makeProjectBlack(titleTextView)
         this.addView(titleTextView)
@@ -140,7 +140,7 @@ class CalendarView: LinearLayout {
     }
 
     private fun _makeProjectFont(textView: TextView) {
-        val typeface = ResourcesCompat.getFont(this.context, R.font.sf_heavy)
+        val typeface = ResourcesCompat.getFont(this.context, R.font.sf_medium)
         textView.typeface = typeface
     }
 

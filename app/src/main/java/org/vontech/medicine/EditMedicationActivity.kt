@@ -155,6 +155,7 @@ class EditMedicationActivity : AppCompatActivity() {
                     day.dayOfMonth % 2 == 0 -> view.calendarDayText.background = resources.getDrawable(R.drawable.calendar_some_taken)
                     day.dayOfMonth % 5 == 0 -> view.calendarDayText.background = resources.getDrawable(R.drawable.calendar_all_taken)
                     day.dayOfMonth % 7 == 0 -> view.calendarDayText.background = resources.getDrawable(R.drawable.calendar_none_taken)
+                    else -> view.calendarDayText.setTextColor(resources.getColor(R.color.disabledTextColor))
                 }
 
                 view.calendarDayText.setPadding(0, 0, 0, 0)
@@ -201,7 +202,11 @@ class EditMedicationActivity : AppCompatActivity() {
             medication.name = it
         }
         doseEditText.afterTextChanged {
-            medication.dose = it.toFloat()
+            if (it.isNotEmpty()) {
+                medication.dose = it.toFloat()
+            } else {
+                medication.dose = 0f
+            }
         }
         notesEditText.afterTextChanged {
             medication.notes = it
@@ -212,7 +217,7 @@ class EditMedicationActivity : AppCompatActivity() {
     private fun setupAddingState() {
         isEditing = true
         isReplacing = false
-        medication = Medication(nameEditText.text.toString(), 0f, notesEditText.text.toString())
+        medication = Medication(nameEditText.text.toString(), null, notesEditText.text.toString())
     }
 
     private fun setupScanningState() {
@@ -270,8 +275,6 @@ class EditMedicationActivity : AppCompatActivity() {
         refreshUI()
     }
 
-
-
     /**
      * Sets the activity views to editable, so the medication can be modified
      */
@@ -304,20 +307,20 @@ class EditMedicationActivity : AppCompatActivity() {
         if (doseEditText.text.isNotEmpty()) { dose = doseEditText.text.toString().toFloat() }
 
         // Create a new Medication object from the fields
-        val newMedication = Medication(nameEditText.text.toString(), dose, notesEditText.text.toString())
-        newMedication.days = medication.days
-        newMedication.times = medication.times
+//        val newMedication = Medication(nameEditText.text.toString(), dose, notesEditText.text.toString())
+//        newMedication.days = medication.days
+//        newMedication.times = medication.times
 
         // If editing a medication, replace the old medication with a new one. Otherwise, add it to the list
         if (isReplacing) {
             Log.i(FN, "Replacing an existing mediciation")
-            medicationStore.replaceMedication(medication, newMedication)
-            scheduleReminder(newMedication, isReplacing = true)
+            medicationStore.replaceMedication(preservedMedication!!, medication)
+            scheduleReminder(medication, isReplacing = true)
         }
         else {
             Log.i(FN, "Saving a new medication")
-            medicationStore.saveMedication(newMedication)
-            scheduleReminder(newMedication)
+            medicationStore.saveMedication(medication)
+            scheduleReminder(medication)
         }
 
         // If adding, simply move back to home
@@ -328,7 +331,6 @@ class EditMedicationActivity : AppCompatActivity() {
         }
         else {
             isReplacing = true
-            medication = newMedication
             preserveMedication()
             editMedication(false)
         }

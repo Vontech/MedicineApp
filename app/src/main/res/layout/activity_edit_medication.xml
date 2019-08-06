@@ -18,7 +18,8 @@
             android:layout_width="175dp"
             android:layout_height="175dp"
             android:id="@+id/pillImageView"
-            android:background="@color/purple"
+            android:background="@drawable/card_background"
+            android:backgroundTint="@color/purple"
             android:layout_marginBottom="16dp"
             android:elevation="5dp"/>
 
@@ -281,14 +282,6 @@
             android:textSize="20sp"/>
 
         <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Medication History"
-                android:textColor="@color/textColor"
-                android:textSize="24sp"
-                android:fontFamily="@font/sf_bold"/>
-
-        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/notesTextView"
@@ -298,10 +291,19 @@
             android:fontFamily="@font/sf_medium"
             android:layout_marginBottom="12dp"/>
 
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="History"
+                android:textColor="@color/textColor"
+                android:textSize="24sp"
+                android:fontFamily="@font/sf_bold"/>
+
         <org.vontech.medicine.views.CalendarView
                 android:id="@+id/calendar"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="32dp"/>
 
         <Button
             android:layout_width="match_parent"
