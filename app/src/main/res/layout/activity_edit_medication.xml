@@ -281,6 +281,19 @@
             android:textSize="20sp"/>
 
         <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Medication History"
+                android:textColor="@color/textColor"
+                android:textSize="24sp"
+                android:fontFamily="@font/sf_bold"/>
+
+        <org.vontech.medicine.views.CalendarView
+                android:id="@+id/calendar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/notesTextView"
@@ -371,6 +384,7 @@
             </LinearLayout>
 
         </LinearLayout>
+
 
     </LinearLayout>
 
