@@ -17,11 +17,15 @@ import org.vontech.medicine.reminders.ReminderManager
 import org.vontech.medicine.utils.MedicationStore
 import java.lang.IllegalArgumentException
 import android.util.Log
+import android.view.LayoutInflater
 import android.widget.TimePicker
+import kotlinx.android.synthetic.main.calendar_day_view.view.*
 import kotlinx.android.synthetic.main.time_layout.view.*
+import org.joda.time.LocalDate
 import org.joda.time.LocalTime
 import org.joda.time.format.DateTimeFormat
 import org.vontech.medicine.utils.EditState
+import org.vontech.medicine.views.CalendarEntryGenerator
 
 class EditMedicationActivity : AppCompatActivity() {
 
@@ -73,6 +77,7 @@ class EditMedicationActivity : AppCompatActivity() {
         preserveMedication()
 
         refreshUI()
+        refreshCalendarUI()
 
     }
 
@@ -131,6 +136,32 @@ class EditMedicationActivity : AppCompatActivity() {
             todayShowing = true
         }
 
+        // hide and show history
+        calendar.visibility = if(isEditing) View.GONE else View.VISIBLE
+
+    }
+
+    private fun refreshCalendarUI() {
+        calendar.calendarEntryGenerator = object : CalendarEntryGenerator {
+            override fun create(day: LocalDate): View {
+
+                val view =
+                    LayoutInflater.from(this@EditMedicationActivity).inflate(R.layout.calendar_day_view, null, false)
+
+                view.calendarDayText.text = day.dayOfMonth.toString()
+
+                when {
+                    day.dayOfMonth % 2 == 0 -> view.calendarDayText.background = resources.getDrawable(R.drawable.calendar_some_taken)
+                    day.dayOfMonth % 5 == 0 -> view.calendarDayText.background = resources.getDrawable(R.drawable.calendar_all_taken)
+                    day.dayOfMonth % 7 == 0 -> view.calendarDayText.background = resources.getDrawable(R.drawable.calendar_none_taken)
+                }
+
+                view.calendarDayText.setPadding(0, 0, 0, 0)
+
+                return view
+
+            }
+        }
     }
 
     private fun preserveMedication() {

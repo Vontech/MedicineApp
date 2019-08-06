@@ -1,7 +1,6 @@
 package org.vontech.medicine.views
 
 import android.content.Context
-import android.graphics.Typeface
 import android.support.v4.content.res.ResourcesCompat
 import android.util.AttributeSet
 import android.view.Gravity
@@ -12,7 +11,6 @@ import org.joda.time.LocalDate
 import org.joda.time.MutableDateTime
 import org.joda.time.YearMonth
 import org.vontech.medicine.R
-
 
 
 
@@ -69,6 +67,14 @@ class CalendarView: LinearLayout {
             render()
         }
 
+    var calendarEntryGenerator : CalendarEntryGenerator? = null
+
+        set(value) {
+            field = value
+            render()
+        }
+
+
     private fun render() {
 
         this.removeAllViews()
@@ -104,7 +110,12 @@ class CalendarView: LinearLayout {
             val weekContainer = LinearLayout(context)
             weekContainer.orientation = HORIZONTAL
             for (day in week) {
-                weekContainer.addView(getDayView(day))
+                if (calendarEntryGenerator == null) {
+                    weekContainer.addView(getDayView(day))
+                } else {
+                    weekContainer.addView(calendarEntryGenerator!!.create(day))
+                }
+
             }
             giveEqualWeights((0 until weekContainer.childCount).map { weekContainer.getChildAt(it) })
             this.addView(weekContainer)
@@ -152,12 +163,12 @@ class CalendarView: LinearLayout {
         view.setLayoutParams(param)
     }
 
-    private fun getDayView(dayOfMonth: Int): View {
+    fun getDayView(dayOfMonth: LocalDate): View {
         val view = TextView(context)
         _makeProjectFont(view)
         _makeProjectBlack(view)
         _makeCenterGravity(view)
-        view.text = dayOfMonth.toString()
+        view.text = dayOfMonth.dayOfMonth.toString()
         return view
     }
 
@@ -174,7 +185,7 @@ val daysToAbbreviations = mapOf(
     7 to "SAT"
 )
 
-fun getArrayOfDates(timeAnchor: LocalDate): List<List<Int>> {
+fun getArrayOfDates(timeAnchor: LocalDate): List<List<LocalDate>> {
     val month = timeAnchor.monthOfYear
     val year = timeAnchor.year
 
@@ -184,7 +195,7 @@ fun getArrayOfDates(timeAnchor: LocalDate): List<List<Int>> {
     currentDay.monthOfYear = month
     currentDay.year = year
 
-    val monthEntries = mutableListOf<MutableList<Int>>(mutableListOf())
+    val monthEntries = mutableListOf<MutableList<LocalDate>>(mutableListOf())
 
     val backReference = currentDay.copy()
 
@@ -193,13 +204,13 @@ fun getArrayOfDates(timeAnchor: LocalDate): List<List<Int>> {
 
     // Add the days from last month
     while (backReference.dayOfMonth != 1) {
-        monthEntries.last().add(backReference.dayOfMonth)
+        monthEntries.last().add(LocalDate(backReference.copy()))
         backReference.addDays(1)
     }
 
     // Now add each day from this month
     while (currentDay.monthOfYear == month) {
-        monthEntries.last().add(currentDay.dayOfMonth)
+        monthEntries.last().add(LocalDate(currentDay.copy()))
         if (currentDay.dayOfWeek == 7) {
             monthEntries.add(mutableListOf())
         }
@@ -208,10 +219,14 @@ fun getArrayOfDates(timeAnchor: LocalDate): List<List<Int>> {
 
     // Now add the final days from next month
     while (currentDay.dayOfWeek != 1) {
-        monthEntries.last().add(currentDay.dayOfMonth)
+        monthEntries.last().add(LocalDate(currentDay.copy()))
         currentDay.addDays(1)
     }
 
     return monthEntries
 
+}
+
+interface CalendarEntryGenerator {
+    fun create(day: LocalDate): View
 }

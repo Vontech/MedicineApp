@@ -4,12 +4,15 @@ import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
+import android.view.LayoutInflater
 import android.view.View
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.calendar_day_view.view.*
 import org.joda.time.*
 import org.vontech.medicine.pokos.Medication
 import org.vontech.medicine.utils.MedicationStore
 import org.joda.time.format.DateTimeFormat
+import org.vontech.medicine.views.CalendarEntryGenerator
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
@@ -52,6 +55,7 @@ class MainActivity : AppCompatActivity() {
         renderButtons()
         renderNextMedication()
         renderMissingPane()
+
     }
 
     /**
