@@ -9,16 +9,13 @@ import android.support.v4.content.ContextCompat
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
-import kotlinx.android.synthetic.main.activity_add_medication.*
+import kotlinx.android.synthetic.main.activity_edit_medication.*
 import org.joda.time.DateTime
 import org.joda.time.DateTimeConstants
 import org.vontech.medicine.pokos.Medication
 import org.vontech.medicine.reminders.ReminderManager
 import org.vontech.medicine.utils.MedicationStore
 import java.lang.IllegalArgumentException
-import android.graphics.Paint.UNDERLINE_TEXT_FLAG
-import android.text.Html
-import android.text.TextWatcher
 import android.util.Log
 import android.widget.TimePicker
 import kotlinx.android.synthetic.main.time_layout.view.*
@@ -47,7 +44,7 @@ class EditMedicationActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_add_medication)
+        setContentView(R.layout.activity_edit_medication)
 
         // Create access to storage operations
         medicationStore = MedicationStore(this)

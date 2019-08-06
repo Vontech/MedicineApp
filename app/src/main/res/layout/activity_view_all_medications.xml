@@ -7,6 +7,20 @@
         tools:context=".ViewAllMedicationsActivity"
         android:orientation="vertical">
 
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/textColor"
+            android:text="All Medications"
+            android:textSize="32sp"
+            android:paddingTop="20dp"
+            android:layout_marginBottom="-8dp"
+            android:paddingRight="26dp"
+            android:paddingLeft="26dp"
+            android:textStyle="bold"
+            android:fontFamily="@font/sf_heavy"
+            android:id="@+id/headerDay"/>
+
     <android.support.v7.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
