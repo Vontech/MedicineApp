@@ -288,11 +288,6 @@
                 android:textSize="24sp"
                 android:fontFamily="@font/sf_bold"/>
 
-        <org.vontech.medicine.views.CalendarView
-                android:id="@+id/calendar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -302,6 +297,11 @@
             android:visibility="gone"
             android:fontFamily="@font/sf_medium"
             android:layout_marginBottom="12dp"/>
+
+        <org.vontech.medicine.views.CalendarView
+                android:id="@+id/calendar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
         <Button
             android:layout_width="match_parent"
