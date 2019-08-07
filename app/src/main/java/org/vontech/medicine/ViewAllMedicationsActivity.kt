@@ -17,6 +17,16 @@ class ViewAllMedicationsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_view_all_medications)
+
+        renderMedications()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        renderMedications()
+    }
+
+    private fun renderMedications() {
         medicationStore = MedicationStore(this)
         allMedicationsList = medicationStore.getMedications()
 
