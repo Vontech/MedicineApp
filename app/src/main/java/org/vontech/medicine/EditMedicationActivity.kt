@@ -427,7 +427,6 @@ class EditMedicationActivity : AppCompatActivity() {
      */
 
 
-
     /**
      * Convert the given TextView to its corresponding JodaTime weekday constant to be saved
      * @param textView the TextView to get the JodaTime weekday from

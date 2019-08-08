@@ -5,10 +5,4 @@
         <item name="colorControlNormal">@color/textColor</item>
     </style>
 
-    <style name="MyDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
-        <item name="android:background">@drawable/card_background</item>
-        <item name="android:textColor">@color/textColor</item>
-        <item name="android:fontFamily">@font/sf_medium</item>
-    </style>
-
 </resources>

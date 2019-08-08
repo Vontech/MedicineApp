@@ -4,10 +4,14 @@ import android.app.IntentService
 import android.content.Intent
 import android.support.v4.app.NotificationManagerCompat
 import android.app.Notification
+import android.support.v4.app.NotificationCompat
 import android.util.Log
 import org.vontech.medicine.MainActivity
 import org.vontech.medicine.reminders.ReminderManager
 import org.vontech.medicine.utils.MedicationStore
+import android.app.PendingIntent
+
+
 
 
 /**
@@ -24,10 +28,14 @@ class ReminderIntentService: IntentService("ReminderIntentService") {
         builder.setContentText(message)
 
         builder.setSmallIcon(android.R.drawable.sym_def_app_icon)
-//        val notifyIntent = Intent(this, MainActivity::class.java)
-//        val pendingIntent = PendingIntent.getActivity(this, 2, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT)
-//        //to be able to launch your activity from the notification
-//        builder.setContentIntent(pendingIntent)
+        builder.setAutoCancel(true) // Notification will be dismissed once clicked
+
+        // Clicking on notification opens MainActivity
+        val contentIntent = PendingIntent.getActivity(this, 0,
+            Intent(this, MainActivity::class.java), PendingIntent.FLAG_UPDATE_CURRENT
+        )
+        builder.setContentIntent(contentIntent)
+
         val notificationCompat = builder.build()
         val managerCompat = NotificationManagerCompat.from(this)
         managerCompat.notify(id, notificationCompat)

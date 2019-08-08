@@ -11,8 +11,7 @@
 
     <android.support.v7.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            >
+            android:layout_height="wrap_content">
 
         <LinearLayout
                 android:orientation="horizontal"
@@ -63,7 +62,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:id="@+id/scan_result_value"
-                    android:layout_weight="1"
+                    android:layout_weight="3"
                     android:fontFamily="@font/sf_light"
                     android:textColor="@color/purple"
                     android:layout_marginRight="8dp"/>

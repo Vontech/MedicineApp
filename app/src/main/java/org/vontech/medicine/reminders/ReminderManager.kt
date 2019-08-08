@@ -49,7 +49,7 @@ class ReminderManager(val context: Context) {
         val pendingIntent = PendingIntent.getBroadcast(context, id, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT)
         val alarmManager = this.context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         // Set the time to send the broadcast at
-        alarmManager.setExact(AlarmManager.RTC_WAKEUP, time.millis + 3000, pendingIntent)
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP, time.millis, pendingIntent)
 
         Log.e("Medicine", "fired")
 
