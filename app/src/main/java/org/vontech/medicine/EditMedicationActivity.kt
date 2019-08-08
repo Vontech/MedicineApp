@@ -1,5 +1,6 @@
 package org.vontech.medicine
 
+import android.app.Dialog
 import android.app.TimePickerDialog
 import android.app.TimePickerDialog.OnTimeSetListener
 import android.content.Intent
@@ -26,6 +27,12 @@ import org.joda.time.LocalTime
 import org.joda.time.format.DateTimeFormat
 import org.vontech.medicine.utils.EditState
 import org.vontech.medicine.views.CalendarEntryGenerator
+import android.content.DialogInterface
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
+import android.support.v7.app.AlertDialog
+import kotlinx.android.synthetic.main.delete_dialog.*
+
 
 class EditMedicationActivity : AppCompatActivity() {
 
@@ -89,12 +96,16 @@ class EditMedicationActivity : AppCompatActivity() {
             it.isClickable = isEditing
         }
         viewsShownDuringViewing.forEach {it.visibility = if (isEditing) View.GONE else View.VISIBLE}
+        // Special case for if notes are empty
+        if (medication.notes.isEmpty() && !isEditing) notesTextView.visibility = View.GONE
+        notesHeaderTextView.visibility = if (medication.notes.isEmpty() && !isEditing) View.GONE else View.VISIBLE
 
         // Show buttons based on state
         editMedicationButton.visibility = if (isReplacing) View.VISIBLE else View.GONE
         deleteMedicationButton.visibility = if (isReplacing && isEditing) View.VISIBLE else View.GONE
         editMedicationButton.text = if (isEditing) "cancel edits" else "edit medication"
         // if isEditing && !isReplacing, show the cancel adding button and return to MainActivity
+        cancelAddingButton.visibility = if (isEditing && !isReplacing) View.VISIBLE else View.GONE
 
         if (medication.name != null) {
             nameEditText.setText(medication.name!!)
@@ -138,8 +149,8 @@ class EditMedicationActivity : AppCompatActivity() {
         }
 
         // hide and show history
-        calendar.visibility = if(isEditing) View.GONE else View.VISIBLE
-
+        calendar.visibility = if (isEditing) View.GONE else View.VISIBLE
+        historyTextView.visibility = calendar.visibility
     }
 
     private fun refreshCalendarUI() {
@@ -179,7 +190,6 @@ class EditMedicationActivity : AppCompatActivity() {
 
     private fun loadOriginalMedication() {
         medication = preservedMedication!!
-
     }
 
     private fun setupOnClickListeners() {
@@ -196,6 +206,11 @@ class EditMedicationActivity : AppCompatActivity() {
         }
         saveMedicationButton.setOnClickListener { saveMedication() }
         deleteMedicationButton.setOnClickListener { deleteMedication() }
+        cancelAddingButton.setOnClickListener {
+            val mainActivityIntent = Intent(this, MainActivity::class.java)
+            startActivity(mainActivityIntent)
+            Toast.makeText(this, "Discarded medication", Toast.LENGTH_SHORT).show()
+        }
 
         // Set edit text listeners
         nameEditText.afterTextChanged {
@@ -313,7 +328,7 @@ class EditMedicationActivity : AppCompatActivity() {
 
         // If editing a medication, replace the old medication with a new one. Otherwise, add it to the list
         if (isReplacing) {
-            Log.i(FN, "Replacing an existing mediciation")
+            Log.i(FN, "Replacing an existing medication")
             medicationStore.replaceMedication(preservedMedication!!, medication)
             scheduleReminder(medication, isReplacing = true)
         }
@@ -328,11 +343,13 @@ class EditMedicationActivity : AppCompatActivity() {
         if (!isReplacing) {
             val intent = Intent(this, MainActivity::class.java)
             this.startActivity(intent)
+            Toast.makeText(this, "Added new medication: " + nameEditText.text, Toast.LENGTH_SHORT).show()
         }
         else {
             isReplacing = true
             preserveMedication()
             editMedication(false)
+            Toast.makeText(this, "Saved edits", Toast.LENGTH_SHORT).show()
         }
 
         refreshUI()
@@ -343,28 +360,38 @@ class EditMedicationActivity : AppCompatActivity() {
         val view = medicationTimesLinearLayout.inflate(R.layout.time_layout, false)
         val fmt = DateTimeFormat.forPattern("hh:mm a")
         view.timeTextView.text = fmt.print(time).toLowerCase()
-        view.deleteReminderImgView.setOnClickListener { deleteReminder(time, view) }
+        view.deleteReminderImgView.setOnClickListener { deleteReminder(time) }
         return view
     }
 
-    private fun deleteReminder(time: LocalTime, view: View) {
-        medication.times.remove(time)
-        scheduleReminder(medication, isDeleting = true)
-        refreshUI()
+    private fun deleteReminder(time: LocalTime) {
+        val dialog = buildDialog("Confirm Deletion", "Do you want to delete this reminder?")
+        dialog.positiveButton.setOnClickListener {
+            medication.times.remove(time)
+            scheduleReminder(medication, isDeleting = true)
+            refreshUI()
+            dialog.dismiss()
+        }
+        dialog.show()
     }
 
     /**
      * Deletes a medication from the ArrayList and re-saves it to SharedPreferences
      */
     private fun deleteMedication() {
-        medicationStore.deleteMedication(medication)
+        val dialog = buildDialog("Confirm Deletion", "Do you want to delete this medication?")
+        dialog.positiveButton.setOnClickListener {
+            medicationStore.deleteMedication(medication)
 
-        scheduleReminder(medication, isDeleting = true)
+            scheduleReminder(medication, isDeleting = true)
+            dialog.dismiss()
 
-        // Return to MainActivity
-        val intent = Intent(this, MainActivity::class.java)
-        this.startActivity(intent)
-        Toast.makeText(this, "Medication deleted", Toast.LENGTH_SHORT).show()
+            // Return to MainActivity
+            val intent = Intent(this, MainActivity::class.java)
+            this.startActivity(intent)
+            Toast.makeText(this, "Medication deleted", Toast.LENGTH_SHORT).show()
+        }
+        dialog.show()
     }
 
     /**
@@ -382,10 +409,10 @@ class EditMedicationActivity : AppCompatActivity() {
         }
 
         if (isReplacing) {
-            reminderManager.editReminder(NOTIFICATION_TITLE, NOTIFICATION_MESSAGE, medication.id, nextTime!!)
+            reminderManager.editReminder(NOTIFICATION_TITLE, NOTIFICATION_MESSAGE, medication.id, nextTime)
             return
         }
-        reminderManager.addReminder(NOTIFICATION_TITLE, NOTIFICATION_MESSAGE, medication.id, nextTime!!)
+        reminderManager.addReminder(NOTIFICATION_TITLE, NOTIFICATION_MESSAGE, medication.id, nextTime)
 
         refreshUI()
     }
@@ -416,6 +443,16 @@ class EditMedicationActivity : AppCompatActivity() {
             sundayTextView -> return DateTimeConstants.SUNDAY
         }
         throw IllegalArgumentException("Invalid weekday name")
+    }
+
+    private fun buildDialog(title: String, message: String): Dialog {
+        val dialog = Dialog(this)
+        dialog.setContentView(R.layout.delete_dialog)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.titleTextView.text = title
+        dialog.messageTextView.text = message
+        dialog.negativeButton.setOnClickListener { dialog.dismiss() }
+        return dialog
     }
 
     private fun calendarToTextView(weekday: Int): TextView {
