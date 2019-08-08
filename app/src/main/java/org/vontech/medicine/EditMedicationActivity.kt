@@ -412,7 +412,7 @@ class EditMedicationActivity : AppCompatActivity() {
             reminderManager.editReminder(NOTIFICATION_TITLE, NOTIFICATION_MESSAGE, medication.id, nextTime)
             return
         }
-        reminderManager.addReminder(NOTIFICATION_TITLE, NOTIFICATION_MESSAGE, medication.id, nextTime)
+        reminderManager.addReminder(NOTIFICATION_TITLE, NOTIFICATION_MESSAGE, /*medication.id,*/ nextTime)
 
         refreshUI()
     }

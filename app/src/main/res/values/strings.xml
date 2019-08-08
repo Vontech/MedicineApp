@@ -47,4 +47,7 @@
     <!-- DETAILED MEDICATION SCREEN -->
     <string name="edit_screen_state">EDIT_SCREEN_STATE</string>
 
+    <!-- NOTIFICATIONS -->
+    <string name="reset_notification_count">RESET_NOTIFICATION_COUNT</string>
+
 </resources>
