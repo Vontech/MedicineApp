@@ -32,7 +32,7 @@ class ReminderManager(val context: Context) {
      * @param: time The time to send the reminder at
      * @param: frequency The frequency for the reminder
      */
-    fun addReminder(title: String, message: String, /*id: Int,*/ time: DateTime) {
+    fun addReminder(title: String, message: String, id: Int, time: DateTime) {
         // Create the intent to send a broadcast
         val notifyIntent = Intent(context, ReminderBroadcastReceiver::class.java)
 
@@ -41,9 +41,9 @@ class ReminderManager(val context: Context) {
         // Create bundle to pass title and message through intent
         val extras = Bundle()
 //        extras.putInt("id", id)
-        val id = 1
         extras.putString("title", title)
         extras.putString("message", message)
+        extras.putInt("medicationId", id)
         notifyIntent.putExtras(extras)
 
         // Make notifyIntent a PendingIntent so it can be fired at a given time
@@ -65,7 +65,7 @@ class ReminderManager(val context: Context) {
      */
     fun editReminder(newTitle: String, newMessage: String, id: Int, time: DateTime) {
         deleteReminder(id)
-        addReminder(newTitle, newMessage, /*id,*/ time)
+        addReminder(newTitle, newMessage, id, time)
     }
 
     /**
@@ -114,7 +114,7 @@ class ReminderManager(val context: Context) {
 
     // Schedule the next reminder for this medication using addReminder
     fun scheduleReminder(medication: Medication, title: String, message: String) {
-        addReminder(title, message, /*medication.id,*/ getNextTime(medication)!!)
+        addReminder(title, message,medication.id, getNextTime(medication)!!)
     }
 
     /**

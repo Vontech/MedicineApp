@@ -12,7 +12,7 @@ import org.joda.time.*
 import org.vontech.medicine.pokos.Medication
 import org.vontech.medicine.utils.MedicationStore
 import org.joda.time.format.DateTimeFormat
-import org.vontech.medicine.background.ReminderIntentService
+import org.vontech.medicine.background.setNumberOfNotifications
 import org.vontech.medicine.utils.EditState
 import java.util.*
 
@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity() {
         recyclerView.adapter = upcomingAdapterUpcomingMedication
 
         if (intent.getSerializableExtra(getString(R.string.reset_notification_count)) == 1) {
-            ReminderIntentService().setNumberOfNotifications(0) // Reset notification count if user clicked notification
+            setNumberOfNotifications(0, this) // Reset notification count if user clicked notification
         }
 
         app = this.application as MedicineApplication

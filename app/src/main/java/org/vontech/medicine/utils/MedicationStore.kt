@@ -2,18 +2,16 @@ package org.vontech.medicine.utils
 
 import android.content.Context
 import android.util.Log
-import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import org.vontech.medicine.R
 import org.vontech.medicine.pokos.Medication
-import org.vontech.medicine.security.SecurePreferencesBuilder
 import java.util.ArrayList
 
 class MedicationStore(context: Context) {
 
     private val LT = "MedicationStore" // Logging tag
     private val MEDICATIONS_KEY = context.getString(R.string.medication_list)
-    private var prefs = SecurePreferencesBuilder(context).build()//context.getSharedPreferences(MED_KEY, Context.MODE_PRIVATE) //SecurePreferencesBuilder(context).build()
+    private var prefs = getPreferences(context)
     private val gson = getSpecialGson()
 
     /**

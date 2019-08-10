@@ -379,6 +379,7 @@ class EditMedicationActivity : AppCompatActivity() {
 
     private fun deleteReminder(time: LocalTime) {
         val dialog = buildDialog("Confirm Deletion", "Do you want to delete this reminder?")
+        dialog.positiveButton.text = "DELETE"
         dialog.positiveButton.setOnClickListener {
             medication.times.remove(time)
             scheduleReminder(medication, isDeleting = true)
@@ -393,6 +394,7 @@ class EditMedicationActivity : AppCompatActivity() {
      */
     private fun deleteMedication() {
         val dialog = buildDialog("Confirm Deletion", "Do you want to delete this medication?")
+        dialog.positiveButton.text = "DELETE"
         dialog.positiveButton.setOnClickListener {
             medicationStore.deleteMedication(medication)
 
@@ -425,7 +427,7 @@ class EditMedicationActivity : AppCompatActivity() {
             reminderManager.editReminder(NOTIFICATION_TITLE, NOTIFICATION_MESSAGE, medication.id, nextTime)
             return
         }
-        reminderManager.addReminder(NOTIFICATION_TITLE, NOTIFICATION_MESSAGE, /*medication.id,*/ nextTime)
+        reminderManager.addReminder(NOTIFICATION_TITLE, NOTIFICATION_MESSAGE, medication.id, nextTime)
 
         refreshUI()
     }

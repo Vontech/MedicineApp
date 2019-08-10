@@ -25,6 +25,7 @@ class ReminderBroadcastReceiver: BroadcastReceiver() {
 //        extras.putInt("id", intent!!.getIntExtra("id", 0))
         extras.putString("title", intent!!.getStringExtra("title"))
         extras.putString("message", intent.getStringExtra("message"))
+        extras.putInt("medicationId", intent.getIntExtra("medicationId", 0))
 
         remindIntent.putExtras(extras)
         context!!.startService(remindIntent)

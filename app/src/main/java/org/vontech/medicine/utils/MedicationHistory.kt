@@ -14,7 +14,7 @@ class MedicationHistory(context: Context) {
 
     private val LT = "MedicationHistory" // Logging tag
     private val MEDICATIONS_HISTORY_KEY = context.getString(R.string.medication_list)
-    private var prefs = SecurePreferencesBuilder(context).build()//context.getSharedPreferences(MED_KEY, Context.MODE_PRIVATE) //SecurePreferencesBuilder(context).build()
+    private var prefs = getPreferences(context)
     private val gson = getSpecialGson()
 
     fun addEvent(medicationEvent: MedicationEvent) {
