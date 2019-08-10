@@ -21,7 +21,8 @@
             android:background="@drawable/card_background"
             android:backgroundTint="@color/purple"
             android:layout_marginBottom="16dp"
-            android:elevation="5dp"/>
+            android:elevation="5dp"
+            android:clickable="true"/>
 
         <EditText
             android:layout_width="match_parent"

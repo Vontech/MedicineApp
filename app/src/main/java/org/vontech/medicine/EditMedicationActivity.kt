@@ -1,9 +1,11 @@
 package org.vontech.medicine
 
+import android.Manifest
 import android.app.Dialog
 import android.app.TimePickerDialog
 import android.app.TimePickerDialog.OnTimeSetListener
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
@@ -27,11 +29,18 @@ import org.joda.time.LocalTime
 import org.joda.time.format.DateTimeFormat
 import org.vontech.medicine.utils.EditState
 import org.vontech.medicine.views.CalendarEntryGenerator
-import android.content.DialogInterface
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.support.v7.app.AlertDialog
+import android.net.Uri
+import android.os.Environment
+import android.provider.MediaStore
+import android.support.v4.app.ActivityCompat
+import android.support.v4.content.FileProvider
 import kotlinx.android.synthetic.main.delete_dialog.*
+import java.io.File
+import java.io.IOException
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 class EditMedicationActivity : AppCompatActivity() {
@@ -39,6 +48,9 @@ class EditMedicationActivity : AppCompatActivity() {
     val NOTIFICATION_TITLE = "Time to take your medicine!"
     val NOTIFICATION_MESSAGE = "Click to view this medication"
     val FN = "EditMedicationActivity"
+
+    val REQUEST_IMAGE_CAPTURE = 2
+    private lateinit var photoPath: String
 
     private lateinit var medicationStore: MedicationStore
     private var isEditing: Boolean = false
@@ -106,7 +118,11 @@ class EditMedicationActivity : AppCompatActivity() {
         editMedicationButton.text = if (isEditing) "cancel edits" else "edit medication"
         // if isEditing && !isReplacing, show the cancel adding button and return to MainActivity
         cancelAddingButton.visibility = if (isEditing && !isReplacing) View.VISIBLE else View.GONE
+        pillImageView.isClickable = isEditing
 
+        if (medication.pillImagePath.isNotEmpty()) {
+            pillImageView.setImageURI(Uri.parse(medication.pillImagePath))
+        }
         if (medication.name != null) {
             nameEditText.setText(medication.name!!)
             nameTextView.text = medication.name!!.toUpperCase()
@@ -186,6 +202,7 @@ class EditMedicationActivity : AppCompatActivity() {
         )
         preservedMedication!!.days = medication.days.filter {true}.toMutableSet()
         preservedMedication!!.times = medication.times.filter {true}.toMutableSet()
+        preservedMedication!!.pillImagePath = medication.pillImagePath
     }
 
     private fun loadOriginalMedication() {
@@ -211,6 +228,7 @@ class EditMedicationActivity : AppCompatActivity() {
             startActivity(mainActivityIntent)
             Toast.makeText(this, "Discarded medication", Toast.LENGTH_SHORT).show()
         }
+        pillImageView.setOnClickListener { dispatchTakePictureIntent() }
 
         // Set edit text listeners
         nameEditText.afterTextChanged {
@@ -320,11 +338,6 @@ class EditMedicationActivity : AppCompatActivity() {
         // Dose has a default value to protect against converting a null value to an Int
         var dose = 0f
         if (doseEditText.text.isNotEmpty()) { dose = doseEditText.text.toString().toFloat() }
-
-        // Create a new Medication object from the fields
-//        val newMedication = Medication(nameEditText.text.toString(), dose, notesEditText.text.toString())
-//        newMedication.days = medication.days
-//        newMedication.times = medication.times
 
         // If editing a medication, replace the old medication with a new one. Otherwise, add it to the list
         if (isReplacing) {
@@ -452,6 +465,50 @@ class EditMedicationActivity : AppCompatActivity() {
         dialog.messageTextView.text = message
         dialog.negativeButton.setOnClickListener { dialog.dismiss() }
         return dialog
+    }
+
+    @Throws(IOException::class)
+    private fun createImageFile(): File {
+        // Create an image file name
+        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+        val storageDir: File = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        val image = File.createTempFile(
+            "JPEG_${timeStamp}_", /* prefix */
+            ".jpg", /* suffix */
+            storageDir /* directory */
+        )
+        // Save a file: path for use with ACTION_VIEW intents
+        photoPath = image.absolutePath
+
+        return image
+    }
+
+    private fun dispatchTakePictureIntent() {
+        val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+
+        if (takePictureIntent.resolveActivity(packageManager) != null) {
+            val photoFile: File? = try { createImageFile() } catch (e: IOException) { null }
+            if (photoFile != null) {
+                val photoUri = FileProvider.getUriForFile(
+                    this, "com.example.android.fileprovider", photoFile
+                )
+                if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)
+                    ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA), REQUEST_IMAGE_CAPTURE)
+
+                if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri)
+                    startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
+                }
+            }
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            medication.pillImagePath = photoPath
+            pillImageView.rotation = 90f
+            pillImageView.setImageURI(Uri.parse(photoPath))
+        }
     }
 
     private fun calendarToTextView(weekday: Int): TextView {

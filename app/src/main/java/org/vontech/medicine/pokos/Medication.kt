@@ -7,6 +7,7 @@ import kotlin.random.Random
 data class Medication(var name: String?, var dose: Float?, var notes: String, val id: Int = Random.nextInt()) : Serializable {
     var days = mutableSetOf<Int>() // JodaTime weekday constants
     var times = mutableSetOf<LocalTime>() // JodaTime object
+    var pillImagePath: String = "" // Picture of the pill shown on UI cards
 
     /**
      *  Adapter method for converting from Joda weekdays to Calendar weekdays
