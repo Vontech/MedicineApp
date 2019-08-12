@@ -12,6 +12,7 @@ import org.vontech.medicine.pokos.MedicationEventType
 import org.vontech.medicine.utils.EditState
 import org.vontech.medicine.utils.MedicationHistory
 import android.graphics.BitmapFactory
+import android.net.Uri
 
 class UpcomingRecyclerAdapter(private val medications: List<Medication>)
     : RecyclerView.Adapter<UpcomingRecyclerAdapter.MedicationHolder>() {
@@ -56,8 +57,12 @@ class UpcomingRecyclerAdapter(private val medications: List<Medication>)
             view.nameTextView.text = medication.name
             view.doseTextView.text = medication.dose.toString() + " mL"
 
-            val icon = BitmapFactory.decodeResource(itemView.context.resources, R.drawable.placeholder)
-            view.imageView.setImageBitmap(getRoundedCornerBitmap(icon))
+            if (medication.pillImagePath.isNotEmpty()) {
+                view.imageView.setImageURI(Uri.parse(medication.pillImagePath))
+            } else {
+                val icon = BitmapFactory.decodeResource(itemView.context.resources, R.drawable.placeholder)
+                view.imageView.setImageBitmap(getRoundedCornerBitmap(icon))
+            }
 
             view.markAsDoneButton.setOnClickListener {
                 handleMedicineTaken(medication)

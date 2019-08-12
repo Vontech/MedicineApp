@@ -4,6 +4,7 @@ import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import kotlinx.android.synthetic.main.activity_main.*
@@ -103,13 +104,17 @@ class MainActivity : AppCompatActivity() {
         val nextBatch = getNextReminder()
         if (nextBatch?.reminderTime == null) {
             nextReminderWidget.visibility = View.GONE
+            recyclerView.visibility = View.GONE
         } else {
             nextReminderWidget.visibility = View.VISIBLE
+            recyclerView.visibility = View.VISIBLE
             // Instantiate RecyclerView and set its adapter
             upcomingLinearLayoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
             recyclerView.layoutManager = upcomingLinearLayoutManager
             upcomingAdapterUpcomingMedication = UpcomingRecyclerAdapter(nextBatch.medicationList)
             recyclerView.adapter = upcomingAdapterUpcomingMedication
+
+            Log.d("Next Batch", nextBatch.medicationList.toString())
 
             val fmt = DateTimeFormat.forPattern("h:mm aa")
             nextReminderTimeTextView.text = fmt.print(nextBatch.reminderTime)

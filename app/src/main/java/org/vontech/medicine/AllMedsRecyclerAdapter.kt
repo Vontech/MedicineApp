@@ -9,6 +9,7 @@ import org.vontech.medicine.pokos.Medication
 import org.vontech.medicine.utils.EditState
 import org.vontech.medicine.utils.MedicationHistory
 import android.graphics.BitmapFactory
+import android.net.Uri
 
 class AllMedsRecyclerAdapter(private val medications: List<Medication>)
     : RecyclerView.Adapter<AllMedsRecyclerAdapter.MedicationHolder>() {
@@ -53,8 +54,12 @@ class AllMedsRecyclerAdapter(private val medications: List<Medication>)
             view.nameTextView.text = medication.name
             view.doseTextView.text = medication.dose.toString() + " mL"
 
-            val icon = BitmapFactory.decodeResource(itemView.context.resources, R.drawable.placeholder)
-            view.imageView.setImageBitmap(icon)
+            if (medication.pillImagePath.isNotEmpty()) {
+                view.imageView.setImageURI(Uri.parse(medication.pillImagePath))
+            } else {
+                val icon = BitmapFactory.decodeResource(itemView.context.resources, R.drawable.placeholder)
+                view.imageView.setImageBitmap(icon)
+            }
         }
     }
 
