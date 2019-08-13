@@ -1,22 +1,23 @@
 <LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:background="@drawable/card_background"
-    android:orientation="horizontal"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="8dp"
-    android:layout_marginBottom="8dp"
-    android:layout_marginLeft="16dp"
-    android:layout_marginRight="16dp"
-    android:padding="12dp"
-    android:elevation="2dp">
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:background="@drawable/card_background"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:elevation="2dp">
 
-    <ImageView
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+    <com.github.siyamed.shapeimageview.mask.PorterShapeImageView
+            android:layout_width="125dp"
+            android:layout_height="125dp"
             android:id="@+id/imageView"
-            android:scaleType="centerCrop"
-            android:background="@color/textColor"/>
+            app:siShape="@drawable/all_meds_image_mask"
+            android:src="@drawable/placeholder"
+            app:siSquare="true"/>
 
     <LinearLayout
             android:layout_width="match_parent"

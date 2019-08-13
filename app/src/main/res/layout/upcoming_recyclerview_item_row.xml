@@ -1,18 +1,21 @@
 <LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:background="@drawable/card_background"
-    android:orientation="vertical"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:elevation="10dp"
-    android:layout_marginTop="8dp"
-    android:layout_marginBottom="16dp">
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:background="@drawable/upcoming_card_background"
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:elevation="10dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="16dp">
 
-    <ImageView
+    <com.github.siyamed.shapeimageview.mask.PorterShapeImageView
             android:layout_width="@dimen/mainScreenPillSize"
             android:layout_height="@dimen/mainScreenPillSize"
             android:id="@+id/imageView"
-            android:scaleType="centerCrop"/>
+            app:siShape="@drawable/upcoming_image_mask"
+            android:src="@drawable/placeholder"
+            app:siSquare="true"/>
 
     <TextView
             android:layout_width="match_parent"
@@ -36,7 +39,8 @@
             android:fontFamily="@font/sf_regular"
             android:textColor="@color/disabledTextColor"
             android:textAlignment="viewStart"
-            android:paddingLeft="16dp"/>
+            android:paddingLeft="16dp"
+            android:layout_marginTop="-10dp"/>
 
     <Button
             android:text="@string/click_once_taken"
@@ -54,8 +58,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/card_background"
-        android:backgroundTint="@color/blueButtonColor">
+        android:background="@drawable/card_button">
 
 
 

@@ -1,5 +1,7 @@
 package org.vontech.medicine
 
+import android.content.ContentResolver
+import android.content.Context
 import android.content.Intent
 import android.graphics.*
 import android.support.v7.widget.RecyclerView
@@ -16,9 +18,12 @@ import android.net.Uri
 import android.util.Log
 import org.joda.time.*
 import java.lang.Math.abs
+import android.provider.MediaStore
 
-class UpcomingRecyclerAdapter(private val medications: List<Medication>)
+class UpcomingRecyclerAdapter(private val medications: List<Medication>, context: Context)
     : RecyclerView.Adapter<UpcomingRecyclerAdapter.MedicationHolder>() {
+
+    val myContext = context
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MedicationHolder {
         val inflatedView = parent.inflate(R.layout.upcoming_recyclerview_item_row, false)
@@ -33,7 +38,7 @@ class UpcomingRecyclerAdapter(private val medications: List<Medication>)
     }
 
     // ViewHolder class for the UpcomingRecyclerAdapter
-    class MedicationHolder(v: View) : RecyclerView.ViewHolder(v), View.OnClickListener {
+    inner class MedicationHolder(v: View) : RecyclerView.ViewHolder(v), View.OnClickListener {
         // References to the inflated view to allow MedicationHolder to access textviews
         private var view: View = v
         private var medication: Medication? = null
@@ -61,6 +66,9 @@ class UpcomingRecyclerAdapter(private val medications: List<Medication>)
             view.doseTextView.text = medication.dose.toString() + " mL"
 
             if (medication.pillImagePath.isNotEmpty()) {
+//                val pillImage: Bitmap = MediaStore.Images.Media.getBitmap(myContext.contentResolver, Uri.parse(medication.pillImagePath))
+//                view.imageView.setImageBitmap(getRoundedCornerBitmap(pillImage))
+//                view.imageView.setImageBitmap(EditMedicationActivity().maskImage(view.imageView, medication))
                 view.imageView.setImageURI(Uri.parse(medication.pillImagePath))
             } else {
                 val icon = BitmapFactory.decodeResource(itemView.context.resources, R.drawable.placeholder)
@@ -113,17 +121,14 @@ class UpcomingRecyclerAdapter(private val medications: List<Medication>)
         }
 
         private fun getRoundedCornerBitmap(bitmap: Bitmap): Bitmap {
-            val output = Bitmap.createBitmap(
-                bitmap.width,
-                bitmap.height, Bitmap.Config.ARGB_8888
-            )
+            val output = Bitmap.createBitmap(bitmap.width, bitmap.height, Bitmap.Config.ARGB_8888)
             val canvas = Canvas(output)
 
             val color = -0xbdbdbe
             val paint = Paint()
             val rect = Rect(0, 0, bitmap.width, bitmap.height)
             val rectF = RectF(rect)
-            val roundPx = 1000f
+            val roundPx = (bitmap.width / 4f)
 
             paint.isAntiAlias = true
             canvas.drawARGB(0, 0, 0, 0)

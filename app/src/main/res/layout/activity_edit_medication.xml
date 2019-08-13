@@ -4,6 +4,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:fillViewport="true"
         tools:context=".EditMedicationActivity"
         android:background="@color/mainCardBackground"
@@ -15,15 +16,17 @@
             android:orientation="vertical"
             android:padding="32dp">
 
-        <ImageView
-                android:layout_width="175dp"
-                android:layout_height="175dp"
-                android:id="@+id/pillImageView"
-                android:background="@drawable/card_background"
-                android:backgroundTint="@color/purple"
-                android:layout_marginBottom="16dp"
-                android:elevation="5dp"
-                android:clickable="true"/>
+        <com.github.siyamed.shapeimageview.mask.PorterShapeImageView
+            android:layout_width="175dp"
+            android:layout_height="175dp"
+            android:id="@+id/pillImageView"
+            android:background="@drawable/card_background"
+            android:backgroundTint="@color/purple"
+            android:layout_marginBottom="16dp"
+            android:elevation="5dp"
+            android:clickable="true"
+            app:siShape="@drawable/square_button_background"
+            app:siSquare="true"/>
 
         <EditText
                 android:layout_width="match_parent"
