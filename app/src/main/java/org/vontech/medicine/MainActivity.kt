@@ -1,6 +1,9 @@
 package org.vontech.medicine
 
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.net.Uri
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
@@ -38,7 +41,7 @@ class MainActivity : AppCompatActivity() {
 
         upcomingLinearLayoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         recyclerView.layoutManager = upcomingLinearLayoutManager
-        upcomingAdapterUpcomingMedication = UpcomingRecyclerAdapter(medicationList)
+        upcomingAdapterUpcomingMedication = UpcomingRecyclerAdapter(medicationList, this.applicationContext)
         recyclerView.adapter = upcomingAdapterUpcomingMedication
 
         if (intent.getSerializableExtra(getString(R.string.reset_notification_count)) == 1) {
@@ -111,7 +114,7 @@ class MainActivity : AppCompatActivity() {
             // Instantiate RecyclerView and set its adapter
             upcomingLinearLayoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
             recyclerView.layoutManager = upcomingLinearLayoutManager
-            upcomingAdapterUpcomingMedication = UpcomingRecyclerAdapter(nextBatch.medicationList)
+            upcomingAdapterUpcomingMedication = UpcomingRecyclerAdapter(nextBatch.medicationList, this.applicationContext)
             recyclerView.adapter = upcomingAdapterUpcomingMedication
 
             Log.d("Next Batch", nextBatch.medicationList.toString())

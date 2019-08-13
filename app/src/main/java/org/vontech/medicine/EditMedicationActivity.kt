@@ -6,6 +6,7 @@ import android.app.TimePickerDialog
 import android.app.TimePickerDialog.OnTimeSetListener
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.*
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
@@ -29,13 +30,13 @@ import org.joda.time.LocalTime
 import org.joda.time.format.DateTimeFormat
 import org.vontech.medicine.utils.EditState
 import org.vontech.medicine.views.CalendarEntryGenerator
-import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Environment
 import android.provider.MediaStore
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.FileProvider
+import android.widget.ImageView
 import kotlinx.android.synthetic.main.delete_dialog.*
 import java.io.File
 import java.io.IOException
@@ -63,6 +64,9 @@ class EditMedicationActivity : AppCompatActivity() {
     private lateinit var viewsShownDuringEditing: MutableList<View>
     private lateinit var viewsShownDuringViewing: MutableList<View>
     private lateinit var weekdayTextViews: List<TextView>
+
+    private lateinit var results: Bitmap
+    private lateinit var  maskBitmap: Bitmap
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -511,6 +515,38 @@ class EditMedicationActivity : AppCompatActivity() {
             pillImageView.rotation = 90f
             pillImageView.setImageURI(Uri.parse(photoPath))
         }
+    }
+
+    fun maskImage(imageView: ImageView, medication: Medication): Bitmap {
+        try {
+            val imageUri: Uri = Uri.parse(medication.pillImagePath)
+            val original: Bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, imageUri)
+            val mask: Bitmap = BitmapFactory.decodeResource(this.resources, R.drawable.upcoming_image_mask)
+
+            if (original != null) {
+                val ivWidth = original.width
+                val ivHeight = original.height
+
+                results = Bitmap.createBitmap(ivWidth, ivHeight, Bitmap.Config.ARGB_8888)
+                maskBitmap = Bitmap.createScaledBitmap(mask, ivWidth, ivHeight, true)
+
+                val canvas = Canvas(results)
+
+                val paint = Paint(Paint.ANTI_ALIAS_FLAG)
+                paint.xfermode = PorterDuffXfermode(PorterDuff.Mode.DST_IN)
+
+                canvas.drawBitmap(original, Rect(), Rect(), null)
+                canvas.drawBitmap(maskBitmap, Rect(), Rect(), paint)
+
+                paint.xfermode = null
+                paint.style = Paint.Style.STROKE
+            }
+        } catch (outOfMemoryError: OutOfMemoryError) {
+            outOfMemoryError.printStackTrace()
+        }
+
+        imageView.setImageBitmap(results)
+        return results
     }
 
     private fun calendarToTextView(weekday: Int): TextView {

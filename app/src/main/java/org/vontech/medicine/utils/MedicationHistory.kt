@@ -1,6 +1,7 @@
 package org.vontech.medicine.utils
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.util.Log
 import com.google.gson.reflect.TypeToken
 import org.joda.time.LocalTime
