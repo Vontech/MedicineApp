@@ -15,8 +15,13 @@ import com.google.gson.JsonDeserializationContext
 import org.joda.time.format.ISODateTimeFormat
 import com.google.gson.JsonSerializer
 import com.google.gson.JsonDeserializer
+import org.apache.commons.lang3.StringUtils
 import org.joda.time.LocalTime
 import java.lang.reflect.Type
+import org.joda.time.DateTime
+import org.joda.time.DateTimeZone
+
+
 
 
 var gson = getSpecialGson()
@@ -86,9 +91,35 @@ class LocalTimeSerializer : JsonDeserializer<LocalTime>, JsonSerializer<LocalTim
 
 }
 
+class DateTimeDeserializer : JsonDeserializer<DateTime>, JsonSerializer<DateTime> {
+
+    @Throws(JsonParseException::class)
+    override fun deserialize(
+        je: JsonElement, type: Type,
+        jdc: JsonDeserializationContext
+    ): DateTime? {
+        val dateAsString = je.asString
+        return if (je.asString.length == 0) null else DATE_TIME_FORMATTER.parseDateTime(dateAsString)
+    }
+
+    override fun serialize(
+        src: DateTime?, typeOfSrc: Type,
+        context: JsonSerializationContext
+    ): JsonElement {
+        return JsonPrimitive(if (src == null) StringUtils.EMPTY else DATE_TIME_FORMATTER.print(src))
+    }
+
+    companion object {
+        internal val DATE_TIME_FORMATTER: org.joda.time.format.DateTimeFormatter =
+            ISODateTimeFormat.dateTime().withZone(DateTimeZone.UTC)
+    }
+}
+
 fun getSpecialGson(): Gson {
     val builder = GsonBuilder()
         .registerTypeAdapter(LocalTime::class.java, LocalTimeSerializer())
+        .registerTypeAdapter(DateTime::class.java, DateTimeDeserializer())
+
     val gson = builder.create()
     return gson
 }

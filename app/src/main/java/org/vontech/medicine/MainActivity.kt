@@ -140,6 +140,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         val now = LocalTime.now()
+        println(medicationList)
         var overallClosestReminder = medicationList.first().times.min()
         val nextReminderMedications = mutableSetOf(medicationList.first())
 

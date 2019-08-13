@@ -13,6 +13,9 @@ import org.vontech.medicine.utils.EditState
 import org.vontech.medicine.utils.MedicationHistory
 import android.graphics.BitmapFactory
 import android.net.Uri
+import android.util.Log
+import org.joda.time.*
+import java.lang.Math.abs
 
 class UpcomingRecyclerAdapter(private val medications: List<Medication>)
     : RecyclerView.Adapter<UpcomingRecyclerAdapter.MedicationHolder>() {
@@ -71,10 +74,40 @@ class UpcomingRecyclerAdapter(private val medications: List<Medication>)
 
         private fun handleMedicineTaken(medication: Medication) {
 
+            // Find out which time this was closest to, after removing the times
+            // that this was likely already take
+            // TODO: Make sure this works on a day where this was edited??
+            val takenIndices = medicationHistoryStore.getIndicesOfTimesTakenToday(medication)
+
+            val indexedTimesToTake = mutableMapOf<Int, LocalTime>()
+            medication.times.sorted().forEachIndexed { index, localTime ->
+                if (index !in takenIndices) {
+                    indexedTimesToTake[index] = localTime
+                }
+            }
+
+            if (indexedTimesToTake.isEmpty()) {
+                Log.e("NEXT REMINDER", "Something went horribly wrong! Times to take is already empty")
+                return
+            }
+
+            val now = DateTime.now().toLocalTime()
+            var closestIndex = 0
+            var timeDistance = Int.MAX_VALUE
+            indexedTimesToTake.forEach {
+                val distance = Period.fieldDifference(now, it.value)
+                if (distance.millis < timeDistance) {
+                    timeDistance = distance.millis
+                    closestIndex = it.key
+                }
+            }
+
             // Log this as taken
             medicationHistoryStore.addEvent(MedicationEvent(
                 medication.id,
-                MedicationEventType.TAKEN
+                MedicationEventType.TAKEN,
+                optionalIndex = closestIndex,
+                optionalReference = medication.times.size
             ))
 
         }

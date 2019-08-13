@@ -56,6 +56,7 @@ class MedicationStore(context: Context) {
     fun getMedications(): List<Medication> {
         Log.d(LT, "getMedications()")
         val json = prefs.getString(MEDICATIONS_KEY, null)
+        println(json)
         val type = object : TypeToken<ArrayList<Medication>>() {}.type
         return if (getSpecialGson().fromJson<ArrayList<Medication>>(json, type) == null) {
             return arrayListOf()
@@ -67,7 +68,7 @@ class MedicationStore(context: Context) {
     fun getMedicationById(id: Int): Medication? {
         Log.d(LT, "getMedicationById()")
         val meds = getMedications()
-        return meds.firstOrNull() {it.id == id}
+        return meds.firstOrNull {it.id == id}
     }
 
     /**

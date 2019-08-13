@@ -3,8 +3,10 @@ package org.vontech.medicine.utils
 import android.content.Context
 import android.util.Log
 import com.google.gson.reflect.TypeToken
+import org.joda.time.DateTime
 import org.joda.time.LocalTime
 import org.vontech.medicine.R
+import org.vontech.medicine.pokos.Medication
 import org.vontech.medicine.pokos.MedicationEvent
 import org.vontech.medicine.pokos.MedicationEventType
 import org.vontech.medicine.security.SecurePreferencesBuilder
@@ -13,7 +15,7 @@ import java.util.ArrayList
 class MedicationHistory(context: Context) {
 
     private val LT = "MedicationHistory" // Logging tag
-    private val MEDICATIONS_HISTORY_KEY = context.getString(R.string.medication_list)
+    private val MEDICATIONS_HISTORY_KEY = context.getString(R.string.medication_history)
     private var prefs = getPreferences(context)
     private val gson = getSpecialGson()
 
@@ -27,10 +29,11 @@ class MedicationHistory(context: Context) {
     /**
      * Returns a list of medication events given a medication id. Optionally
      * filter by time range and event type as well
+     * Guaranteed to be sorted!
      */
     fun getEventsForMedication(medicationId: Int,
-                               dateStart: LocalTime? = null,
-                               dateEnd: LocalTime? = null,
+                               dateStart: DateTime? = null,
+                               dateEnd: DateTime? = null,
                                eventType: MedicationEventType? = null): List<MedicationEvent> {
 
         Log.d(LT, "getEventsForMedication()")
@@ -51,8 +54,17 @@ class MedicationHistory(context: Context) {
             }
             filtered.add(it)
         }
-        return filtered
+        return filtered.sortedBy { it.time }
 
+    }
+
+    fun getIndicesOfTimesTakenToday(medication: Medication): List<Int> {
+        return this.getEventsForMedication(
+            medication.id,
+            DateTime.now().withTimeAtStartOfDay(),
+            DateTime.now().withTimeAtStartOfDay().plusDays(1),
+            MedicationEventType.TAKEN)
+            .map {it.optionalIndex!!}
     }
 
     /**

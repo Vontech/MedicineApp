@@ -36,7 +36,11 @@ import android.os.Environment
 import android.provider.MediaStore
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.FileProvider
+import android.widget.ScrollView
 import kotlinx.android.synthetic.main.delete_dialog.*
+import org.vontech.medicine.pokos.MedicationEvent
+import org.vontech.medicine.pokos.MedicationEventType
+import org.vontech.medicine.utils.MedicationHistory
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
@@ -53,6 +57,7 @@ class EditMedicationActivity : AppCompatActivity() {
     private lateinit var photoPath: String
 
     private lateinit var medicationStore: MedicationStore
+    private lateinit var medicationHistory: MedicationHistory
     private var isEditing: Boolean = false
     private var isReplacing: Boolean = false
     private var todayShowing: Boolean = false
@@ -71,6 +76,7 @@ class EditMedicationActivity : AppCompatActivity() {
 
         // Create access to storage operations
         medicationStore = MedicationStore(this)
+        medicationHistory = MedicationHistory(this)
         reminderManager = ReminderManager(this)
 
         // Create lists of views for convenience
@@ -170,6 +176,10 @@ class EditMedicationActivity : AppCompatActivity() {
     }
 
     private fun refreshCalendarUI() {
+
+        // First, we get the medication activity
+        val events = medicationHistory.getEventsForMedication(medication.id)
+
         calendar.calendarEntryGenerator = object : CalendarEntryGenerator {
             override fun create(day: LocalDate): View {
 
@@ -209,6 +219,10 @@ class EditMedicationActivity : AppCompatActivity() {
         medication = preservedMedication!!
     }
 
+    private fun scrollToTop() {
+        //editScreenScrollView.scrollTo(0, 0)
+    }
+
     private fun setupOnClickListeners() {
 
         // Set onClickListeners for TextViews
@@ -220,6 +234,10 @@ class EditMedicationActivity : AppCompatActivity() {
         addReminderButton.setOnClickListener { showTimePickerDialog() }
         editMedicationButton.setOnClickListener {
             editMedication(!isEditing)
+
+            // If no longer editing, scroll to top
+            if (!isEditing) scrollToTop()
+
         }
         saveMedicationButton.setOnClickListener { saveMedication() }
         deleteMedicationButton.setOnClickListener { deleteMedication() }
@@ -349,6 +367,10 @@ class EditMedicationActivity : AppCompatActivity() {
             Log.i(FN, "Saving a new medication")
             medicationStore.saveMedication(medication)
             scheduleReminder(medication)
+            medicationHistory.addEvent(MedicationEvent(
+                medication.id,
+                MedicationEventType.CREATED
+            ))
         }
 
         // If adding, simply move back to home
@@ -366,6 +388,8 @@ class EditMedicationActivity : AppCompatActivity() {
         }
 
         refreshUI()
+
+        scrollToTop()
 
     }
 
@@ -511,19 +535,6 @@ class EditMedicationActivity : AppCompatActivity() {
             pillImageView.rotation = 90f
             pillImageView.setImageURI(Uri.parse(photoPath))
         }
-    }
-
-    private fun calendarToTextView(weekday: Int): TextView {
-        when (weekday) {
-            DateTimeConstants.MONDAY -> return mondayTextView
-            DateTimeConstants.TUESDAY -> return tuesdayTextView
-            DateTimeConstants.WEDNESDAY -> return wednesdayTextView
-            DateTimeConstants.THURSDAY -> return thursdayTextView
-            DateTimeConstants.FRIDAY -> return fridayTextView
-            DateTimeConstants.SATURDAY -> return saturdayTextView
-            DateTimeConstants.SUNDAY -> return sundayTextView
-        }
-        throw IllegalArgumentException("Invalid weekday name")
     }
 
 }

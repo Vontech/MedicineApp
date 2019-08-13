@@ -49,8 +49,7 @@
             android:fontFamily="@font/open_sans_semibold"
             android:layout_marginTop="10dp"
             android:layout_marginLeft="-4dp"
-            android:layout_marginRight="-4dp"
-            android:visibility='gone'/>
+            android:layout_marginRight="-4dp"/>
 
     <LinearLayout
         android:layout_width="match_parent"
