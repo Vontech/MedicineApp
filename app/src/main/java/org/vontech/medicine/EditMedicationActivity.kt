@@ -1,6 +1,7 @@
 package org.vontech.medicine
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Dialog
 import android.app.TimePickerDialog
 import android.app.TimePickerDialog.OnTimeSetListener
@@ -70,9 +71,8 @@ class EditMedicationActivity : AppCompatActivity() {
     private lateinit var viewsShownDuringViewing: MutableList<View>
     private lateinit var weekdayTextViews: List<TextView>
 
-    private lateinit var results: Bitmap
-    private lateinit var  maskBitmap: Bitmap
-
+    private lateinit var takePictureIntent: Intent
+    private lateinit var photoUri: Uri
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -514,76 +514,45 @@ class EditMedicationActivity : AppCompatActivity() {
     }
 
     private fun dispatchTakePictureIntent() {
-        val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
 
         if (takePictureIntent.resolveActivity(packageManager) != null) {
             val photoFile: File? = try { createImageFile() } catch (e: IOException) { null }
             if (photoFile != null) {
-                val photoUri = FileProvider.getUriForFile(
+                photoUri = FileProvider.getUriForFile(
                     this, "com.example.android.fileprovider", photoFile
                 )
-                if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)
+                if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
                     ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA), REQUEST_IMAGE_CAPTURE)
-
-                if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
-                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri)
-                    startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
-                }
+                } else { openCamera() }
             }
         }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        if (requestCode == REQUEST_IMAGE_CAPTURE) {
+            val numOfRequest = grantResults.size
+            val isGranted = (numOfRequest == 1) &&
+                    (PackageManager.PERMISSION_GRANTED == grantResults[numOfRequest - 1])
+
+            if (isGranted) { openCamera() }
+        }
+
+    }
+
+    private fun openCamera() {
+        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri)
+        startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             medication.pillImagePath = photoPath
-            pillImageView.rotation = 90f
+//            pillImageView.rotation = 90f
             pillImageView.setImageURI(Uri.parse(photoPath))
         }
-    }
-
-    fun maskImage(imageView: ImageView, medication: Medication): Bitmap {
-        try {
-            val imageUri: Uri = Uri.parse(medication.pillImagePath)
-            val original: Bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, imageUri)
-            val mask: Bitmap = BitmapFactory.decodeResource(this.resources, R.drawable.upcoming_image_mask)
-
-            if (original != null) {
-                val ivWidth = original.width
-                val ivHeight = original.height
-
-                results = Bitmap.createBitmap(ivWidth, ivHeight, Bitmap.Config.ARGB_8888)
-                maskBitmap = Bitmap.createScaledBitmap(mask, ivWidth, ivHeight, true)
-
-                val canvas = Canvas(results)
-
-                val paint = Paint(Paint.ANTI_ALIAS_FLAG)
-                paint.xfermode = PorterDuffXfermode(PorterDuff.Mode.DST_IN)
-
-                canvas.drawBitmap(original, Rect(), Rect(), null)
-                canvas.drawBitmap(maskBitmap, Rect(), Rect(), paint)
-
-                paint.xfermode = null
-                paint.style = Paint.Style.STROKE
-            }
-        } catch (outOfMemoryError: OutOfMemoryError) {
-            outOfMemoryError.printStackTrace()
-        }
-
-        imageView.setImageBitmap(results)
-        return results
-    }
-
-    private fun calendarToTextView(weekday: Int): TextView {
-        when (weekday) {
-            DateTimeConstants.MONDAY -> return mondayTextView
-            DateTimeConstants.TUESDAY -> return tuesdayTextView
-            DateTimeConstants.WEDNESDAY -> return wednesdayTextView
-            DateTimeConstants.THURSDAY -> return thursdayTextView
-            DateTimeConstants.FRIDAY -> return fridayTextView
-            DateTimeConstants.SATURDAY -> return saturdayTextView
-            DateTimeConstants.SUNDAY -> return sundayTextView
-        }
-        throw IllegalArgumentException("Invalid weekday name")
     }
 
 }

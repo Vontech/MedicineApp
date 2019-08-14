@@ -1,7 +1,7 @@
 <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:background="@drawable/upcoming_card_background"
+        android:background="@drawable/card_background"
         android:orientation="vertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -42,26 +42,25 @@
             android:paddingLeft="16dp"
             android:layout_marginTop="-10dp"/>
 
-    <Button
-            android:text="@string/click_once_taken"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/markAsDoneButton"
-            android:backgroundTint="@color/blueButtonColor"
-            android:textColor="@color/mainCardBackground"
-            android:minHeight="0dp"
-            android:fontFamily="@font/open_sans_semibold"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="-4dp"
-            android:layout_marginRight="-4dp"/>
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/card_button">
+        android:id="@+id/markAsDoneButton"
+        android:clickable="true"
+        android:background="@drawable/card_button"
+        android:layout_marginTop="4dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="6dp"
+        android:gravity="bottom">
 
-
-
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="CLICK ONCE TAKEN"
+                android:textColor="@color/mainCardBackground"
+                android:fontFamily="@font/sf_semibold"
+                android:textSize="14sp"
+                android:gravity="center"/>
     </LinearLayout>
 
 </LinearLayout>
