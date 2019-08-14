@@ -1,6 +1,5 @@
 package org.vontech.medicine
 
-import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
 import android.graphics.*
@@ -17,10 +16,12 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.util.Log
 import org.joda.time.*
-import java.lang.Math.abs
-import android.provider.MediaStore
 
-class UpcomingRecyclerAdapter(private val medications: List<Medication>, context: Context)
+class UpcomingRecyclerAdapter(
+    private val medications: List<Medication>,
+    context: Context,
+    private val renderNextMedication: () -> Unit
+)
     : RecyclerView.Adapter<UpcomingRecyclerAdapter.MedicationHolder>() {
 
     val myContext = context
@@ -117,6 +118,8 @@ class UpcomingRecyclerAdapter(private val medications: List<Medication>, context
                 optionalIndex = closestIndex,
                 optionalReference = medication.times.size
             ))
+
+            renderNextMedication()
 
         }
 

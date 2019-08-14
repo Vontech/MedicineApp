@@ -1,23 +1,19 @@
 package org.vontech.medicine
 
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.net.Uri
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.calendar_day_view.view.*
 import org.joda.time.*
 import org.vontech.medicine.pokos.Medication
 import org.vontech.medicine.utils.MedicationStore
 import org.joda.time.format.DateTimeFormat
 import org.vontech.medicine.background.setNumberOfNotifications
 import org.vontech.medicine.utils.EditState
+import org.vontech.medicine.utils.MedicationHistory
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
@@ -29,16 +25,20 @@ class MainActivity : AppCompatActivity() {
     private lateinit var upcomingAdapterUpcomingMedication: UpcomingRecyclerAdapter
     private lateinit var medicationList: List<Medication>
     private lateinit var medicationStore: MedicationStore
+    private lateinit var medicationHistory: MedicationHistory
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         medicationStore = MedicationStore(this)
+        medicationHistory = MedicationHistory(this)
         medicationList = medicationStore.getMedications()
 
         upcomingLinearLayoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         recyclerView.layoutManager = upcomingLinearLayoutManager
-        upcomingAdapterUpcomingMedication = UpcomingRecyclerAdapter(medicationList, this.applicationContext)
+        upcomingAdapterUpcomingMedication = UpcomingRecyclerAdapter(medicationList, this.applicationContext) {
+            this.renderNextMedication()
+        }
         recyclerView.adapter = upcomingAdapterUpcomingMedication
 
         if (intent.getSerializableExtra(getString(R.string.reset_notification_count)) == 1) {
@@ -111,7 +111,10 @@ class MainActivity : AppCompatActivity() {
             // Instantiate RecyclerView and set its adapter
             upcomingLinearLayoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
             recyclerView.layoutManager = upcomingLinearLayoutManager
-            upcomingAdapterUpcomingMedication = UpcomingRecyclerAdapter(nextBatch.medicationList, this.applicationContext)
+            upcomingAdapterUpcomingMedication = UpcomingRecyclerAdapter(
+                nextBatch.medicationList,
+                this.applicationContext
+            ) {renderNextMedication()}
             recyclerView.adapter = upcomingAdapterUpcomingMedication
 
             Log.d("Next Batch", nextBatch.medicationList.toString())
@@ -133,45 +136,86 @@ class MainActivity : AppCompatActivity() {
     }
 
 
+    private val MEDICATION_TIME_NEARBY_THRESHOLD = 45
+
     /**
      * Returns all of the medications that have the closest upcoming reminders (same time)
+     * This is done with the following logic:
+     * - Get a list of all medications for today
+     * - Combine into clusters of medicines that are taken within 45 minutes of each other
+     * - Choose to display the earliest cluster, removing any already taken (using MedicationHistory)
      */
     private fun getNextReminder(): ReminderBatch? {
 
-        if (medicationList.isEmpty()) {
+        val clusters = mutableListOf<ReminderCluster>()
+
+        // First, create clusters
+        medicationList.forEach { med ->
+            med.times.forEachIndexed { index, medTime ->
+
+                // TODO: Do not include a medication if it was already taken
+                if (index in medicationHistory.getIndicesOfTimesTakenToday(med)) {
+                    println("SKIPPING MED ${med.name} for time $medTime")
+                    return@forEachIndexed
+                }
+
+                val comp = ReminderClusterComponent(med, index)
+
+                val overlappingClusters = clusters.filter {
+                    overlapsWithCluster(medTime, it, MEDICATION_TIME_NEARBY_THRESHOLD)
+                }
+
+                // Case 1: No clusters or no overlap with clusters
+                if (clusters.isEmpty()) {
+                    val cluster = ReminderCluster(medTime, medTime, mutableListOf(comp))
+                    clusters.add(cluster)
+                    return@forEachIndexed
+                }
+
+                // Case 2: Overlaps with one cluster
+                val cluster = overlappingClusters.first()
+                cluster.components.add(comp)
+                cluster.start = if (medTime < cluster.start) medTime else cluster.start
+                cluster.end = if (medTime > cluster.end) medTime else cluster.end
+
+                // Case 3: Overlaps with multiple clusters
+                if (overlappingClusters.size > 1) {
+                    overlappingClusters.subList(1, overlappingClusters.size).forEach {
+                        cluster.start = if (it.start < cluster.start) it.start else cluster.start
+                        cluster.end = if (it.end > cluster.end) it.end else cluster.end
+                        cluster.components.addAll(it.components)
+                        clusters.remove(it)
+                    }
+                }
+
+            }
+        }
+        println("CLUSTERS")
+        print(clusters)
+
+        if (clusters.isEmpty()) {
             return null
         }
 
-        val now = LocalTime.now()
-        println(medicationList)
-        var overallClosestReminder = medicationList.first().times.min()
-        val nextReminderMedications = mutableSetOf(medicationList.first())
+        // Now find the cluster with the earliest time
+        val earliestCluster = clusters.minBy { it.start }
+        val medsToTake = earliestCluster!!.components.map {it.medication}
+        val earliestMed = earliestCluster.start
 
-        // Find the closest time to now, and return the list of medications
-        // that are taken at that time
-        for (medication in medicationList) {
-            if (medication.times.isEmpty()) continue
+        return ReminderBatch(medsToTake, earliestMed)
 
-            val currentMedTimesList = medication.times.toMutableList()
-            currentMedTimesList.add(now)
-            currentMedTimesList.sort()
-
-            val nextTime =
-                if (currentMedTimesList.indexOf(now) == currentMedTimesList.size - 1) currentMedTimesList.first()
-                else currentMedTimesList[currentMedTimesList.indexOf(now) + 1]
-
-
-            if (Minutes.minutesBetween(overallClosestReminder, now) > Minutes.minutesBetween(nextTime, now)) {
-                overallClosestReminder = nextTime
-                nextReminderMedications.clear()
-                nextReminderMedications.add(medication)
-            } else if (nextTime == overallClosestReminder) {
-                nextReminderMedications.add(medication)
-            }
-        }
-        return ReminderBatch(nextReminderMedications.toList(), overallClosestReminder)
     }
 
-    data class ReminderBatch (val medicationList: List<Medication>, val reminderTime: LocalTime?)
+}
 
+data class ReminderBatch (val medicationList: List<Medication>, val reminderTime: LocalTime?)
+
+data class ReminderClusterComponent (val medication: Medication, val timeIndex: Int)
+data class ReminderCluster (var start: LocalTime, var end: LocalTime, val components: MutableList<ReminderClusterComponent>)
+
+fun overlapsWithCluster(time: LocalTime, cluster: ReminderCluster, maxDistance: Int): Boolean {
+    val interval = Interval(
+        cluster.start.minusMinutes(maxDistance).toDateTimeToday(),
+        cluster.end.plusMinutes(maxDistance).toDateTimeToday())
+    return interval.contains(time.toDateTimeToday())
 }
