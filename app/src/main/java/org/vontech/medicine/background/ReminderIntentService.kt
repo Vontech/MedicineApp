@@ -12,6 +12,7 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.support.v4.app.NotificationCompat
 import org.vontech.medicine.R
 import org.vontech.medicine.security.SecurePreferencesBuilder
 import org.vontech.medicine.utils.getPreferences
@@ -40,7 +41,8 @@ class ReminderIntentService: IntentService("ReminderIntentService") {
 
         builder.setSmallIcon(android.R.drawable.sym_def_app_icon)
         builder.setAutoCancel(true) // Notification will be dismissed once clicked
-
+        builder.setPriority(Notification.PRIORITY_HIGH)
+        builder.setDefaults(Notification.DEFAULT_ALL)
 
         setIntents(builder)
 
