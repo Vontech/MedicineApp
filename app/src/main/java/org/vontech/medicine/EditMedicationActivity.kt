@@ -12,8 +12,6 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.view.View
-import android.widget.TextView
-import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_edit_medication.*
 import org.joda.time.DateTime
 import org.joda.time.DateTimeConstants
@@ -23,7 +21,6 @@ import org.vontech.medicine.utils.MedicationStore
 import java.lang.IllegalArgumentException
 import android.util.Log
 import android.view.LayoutInflater
-import android.widget.TimePicker
 import kotlinx.android.synthetic.main.calendar_day_view.view.*
 import kotlinx.android.synthetic.main.time_layout.view.*
 import org.joda.time.LocalDate
@@ -39,6 +36,7 @@ import android.support.v4.app.ActivityCompat
 import android.support.v4.content.FileProvider
 import android.widget.ScrollView
 import android.widget.ImageView
+import android.widget.*
 import kotlinx.android.synthetic.main.delete_dialog.*
 import org.vontech.medicine.pokos.MedicationEvent
 import org.vontech.medicine.pokos.MedicationEventType
@@ -392,7 +390,6 @@ class EditMedicationActivity : AppCompatActivity() {
         }
 
         refreshUI()
-
         scrollToTop()
 
     }
@@ -405,6 +402,10 @@ class EditMedicationActivity : AppCompatActivity() {
         return view
     }
 
+    /**
+     * Deletes the given reminder time from this medication
+     * @param time: the time to be removed
+     */
     private fun deleteReminder(time: LocalTime) {
         val dialog = buildDialog("Confirm Deletion", "Do you want to delete this reminder?")
         dialog.positiveButton.text = "DELETE"
@@ -487,6 +488,11 @@ class EditMedicationActivity : AppCompatActivity() {
         throw IllegalArgumentException("Invalid weekday name")
     }
 
+    /**
+     * Configure the popup confirmation dialog styling and content
+     * @param title the title displayed on the dialog
+     * @param message the description on the dialog
+     */
     private fun buildDialog(title: String, message: String): Dialog {
         val dialog = Dialog(this)
         dialog.setContentView(R.layout.delete_dialog)
@@ -497,6 +503,9 @@ class EditMedicationActivity : AppCompatActivity() {
         return dialog
     }
 
+    /**
+     * Creates a file with
+     */
     @Throws(IOException::class)
     private fun createImageFile(): File {
         // Create an image file name
@@ -513,6 +522,10 @@ class EditMedicationActivity : AppCompatActivity() {
         return image
     }
 
+    /**
+     * Configure intent for opening camera and photoFile Uri. Check if camera permissions
+     * have been granted and launch the camera
+     */
     private fun dispatchTakePictureIntent() {
         takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
 
@@ -529,6 +542,10 @@ class EditMedicationActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Callback function called after app requests camera permissions from user.
+     * If accepted, launch the camera
+     */
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
@@ -542,6 +559,9 @@ class EditMedicationActivity : AppCompatActivity() {
 
     }
 
+    /**
+     * Launch intent to open the camera for taking a picture of a pill
+     */
     private fun openCamera() {
         takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri)
         startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)

@@ -36,9 +36,6 @@ class MainActivity : AppCompatActivity() {
         medicationStore = MedicationStore(this)
         medicationList = medicationStore.getMedications()
 
-        // TODO should not get 'lateinit var not assigned' error anymore, and should also have edit activity in edit mode
-        // TODO set the 'tonight' text in the widget to change dynamically based on the next reminder time
-
         upcomingLinearLayoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         recyclerView.layoutManager = upcomingLinearLayoutManager
         upcomingAdapterUpcomingMedication = UpcomingRecyclerAdapter(medicationList, this.applicationContext)
@@ -126,6 +123,9 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    /**
+     * Sets the day of the week header text
+     */
     private fun renderHeader() {
         val dayOfWeek = DateTime().dayOfWeek()
         val day = dayOfWeek.getAsText(Locale.getDefault()).toUpperCase()
