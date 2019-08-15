@@ -72,6 +72,8 @@ class EditMedicationActivity : AppCompatActivity() {
     private lateinit var takePictureIntent: Intent
     private lateinit var photoUri: Uri
 
+    private var currentMonthState: LocalDate = LocalDate.now().withDayOfMonth(1)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_medication)
@@ -173,15 +175,22 @@ class EditMedicationActivity : AppCompatActivity() {
         }
 
         // hide and show history
-        calendar.visibility = if (isEditing) View.GONE else View.VISIBLE
-        historyTextView.visibility = calendar.visibility
+        historyContainer.visibility = if (isEditing) View.GONE else View.VISIBLE
     }
 
     private fun refreshCalendarUI() {
 
         // First, we get the medication activity
         val events = medicationHistory.getEventsForMedication(medication.id)
+        val creationDate = events.first {it.eventType == MedicationEventType.CREATED}
+        println("EVENTS FOR THIS MEDICATION")
+        println(events)
 
+        // We also get the current month state
+        calendar.month = currentMonthState.monthOfYear
+        calendar.year = currentMonthState.year
+
+        // Now update what is to be shown within the calendar
         calendar.calendarEntryGenerator = object : CalendarEntryGenerator {
             override fun create(day: LocalDate): View {
 
@@ -189,6 +198,17 @@ class EditMedicationActivity : AppCompatActivity() {
                     LayoutInflater.from(this@EditMedicationActivity).inflate(R.layout.calendar_day_view, null, false)
 
                 view.calendarDayText.text = day.dayOfMonth.toString()
+
+                // Case 1: Before creation date or after current date
+                if (day.isBefore(creationDate.time.toLocalDate()) || day.isAfter(LocalDate.now())) {
+                    // DO NOTHING
+                }
+
+                // Case 2: Not today - Find out what happened on this day
+                // 1) Figure out how many times it was taken
+                // 2) Figure out how many times it should have been taken
+
+                // Case 3: Is today
 
                 when {
                     day.dayOfMonth % 2 == 0 -> view.calendarDayText.background = resources.getDrawable(R.drawable.calendar_some_taken)
@@ -253,6 +273,16 @@ class EditMedicationActivity : AppCompatActivity() {
         }
         notesEditText.afterTextChanged {
             medication.notes = it
+        }
+
+        previousMonthButton.setOnClickListener {
+            currentMonthState = currentMonthState.plusMonths(-1)
+            refreshCalendarUI()
+        }
+
+        nextMonthButton.setOnClickListener {
+            currentMonthState = currentMonthState.plusMonths(1)
+            refreshCalendarUI()
         }
 
     }
