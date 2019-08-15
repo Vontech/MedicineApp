@@ -16,17 +16,39 @@
             android:orientation="vertical"
             android:padding="24dp">
 
-        <com.github.siyamed.shapeimageview.mask.PorterShapeImageView
-            android:layout_width="175dp"
-            android:layout_height="175dp"
-            android:id="@+id/pillImageView"
-            android:background="@drawable/card_background"
-            android:backgroundTint="@color/purple"
-            android:layout_marginBottom="16dp"
-            android:elevation="5dp"
-            android:clickable="true"
-            app:siShape="@drawable/square_button_background"
-            app:siSquare="true"/>
+        <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp">
+
+            <com.github.siyamed.shapeimageview.mask.PorterShapeImageView
+                    android:layout_width="175dp"
+                    android:layout_height="175dp"
+                    android:id="@+id/pillImageView"
+                    android:background="@drawable/card_background"
+                    android:backgroundTint="@color/purple"
+                    app:siShape="@drawable/square_button_background"
+                    app:siSquare="true"/>
+
+            <LinearLayout
+                    android:layout_width="175dp"
+                    android:layout_height="175dp"
+                    android:id="@+id/pillImageCameraOverlay"
+                    android:background="@drawable/card_background"
+                    android:backgroundTint="#66000000"
+                    android:elevation="1dp"
+                    android:clickable="true">
+
+            <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/ic_camera"
+                    android:layout_margin="50dp"/>
+
+            </LinearLayout>
+
+        </FrameLayout>
+
 
         <EditText
                 android:layout_width="match_parent"

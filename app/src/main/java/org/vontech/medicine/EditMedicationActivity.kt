@@ -128,7 +128,8 @@ class EditMedicationActivity : AppCompatActivity() {
         editMedicationButton.text = if (isEditing) "cancel edits" else "edit medication"
         // if isEditing && !isReplacing, show the cancel adding button and return to MainActivity
         cancelAddingButton.visibility = if (isEditing && !isReplacing) View.VISIBLE else View.GONE
-        pillImageView.isClickable = isEditing
+        pillImageCameraOverlay.visibility = if (isEditing) View.VISIBLE else View.GONE
+//        pillImageView.isClickable = isEditing
 
         if (medication.pillImagePath.isNotEmpty()) {
             pillImageView.setImageURI(Uri.parse(medication.pillImagePath))
@@ -180,6 +181,7 @@ class EditMedicationActivity : AppCompatActivity() {
 
     private fun refreshCalendarUI() {
 
+        if (isEditing) return
         // First, we get the medication activity
         val events = medicationHistory.getEventsForMedication(medication.id)
         val creationDate = events.first {it.eventType == MedicationEventType.CREATED}
@@ -258,7 +260,7 @@ class EditMedicationActivity : AppCompatActivity() {
             startActivity(mainActivityIntent)
             Toast.makeText(this, "Discarded medication", Toast.LENGTH_SHORT).show()
         }
-        pillImageView.setOnClickListener { dispatchTakePictureIntent() }
+        pillImageCameraOverlay.setOnClickListener { dispatchTakePictureIntent() }
 
         // Set edit text listeners
         nameEditText.afterTextChanged {
@@ -579,7 +581,13 @@ class EditMedicationActivity : AppCompatActivity() {
 
             if (isGranted) { openCamera() }
         }
+    }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            medication.pillImagePath = photoPath
+            pillImageView.setImageURI(Uri.parse(photoPath))
+        }
     }
 
     /**
@@ -604,14 +612,6 @@ class EditMedicationActivity : AppCompatActivity() {
         view?.let { v ->
             val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
             imm?.hideSoftInputFromWindow(v.windowToken, 0)
-        }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            medication.pillImagePath = photoPath
-//            pillImageView.rotation = 90f
-            pillImageView.setImageURI(Uri.parse(photoPath))
         }
     }
 
