@@ -22,20 +22,22 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/nameTextView"
-            android:textSize="24sp"
+            android:textSize="22sp"
             android:text="Medication Name"
             android:textStyle="bold"
             android:textColor="@color/textColor"
             android:fontFamily="@font/sf_bold"
             android:textAlignment="viewStart"
             android:paddingTop="8dp"
-            android:paddingLeft="16dp"/>
+            android:paddingLeft="16dp"
+            android:ellipsize="end"
+            android:maxLines="1"/>
 
     <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/doseTextView"
-            android:textSize="20sp"
+            android:textSize="18sp"
             android:text="Dose amount"
             android:fontFamily="@font/sf_regular"
             android:textColor="@color/disabledTextColor"
