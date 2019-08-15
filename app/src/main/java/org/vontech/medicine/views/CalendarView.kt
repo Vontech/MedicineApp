@@ -89,6 +89,7 @@ class CalendarView: LinearLayout {
 //        _makeCenterGravity(titleTextView)
         _makeTitle(titleTextView)
         _makeProjectBlack(titleTextView)
+        titleTextView.setPadding(10, 0, 0, 0)
         this.addView(titleTextView)
 
         // Add weekday headers

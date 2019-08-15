@@ -14,7 +14,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:padding="32dp">
+            android:padding="24dp">
 
         <com.github.siyamed.shapeimageview.mask.PorterShapeImageView
             android:layout_width="175dp"
@@ -35,7 +35,9 @@
                 android:hint="medication name"
                 android:textSize="32sp"
                 android:layout_marginBottom="12dp"
-                android:fontFamily="@font/sf_heavy"/>
+                android:fontFamily="@font/sf_heavy"
+                android:imeOptions="actionNext"
+                android:inputType="textImeMultiLine"/>
 
         <TextView
                 android:layout_width="match_parent"
@@ -311,7 +313,9 @@
                 android:id="@+id/calendar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="32dp"/>
+                android:layout_marginBottom="32dp"
+                android:layout_marginLeft="-3dp"
+                android:layout_marginRight="-3dp"/>
 
         <Button
                 android:layout_width="match_parent"
@@ -326,7 +330,7 @@
                 android:paddingBottom="3dp"
                 android:textAlignment="center"/>
 
-        <LinearLayout
+        <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -335,21 +339,22 @@
                 android:id="@+id/editingButtons">
 
             <LinearLayout
-                    android:layout_width="150dp"
-                    android:layout_height="150dp"
+                    android:layout_width="175dp"
+                    android:layout_height="175dp"
                     android:background="@drawable/square_button_background"
                     android:backgroundTint="@color/red"
                     android:layout_marginBottom="12dp"
                     android:layout_marginRight="32dp"
                     android:paddingTop="18dp"
-                    android:paddingLeft="18dp"
+                    android:paddingLeft="20dp"
                     android:elevation="5dp"
                     android:orientation="vertical"
-                    android:id="@+id/deleteMedicationButton">
+                    android:id="@+id/deleteMedicationButton"
+                    android:layout_alignParentLeft="true">
 
                 <ImageView
-                        android:layout_width="56dp"
-                        android:layout_height="56dp"
+                        android:layout_width="68dp"
+                        android:layout_height="68dp"
                         android:src="@drawable/ic_delete_medication"
                         android:layout_marginTop="-4dp"/>
 
@@ -358,58 +363,59 @@
                         android:layout_height="wrap_content"
                         android:text="delete\nmedication"
                         android:fontFamily="@font/sf_medium"
-                        android:textSize="19sp"
-                        android:textColor="@color/mainCardBackground"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginTop="4dp"/>
-            </LinearLayout>
-
-            <LinearLayout
-                    android:layout_width="150dp"
-                    android:layout_height="150dp"
-                    android:background="@drawable/square_button_background"
-                    android:backgroundTint="@color/red"
-                    android:layout_marginBottom="12dp"
-                    android:layout_marginRight="32dp"
-                    android:paddingTop="18dp"
-                    android:paddingLeft="18dp"
-                    android:elevation="5dp"
-                    android:orientation="vertical"
-                    android:id="@+id/cancelAddingButton">
-
-                <ImageView
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
-                        android:src="@drawable/ic_cancel"
-                        android:layout_marginTop="0dp"/>
-
-                <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="cancel\nedits"
-                        android:fontFamily="@font/sf_medium"
-                        android:textSize="19sp"
+                        android:textSize="21sp"
                         android:textColor="@color/mainCardBackground"
                         android:layout_marginLeft="5dp"
                         android:layout_marginTop="8dp"/>
             </LinearLayout>
 
             <LinearLayout
-                    android:layout_width="150dp"
-                    android:layout_height="150dp"
+                    android:layout_width="175dp"
+                    android:layout_height="175dp"
+                    android:background="@drawable/square_button_background"
+                    android:backgroundTint="@color/red"
+                    android:layout_marginBottom="12dp"
+                    android:paddingTop="20dp"
+                    android:paddingLeft="20dp"
+                    android:elevation="5dp"
+                    android:orientation="vertical"
+                    android:id="@+id/cancelAddingButton"
+                    android:layout_alignParentLeft="true">
+
+                <ImageView
+                        android:layout_width="62dp"
+                        android:layout_height="62dp"
+                        android:src="@drawable/ic_cancel"
+                        android:layout_marginLeft="-4dp"/>
+
+                <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="cancel adding\nmedication"
+                        android:fontFamily="@font/sf_medium"
+                        android:textSize="21sp"
+                        android:textColor="@color/mainCardBackground"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginTop="12dp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                    android:layout_width="175dp"
+                    android:layout_height="175dp"
                     android:background="@drawable/square_button_background"
                     android:backgroundTint="@color/purple"
                     android:layout_marginBottom="12dp"
-                    android:paddingTop="18dp"
-                    android:paddingLeft="18dp"
+                    android:paddingTop="20dp"
+                    android:paddingLeft="20dp"
                     android:elevation="5dp"
                     android:clickable="true"
                     android:orientation="vertical"
-                    android:id="@+id/saveMedicationButton">
+                    android:id="@+id/saveMedicationButton"
+                    android:layout_alignParentRight="true">
 
                 <ImageView
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
                         android:src="@drawable/ic_save"/>
 
                 <TextView
@@ -417,13 +423,13 @@
                         android:layout_height="wrap_content"
                         android:text="save\nmedication"
                         android:fontFamily="@font/sf_medium"
-                        android:textSize="19sp"
+                        android:textSize="21sp"
                         android:textColor="@color/mainCardBackground"
                         android:layout_marginLeft="5dp"
-                        android:layout_marginTop="8dp"/>
+                        android:layout_marginTop="12dp"/>
             </LinearLayout>
 
-        </LinearLayout>
+        </RelativeLayout>
 
 
     </LinearLayout>

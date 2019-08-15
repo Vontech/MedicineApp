@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Medicine</string>
+    <string name="app_name">Medz</string>
 
     <!-- LOGIN SCREEN -->
     <string name="login_username_empty_error">A valid username must be entered</string>

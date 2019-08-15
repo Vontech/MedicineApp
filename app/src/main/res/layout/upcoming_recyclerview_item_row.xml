@@ -7,7 +7,8 @@
         android:layout_height="wrap_content"
         android:elevation="10dp"
         android:layout_marginTop="8dp"
-        android:layout_marginBottom="16dp">
+        android:layout_marginBottom="16dp"
+        android:layout_marginRight="14dp">
 
     <com.github.siyamed.shapeimageview.mask.PorterShapeImageView
             android:layout_width="@dimen/mainScreenPillSize"
@@ -54,13 +55,13 @@
         android:gravity="bottom">
 
         <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="CLICK ONCE TAKEN"
-                android:textColor="@color/mainCardBackground"
-                android:fontFamily="@font/sf_semibold"
-                android:textSize="14sp"
-                android:gravity="center"/>
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="CLICK ONCE TAKEN"
+            android:textColor="@color/mainCardBackground"
+            android:fontFamily="@font/sf_semibold"
+            android:textSize="15sp"
+            android:gravity="center"/>
     </LinearLayout>
 
 </LinearLayout>

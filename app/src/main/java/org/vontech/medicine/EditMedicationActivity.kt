@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.app.Dialog
 import android.app.TimePickerDialog
 import android.app.TimePickerDialog.OnTimeSetListener
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.*
@@ -34,8 +35,7 @@ import android.os.Environment
 import android.provider.MediaStore
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.FileProvider
-import android.widget.ScrollView
-import android.widget.ImageView
+import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import kotlinx.android.synthetic.main.delete_dialog.*
 import org.vontech.medicine.pokos.MedicationEvent
@@ -133,7 +133,7 @@ class EditMedicationActivity : AppCompatActivity() {
         }
         if (medication.name != null) {
             nameEditText.setText(medication.name!!)
-            nameTextView.text = medication.name!!.toUpperCase()
+            nameTextView.text = medication.name!!
         }
         if (medication.dose != null) {
             doseEditText.setText(medication.dose.toString())
@@ -221,10 +221,6 @@ class EditMedicationActivity : AppCompatActivity() {
         medication = preservedMedication!!
     }
 
-    private fun scrollToTop() {
-        //editScreenScrollView.scrollTo(0, 0)
-    }
-
     private fun setupOnClickListeners() {
 
         // Set onClickListeners for TextViews
@@ -234,13 +230,7 @@ class EditMedicationActivity : AppCompatActivity() {
 
         // Set onClickListeners for buttons
         addReminderButton.setOnClickListener { showTimePickerDialog() }
-        editMedicationButton.setOnClickListener {
-            editMedication(!isEditing)
-
-            // If no longer editing, scroll to top
-            if (!isEditing) scrollToTop()
-
-        }
+        editMedicationButton.setOnClickListener { editMedication(!isEditing) }
         saveMedicationButton.setOnClickListener { saveMedication() }
         deleteMedicationButton.setOnClickListener { deleteMedication() }
         cancelAddingButton.setOnClickListener {
@@ -338,8 +328,10 @@ class EditMedicationActivity : AppCompatActivity() {
 
         if (isEditing) {
             preserveMedication()
-        } else {
+        } else { // Cancelling edits without saving, revert to previous version of medication
             loadOriginalMedication()
+            scrollToTop()
+            hideKeyboard()
         }
         refreshUI()
 
@@ -391,6 +383,7 @@ class EditMedicationActivity : AppCompatActivity() {
 
         refreshUI()
         scrollToTop()
+        hideKeyboard()
 
     }
 
@@ -565,6 +558,23 @@ class EditMedicationActivity : AppCompatActivity() {
     private fun openCamera() {
         takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri)
         startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
+    }
+
+    /**
+     * Scroll to the top of the activity
+     */
+    private fun scrollToTop() { editScreenScrollView.scrollTo(0, 0) }
+
+    /**
+     * Hide the software keyboard, if it is showing
+     */
+    private fun hideKeyboard() {
+        // Check if no view has focus:
+        val view = this.currentFocus
+        view?.let { v ->
+            val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+            imm?.hideSoftInputFromWindow(v.windowToken, 0)
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

@@ -29,13 +29,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/nameTextView"
-                android:textSize="24sp"
+                android:textSize="26sp"
                 android:text="Medication Name"
                 android:textStyle="bold"
                 android:textColor="@color/textColor"
                 android:fontFamily="@font/sf_medium"
                 android:textAlignment="viewStart"
-                android:paddingTop="8dp"
+                android:layout_marginTop="12dp"
                 android:paddingLeft="16dp"/>
 
         <TextView
@@ -47,7 +47,8 @@
                 android:fontFamily="@font/sf_regular"
                 android:textColor="@color/disabledTextColor"
                 android:textAlignment="viewStart"
-                android:paddingLeft="16dp"/>
+                android:paddingLeft="16dp"
+                android:layout_marginTop="-10dp"/>
     </LinearLayout>
 
 </LinearLayout>
