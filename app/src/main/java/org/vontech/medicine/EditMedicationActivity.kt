@@ -401,10 +401,56 @@ class EditMedicationActivity : AppCompatActivity() {
 
     }
 
+    // Validates the medications before saving. Returns false if the form is not valid
+    private fun validateForm(): Boolean {
+
+        // Should have a name
+        if (medication.name?.trim()?.length == 0) {
+            showValidationError("A valid medication name must be entered.")
+            return false
+        }
+
+        // Should have a dosage
+        if (medication.dose == null || medication.dose!! < 0.000001) {
+            showValidationError("A valid dosage amount greater than 0 must be entered.")
+            return false
+        }
+
+        // Should have at least one day
+        if (medication.days.size == 0) {
+            showValidationError("The medication must be taken on at least one day.")
+            return false
+        }
+
+        // Should have at least one time
+        if (medication.times.size == 0) {
+            showValidationError("The medication must have at least one time to be taken.")
+            return false
+        }
+
+        return true
+
+    }
+
+    private fun showValidationError(message: String) {
+        val dialog = buildDialog("Medication Incomplete", message)
+        dialog.positiveButton.text = "OK"
+        dialog.negativeButton.visibility = View.GONE
+        dialog.positiveButton.setOnClickListener {
+            dialog.dismiss()
+        }
+        dialog.show()
+    }
+
     /**
      * Updates a modified Medication if editing, or adds a new Medication to the ArrayList of Medications
      */
     private fun saveMedication() {
+
+        if (!validateForm()) {
+            return
+        }
+
         // Do not allow medication to be created without a name
         if (nameEditText.text.isEmpty()) {
             Toast.makeText(this, "Must give medication a name", Toast.LENGTH_SHORT).show()
