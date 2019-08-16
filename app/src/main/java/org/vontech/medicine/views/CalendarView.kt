@@ -51,6 +51,9 @@ class CalendarView: LinearLayout {
          */
         set(value) {
             field = value
+            if (onMonthChangeListener != null) {
+                onMonthChangeListener!!.changed(this.month, this.year)
+            }
             render()
         }
 
@@ -59,15 +62,25 @@ class CalendarView: LinearLayout {
         /**
          * Sets the month to use within this calendar view
          * Must be from [1, 12]
-         * @param value The year
+         * @param value The month
          */
         set(value) {
             assert(value in 1..12)
             field = value
+            if (onMonthChangeListener != null) {
+                onMonthChangeListener!!.changed(this.month, this.year)
+            }
             render()
         }
 
     var calendarEntryGenerator : CalendarEntryGenerator? = null
+
+        set(value) {
+            field = value
+            render()
+        }
+
+    var onMonthChangeListener: OnMonthChangeListener? = null
 
         set(value) {
             field = value
@@ -83,14 +96,14 @@ class CalendarView: LinearLayout {
         val daysAcrossWeeks = getArrayOfDates(date)
 
         // Add the month above the calendar
-        val titleTextView = TextView(context)
-        titleTextView.text = YearMonth(date.year, date.monthOfYear).monthOfYear().asText.toUpperCase()
-        _makeFillParentWidth(titleTextView)
-//        _makeCenterGravity(titleTextView)
-        _makeTitle(titleTextView)
-        _makeProjectBlack(titleTextView)
-        titleTextView.setPadding(10, 0, 0, 0)
-        this.addView(titleTextView)
+//        val titleTextView = TextView(context)
+//        titleTextView.text = YearMonth(date.year, date.monthOfYear).monthOfYear().asText.toUpperCase()
+//        _makeFillParentWidth(titleTextView)
+////        _makeCenterGravity(titleTextView)
+//        _makeTitle(titleTextView)s
+//        _makeProjectBlack(titleTextView)
+//        titleTextView.setPadding(10, 0, 0, 0)
+//        this.addView(titleTextView)
 
         // Add weekday headers
         val dayHeaders = LinearLayout(context)
@@ -230,4 +243,8 @@ fun getArrayOfDates(timeAnchor: LocalDate): List<List<LocalDate>> {
 
 interface CalendarEntryGenerator {
     fun create(day: LocalDate): View
+}
+
+interface OnMonthChangeListener {
+    fun changed(month: Int, year: Int)
 }

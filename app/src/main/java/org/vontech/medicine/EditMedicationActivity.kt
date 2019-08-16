@@ -14,8 +14,6 @@ import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.view.View
 import kotlinx.android.synthetic.main.activity_edit_medication.*
-import org.joda.time.DateTime
-import org.joda.time.DateTimeConstants
 import org.vontech.medicine.pokos.Medication
 import org.vontech.medicine.reminders.ReminderManager
 import org.vontech.medicine.utils.MedicationStore
@@ -24,8 +22,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import kotlinx.android.synthetic.main.calendar_day_view.view.*
 import kotlinx.android.synthetic.main.time_layout.view.*
-import org.joda.time.LocalDate
-import org.joda.time.LocalTime
 import org.joda.time.format.DateTimeFormat
 import org.vontech.medicine.utils.EditState
 import org.vontech.medicine.views.CalendarEntryGenerator
@@ -38,11 +34,13 @@ import android.support.v4.content.FileProvider
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import kotlinx.android.synthetic.main.delete_dialog.*
+import org.joda.time.*
 import org.vontech.medicine.ocr.DosageType
 import org.vontech.medicine.pokos.MedicationEvent
 import org.vontech.medicine.pokos.MedicationEventType
 import org.vontech.medicine.utils.MedicationHistory
 import org.vontech.medicine.utils.buildDialog
+import org.vontech.medicine.views.OnMonthChangeListener
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
@@ -312,6 +310,14 @@ class EditMedicationActivity : AppCompatActivity() {
                 }
             }
 
+        }
+
+        calendar.onMonthChangeListener = object : OnMonthChangeListener {
+            override fun changed(month: Int, year: Int) {
+                val spec = YearMonth(year, month)
+                monthNameTextView.text = spec.monthOfYear().asText.toUpperCase()
+                yearTextView.text = spec.year.toString()
+            }
         }
 
     }
