@@ -1,10 +1,11 @@
 package org.vontech.medicine.pokos
 
 import org.joda.time.LocalTime
+import org.vontech.medicine.ocr.DosageType
 import java.io.Serializable
 import kotlin.random.Random
 
-data class Medication(var name: String?, var dose: Float?, var notes: String, val id: Int = Random.nextInt()) : Serializable {
+data class Medication(var name: String?, var dose: Float?, var notes: String, val id: Int = Random.nextInt(), var doseType: DosageType = DosageType.MCG) : Serializable {
     var days = mutableSetOf<Int>() // JodaTime weekday constants
     var times = mutableSetOf<LocalTime>() // JodaTime object
     var pillImagePath: String = "" // Picture of the pill shown on UI cards

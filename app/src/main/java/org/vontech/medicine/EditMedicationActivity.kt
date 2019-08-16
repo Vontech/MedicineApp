@@ -38,6 +38,7 @@ import android.support.v4.content.FileProvider
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import kotlinx.android.synthetic.main.delete_dialog.*
+import org.vontech.medicine.ocr.DosageType
 import org.vontech.medicine.pokos.MedicationEvent
 import org.vontech.medicine.pokos.MedicationEventType
 import org.vontech.medicine.utils.MedicationHistory
@@ -140,12 +141,14 @@ class EditMedicationActivity : AppCompatActivity() {
         }
         if (medication.dose != null) {
             doseEditText.setText(medication.dose.toString())
-            doseTextView.text = "${medication.dose.toString()} mL"
+            doseTextView.text = medication.dose.toString()
         }
         if (medication.notes != null) {
             notesEditText.setText(medication.notes)
             notesTextView.text = medication.notes
         }
+
+        doseMeasureText.text = medication.doseType.name.toLowerCase()
 
         // Show each time
         medicationTimesLinearLayout.removeAllViews()
@@ -232,7 +235,8 @@ class EditMedicationActivity : AppCompatActivity() {
             medication.name,
             medication.dose,
             medication.notes,
-            medication.id
+            medication.id,
+            medication.doseType
         )
         preservedMedication!!.days = medication.days.filter {true}.toMutableSet()
         preservedMedication!!.times = medication.times.filter {true}.toMutableSet()
@@ -285,6 +289,20 @@ class EditMedicationActivity : AppCompatActivity() {
         nextMonthButton.setOnClickListener {
             currentMonthState = currentMonthState.plusMonths(1)
             refreshCalendarUI()
+        }
+        doseMeasureText.setOnClickListener {
+            if (!isEditing) {
+                return@setOnClickListener
+            }
+            val popup = PopupMenu(this, it)
+            DosageType.values().forEach { dt ->
+                popup.menu.add(dt.name).setTitle(dt.name.toLowerCase())
+            }
+            popup.setOnMenuItemClickListener { mi ->
+                handleDosageTypeClicked(mi.title.toString())
+                return@setOnMenuItemClickListener true
+            }
+            popup.show()
         }
 
     }
@@ -347,6 +365,11 @@ class EditMedicationActivity : AppCompatActivity() {
             textView.setTextColor(ContextCompat.getColor(this, R.color.textColor))
             medication.days.add(textViewToJoda(textView))
         }
+        refreshUI()
+    }
+
+    private fun handleDosageTypeClicked(dosageType: String) {
+        medication.doseType = DosageType.valueOf(dosageType.toUpperCase())
         refreshUI()
     }
 

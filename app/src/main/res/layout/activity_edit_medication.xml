@@ -80,33 +80,50 @@
             <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Dose"
+                    android:text="Dosage"
                     android:textColor="@color/disabledTextColor"
                     android:fontFamily="@font/sf_medium"
                     android:textSize="20sp"
                     android:layout_marginBottom="-12dp"/>
 
-            <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/doseEditText"
-                    android:inputType="numberDecimal"
-                    android:hint="in mL"
-                    android:textColor="@color/textColor"
-                    android:textSize="20sp"
+            <LinearLayout
                     android:layout_marginBottom="12dp"
-                    android:fontFamily="@font/sf_medium"/>
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" >
 
-            <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/doseTextView"
-                    android:inputType="numberDecimal"
-                    android:textColor="@color/textColor"
-                    android:layout_marginBottom="12dp"
-                    android:textSize="24sp"
-                    android:visibility="gone"
-                    android:fontFamily="@font/sf_medium"/>
+                <EditText
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/doseEditText"
+                        android:inputType="numberDecimal"
+                        android:hint="0.00"
+                        android:textColor="@color/textColor"
+                        android:textSize="20sp"
+                        android:layout_marginBottom="12dp"
+                        android:fontFamily="@font/sf_medium"/>
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/doseTextView"
+                        android:inputType="numberDecimal"
+                        android:textColor="@color/textColor"
+                        android:textSize="24sp"
+                        android:visibility="gone"
+                        android:fontFamily="@font/sf_medium"/>
+
+                <TextView
+                        android:id="@+id/doseMeasureText"
+                        android:textColor="@color/textColor"
+                        android:fontFamily="@font/sf_medium"
+                        android:textSize="20sp"
+                        android:text="mcg"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp"/>
+
+            </LinearLayout>
 
         </LinearLayout>
 

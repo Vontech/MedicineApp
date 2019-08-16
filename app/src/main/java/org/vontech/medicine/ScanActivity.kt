@@ -161,8 +161,18 @@ class ScanActivity : AppCompatActivity() {
 
     private fun moveToEditing() {
         val extracted = attemptMedicationExtraction()
+
+        // Attempt to get a dosage type
+        var dosageType = DosageType.MG
+        try {
+            dosageType = DosageType.valueOf(extracted?.dosageType!!.toUpperCase())
+        } catch (e: Exception) {
+            // Do nothing, it is just a bad unit type
+        }
+
         val medicineToEdit = Medication(
             dose=extracted?.dosageAmount,
+            doseType=dosageType,
             name=extracted?.name,
             notes=""
         )

@@ -64,7 +64,7 @@ class UpcomingRecyclerAdapter(
         fun bindMedication(medication: Medication) {
             this.medication = medication
             view.nameTextView.text = medication.name
-            view.doseTextView.text = medication.dose.toString() + " mL"
+            view.doseTextView.text = "${medication.dose.toString()} ${medication.doseType.name.toLowerCase()}"
 
             if (medication.pillImagePath.isNotEmpty()) {
 //                val pillImage: Bitmap = MediaStore.Images.Media.getBitmap(myContext.contentResolver, Uri.parse(medication.pillImagePath))
