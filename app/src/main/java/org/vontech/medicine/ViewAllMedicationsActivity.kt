@@ -3,7 +3,10 @@ package org.vontech.medicine
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
+import android.view.View
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_main.recyclerView
+import kotlinx.android.synthetic.main.activity_view_all_medications.*
 import org.vontech.medicine.pokos.Medication
 import org.vontech.medicine.utils.MedicationStore
 
@@ -34,5 +37,8 @@ class ViewAllMedicationsActivity : AppCompatActivity() {
         recyclerView.layoutManager = medicationListLinearLayout
         recyclerAdapter = AllMedsRecyclerAdapter(allMedicationsList)
         recyclerView.adapter = recyclerAdapter
+
+        noMedsText.visibility = if (allMedicationsList.isEmpty()) View.VISIBLE else View.GONE
+
     }
 }

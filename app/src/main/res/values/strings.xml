@@ -43,6 +43,7 @@
     <string name="add_reminder_time">Add Reminder</string>
     <string name="create_new_medication">CREATE NEW MEDICATION</string>
     <string name="main_no_meds">No medications!\nAdd a new medication below</string>
+    <string name="view_all_no_meds">No medications!\nAdd a new medication on the home page</string>
 
     <!-- DETAILED MEDICATION SCREEN -->
     <string name="edit_screen_state">EDIT_SCREEN_STATE</string>
