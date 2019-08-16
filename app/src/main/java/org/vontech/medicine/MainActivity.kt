@@ -54,7 +54,7 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         medicationList = medicationStore.getMedications()
-        if (nextReminderWidget.visibility == View.VISIBLE) upcomingAdapterUpcomingMedication.notifyDataSetChanged()
+        if (nextReminderHeader.visibility == View.VISIBLE) upcomingAdapterUpcomingMedication.notifyDataSetChanged()
 
         // Render things ----------------------------
         renderHeader()
@@ -103,11 +103,9 @@ class MainActivity : AppCompatActivity() {
 
         val nextBatch = getNextReminder()
         if (nextBatch?.reminderTime == null) {
-            nextReminderWidget.visibility = View.GONE
-            recyclerView.visibility = View.GONE
+            nextMedicationWidget.visibility = View.GONE
         } else {
-            nextReminderWidget.visibility = View.VISIBLE
-            recyclerView.visibility = View.VISIBLE
+            nextMedicationWidget.visibility = View.VISIBLE
             // Instantiate RecyclerView and set its adapter
             upcomingLinearLayoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
             recyclerView.layoutManager = upcomingLinearLayoutManager

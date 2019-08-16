@@ -48,109 +48,116 @@
                     android:layout_marginBottom="24dp"/>
         </LinearLayout>
 
-
         <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingLeft="24dp"
-                android:id='@+id/nextReminderWidget'>
+                android:orientation="vertical"
+                android:id="@+id/nextMedicationWidget">
 
             <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/widget_background"
-                    android:orientation="vertical"
-                    android:paddingRight="48dp"
-                    android:paddingLeft="18dp">
-
-                <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="18sp"
-                        android:textColor="@color/textColor"
-                        android:text="@string/main_next_medication"
-                        android:fontFamily="@font/sf_regular"
-                        android:layout_marginBottom="-6dp"/>
+                    android:orientation="horizontal"
+                    android:paddingLeft="24dp"
+                    android:id='@+id/nextReminderHeader'>
 
                 <LinearLayout
-                        android:orientation="horizontal"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="-6dp">
+                        android:background="@drawable/widget_background"
+                        android:orientation="vertical"
+                        android:paddingRight="48dp"
+                        android:paddingLeft="18dp">
 
                     <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:id="@+id/nextReminderTimeTextView"
-                            android:textSize="20sp"
+                            android:textSize="18sp"
                             android:textColor="@color/textColor"
-                            android:textAlignment="viewStart"
-                            android:fontFamily="@font/sf_bold"/>
+                            android:text="@string/main_next_medication"
+                            android:fontFamily="@font/sf_regular"
+                            android:layout_marginBottom="-6dp"/>
 
-                    <TextView
-                            android:text=" today, "
+                    <LinearLayout
+                            android:orientation="horizontal"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="20sp"
-                            android:textColor="@color/textColor"
-                            android:textAlignment="viewStart"
-                            android:fontFamily="@font/sf_regular"/>
+                            android:layout_marginTop="-6dp">
 
-                    <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/nextReminderNumMedsTextView"
-                            android:textStyle="bold"
-                            android:textSize="20sp"
-                            android:textColor="@color/textColor"
-                            android:textAlignment="viewStart"
-                            android:fontFamily="@font/sf_bold"/>
+                        <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/nextReminderTimeTextView"
+                                android:textSize="20sp"
+                                android:textColor="@color/textColor"
+                                android:textAlignment="viewStart"
+                                android:fontFamily="@font/sf_bold"/>
 
-                    <TextView
-                            android:text=" medications"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textSize="20sp"
-                            android:textColor="@color/textColor"
-                            android:textAlignment="viewStart"
-                            android:fontFamily="@font/sf_regular"/>
+                        <TextView
+                                android:text=" today, "
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="20sp"
+                                android:textColor="@color/textColor"
+                                android:textAlignment="viewStart"
+                                android:fontFamily="@font/sf_regular"/>
+
+                        <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/nextReminderNumMedsTextView"
+                                android:textStyle="bold"
+                                android:textSize="20sp"
+                                android:textColor="@color/textColor"
+                                android:textAlignment="viewStart"
+                                android:fontFamily="@font/sf_bold"/>
+
+                        <TextView
+                                android:text=" medications"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="20sp"
+                                android:textColor="@color/textColor"
+                                android:textAlignment="viewStart"
+                                android:fontFamily="@font/sf_regular"/>
+                    </LinearLayout>
+
                 </LinearLayout>
 
             </LinearLayout>
 
-        </LinearLayout>
-
-        <android.support.v7.widget.RecyclerView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:clipToPadding="false"
-                android:layout_marginTop="16dp"
-                android:paddingLeft="26dp"
-                android:id="@+id/recyclerView"
-                android:layout_weight="0"
-                android:orientation="horizontal"
-                android:layout_marginBottom="4dp"/>
-
-        <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/mark_as_done_background"
-                android:layout_marginLeft="24dp"
-                android:layout_marginRight="24dp"
-                android:layout_marginBottom="24dp"
-                android:elevation="3dp">
-
-            <TextView
+            <android.support.v7.widget.RecyclerView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="MARK ALL AS TAKEN"
-                    android:textSize="18sp"
-                    android:fontFamily="@font/sf_bold"
-                    android:textColor="@color/mainCardBackground"
-                    android:paddingTop="5dp"
-                    android:paddingBottom="3dp"
-                    android:textAlignment="center"/>
+                    android:clipToPadding="false"
+                    android:layout_marginTop="12dp"
+                    android:paddingLeft="26dp"
+                    android:id="@+id/recyclerView"
+                    android:layout_weight="0"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="4dp"/>
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/mark_as_done_background"
+                    android:layout_marginLeft="24dp"
+                    android:layout_marginRight="24dp"
+                    android:layout_marginBottom="24dp"
+                    android:elevation="3dp">
+
+                <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="MARK ALL AS TAKEN"
+                        android:textSize="18sp"
+                        android:fontFamily="@font/sf_bold"
+                        android:textColor="@color/mainCardBackground"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="3dp"
+                        android:textAlignment="center"/>
+
+            </LinearLayout>
 
         </LinearLayout>
 

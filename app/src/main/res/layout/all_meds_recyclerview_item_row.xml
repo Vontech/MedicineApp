@@ -36,7 +36,10 @@
                 android:fontFamily="@font/sf_medium"
                 android:textAlignment="viewStart"
                 android:layout_marginTop="12dp"
-                android:paddingLeft="16dp"/>
+                android:layout_marginRight="16dp"
+                android:layout_marginLeft="16dp"
+                android:ellipsize="end"
+                android:maxLines="2"/>
 
         <TextView
                 android:layout_width="match_parent"
