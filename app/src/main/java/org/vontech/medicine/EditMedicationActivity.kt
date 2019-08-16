@@ -42,6 +42,7 @@ import org.vontech.medicine.ocr.DosageType
 import org.vontech.medicine.pokos.MedicationEvent
 import org.vontech.medicine.pokos.MedicationEventType
 import org.vontech.medicine.utils.MedicationHistory
+import org.vontech.medicine.utils.buildDialog
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
@@ -542,21 +543,6 @@ class EditMedicationActivity : AppCompatActivity() {
             sundayTextView -> return DateTimeConstants.SUNDAY
         }
         throw IllegalArgumentException("Invalid weekday name")
-    }
-
-    /**
-     * Configure the popup confirmation dialog styling and content
-     * @param title the title displayed on the dialog
-     * @param message the description on the dialog
-     */
-    private fun buildDialog(title: String, message: String): Dialog {
-        val dialog = Dialog(this)
-        dialog.setContentView(R.layout.delete_dialog)
-        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        dialog.titleTextView.text = title
-        dialog.messageTextView.text = message
-        dialog.negativeButton.setOnClickListener { dialog.dismiss() }
-        return dialog
     }
 
     /**

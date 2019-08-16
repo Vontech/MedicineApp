@@ -181,6 +181,7 @@
                     android:elevation="3dp">
 
                 <TextView
+                        android:id="@+id/markAllAsTakenButton"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="MARK ALL AS TAKEN"
