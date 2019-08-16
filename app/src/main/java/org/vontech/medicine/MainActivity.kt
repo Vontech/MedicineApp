@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.view.View
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.delete_dialog.*
 import org.joda.time.*
 import org.vontech.medicine.pokos.Medication
 import org.vontech.medicine.utils.MedicationStore
@@ -14,6 +15,7 @@ import org.joda.time.format.DateTimeFormat
 import org.vontech.medicine.background.setNumberOfNotifications
 import org.vontech.medicine.utils.EditState
 import org.vontech.medicine.utils.MedicationHistory
+import org.vontech.medicine.utils.buildDialog
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
@@ -104,8 +106,10 @@ class MainActivity : AppCompatActivity() {
         val nextBatch = getNextReminder()
         if (nextBatch?.reminderTime == null) {
             nextMedicationWidget.visibility = View.GONE
+            noNextMedicationContainer.visibility = if (medicationList.isEmpty()) View.GONE else View.VISIBLE
         } else {
             nextMedicationWidget.visibility = View.VISIBLE
+            noNextMedicationContainer.visibility = if (medicationList.isEmpty()) View.VISIBLE else View.GONE
             // Instantiate RecyclerView and set its adapter
             upcomingLinearLayoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
             recyclerView.layoutManager = upcomingLinearLayoutManager
@@ -120,8 +124,30 @@ class MainActivity : AppCompatActivity() {
             val fmt = DateTimeFormat.forPattern("h:mm aa")
             nextReminderTimeTextView.text = fmt.print(nextBatch.reminderTime)
             nextReminderNumMedsTextView.text = nextBatch.medicationList.size.toString()
+
+            markAllAsTakenButton.setOnClickListener {
+                clickedTakeAll(nextBatch)
+            }
+
         }
 
+    }
+
+    private fun clickedTakeAll(nextBatch: ReminderBatch) {
+
+        val medNames = nextBatch.medicationList.map {"\u2022 ${it.name} (${it.dose} ${it.doseType.toString().toLowerCase()})"}
+        val message = "Have you taken the following medications?\n\n${medNames.joinToString("\n")}"
+        val dialog = buildDialog("Take Next Medications", message)
+        dialog.positiveButton.text = "TAKE ALL"
+        dialog.negativeButton.text = "CANCEL"
+        dialog.positiveButton.setOnClickListener {
+            nextBatch.medicationList.forEach { med ->
+                medicationHistory.takeMedicationNow(med)
+            }
+            renderNextMedication()
+            dialog.dismiss()
+        }
+        dialog.show()
     }
 
     /**

@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical" >
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@color/white">
 
     <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:paddingBottom="20dp"
             android:paddingTop="20dp"
             tools:context=".MainActivity"
@@ -49,6 +51,36 @@
         </LinearLayout>
 
         <LinearLayout
+                android:id="@+id/noNextMedicationContainer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/widget_background"
+                android:orientation="horizontal"
+                android:paddingRight="48dp"
+                android:paddingLeft="18dp"
+                android:layout_marginLeft="24dp"
+                android:paddingBottom="12dp">
+
+            <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    app:srcCompat="@drawable/tada"
+                    android:id="@+id/imageView2"
+                    android:layout_weight="1"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginRight="12dp"/>
+
+            <TextView
+                    android:text="No upcoming medications"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:textColor="@color/textColor"
+                    android:fontFamily="@font/sf_bold"/>
+
+        </LinearLayout>
+
+        <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
@@ -70,6 +102,7 @@
                         android:paddingLeft="18dp">
 
                     <TextView
+                            android:id="@+id/nextReminderTitle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="18sp"
@@ -79,6 +112,7 @@
                             android:layout_marginBottom="-6dp"/>
 
                     <LinearLayout
+                            android:id="@+id/nextReminderDetails"
                             android:orientation="horizontal"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -147,6 +181,7 @@
                     android:elevation="3dp">
 
                 <TextView
+                        android:id="@+id/markAllAsTakenButton"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="MARK ALL AS TAKEN"
@@ -195,49 +230,49 @@
                     android:layout_alignParentLeft="true">
 
                 <ImageView
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:src="@drawable/ic_list"/>
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:src="@drawable/ic_list"/>
 
                 <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="view all\nmedications"
-                    android:fontFamily="@font/sf_medium"
-                    android:textSize="21sp"
-                    android:textColor="@color/mainCardBackground"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginTop="12dp"/>
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="view all\nmedications"
+                        android:fontFamily="@font/sf_medium"
+                        android:textSize="21sp"
+                        android:textColor="@color/mainCardBackground"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginTop="12dp"/>
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="175dp"
-                android:layout_height="175dp"
-                android:background="@drawable/square_button_background"
-                android:backgroundTint="@color/purple"
-                android:paddingTop="22dp"
-                android:paddingLeft="20dp"
-                android:layout_marginBottom="14dp"
-                android:elevation="5dp"
-                android:id="@+id/scanMedicationButton"
-                android:clickable="true"
-                android:orientation="vertical"
-                android:layout_alignParentRight="true">
+                    android:layout_width="175dp"
+                    android:layout_height="175dp"
+                    android:background="@drawable/square_button_background"
+                    android:backgroundTint="@color/purple"
+                    android:paddingTop="22dp"
+                    android:paddingLeft="20dp"
+                    android:layout_marginBottom="14dp"
+                    android:elevation="5dp"
+                    android:id="@+id/scanMedicationButton"
+                    android:clickable="true"
+                    android:orientation="vertical"
+                    android:layout_alignParentRight="true">
 
                 <ImageView
-                    android:layout_width="56dp"
-                    android:layout_height="56dp"
-                    android:src="@drawable/ic_camera"/>
+                        android:layout_width="56dp"
+                        android:layout_height="56dp"
+                        android:src="@drawable/ic_camera"/>
 
                 <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="scan new medication"
-                    android:fontFamily="@font/sf_medium"
-                    android:textSize="21sp"
-                    android:textColor="@color/mainCardBackground"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginTop="14dp"/>
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="scan new medication"
+                        android:fontFamily="@font/sf_medium"
+                        android:textSize="21sp"
+                        android:textColor="@color/mainCardBackground"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginTop="14dp"/>
             </LinearLayout>
 
         </RelativeLayout>
@@ -278,8 +313,8 @@
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="150dp"
-                android:layout_height="150dp" />
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"/>
 
         </LinearLayout>
 

@@ -6,6 +6,7 @@ import android.util.Log
 import com.google.gson.reflect.TypeToken
 import org.joda.time.DateTime
 import org.joda.time.LocalTime
+import org.joda.time.Period
 import org.vontech.medicine.R
 import org.vontech.medicine.pokos.Medication
 import org.vontech.medicine.pokos.MedicationEvent
@@ -66,6 +67,45 @@ class MedicationHistory(context: Context) {
             DateTime.now().withTimeAtStartOfDay().plusDays(1),
             MedicationEventType.TAKEN)
             .map {it.optionalIndex!!}
+    }
+
+    fun takeMedicationNow(medication: Medication) {
+        // Find out which time this was closest to, after removing the times
+        // that this was likely already take
+        // TODO: Make sure this works on a day where this was edited??
+        val takenIndices = this.getIndicesOfTimesTakenToday(medication)
+
+        val indexedTimesToTake = mutableMapOf<Int, LocalTime>()
+        medication.times.sorted().forEachIndexed { index, localTime ->
+            if (index !in takenIndices) {
+                indexedTimesToTake[index] = localTime
+            }
+        }
+
+        if (indexedTimesToTake.isEmpty()) {
+            Log.e("NEXT REMINDER", "Something went horribly wrong! Times to take is already empty")
+            return
+        }
+
+        val now = DateTime.now().toLocalTime()
+        var closestIndex = 0
+        var timeDistance = Int.MAX_VALUE
+        indexedTimesToTake.forEach {
+            val distance = Period.fieldDifference(now, it.value)
+            if (distance.millis < timeDistance) {
+                timeDistance = distance.millis
+                closestIndex = it.key
+            }
+        }
+
+        // Log this as taken
+        this.addEvent(MedicationEvent(
+            medication.id,
+            MedicationEventType.TAKEN,
+            optionalIndex = closestIndex,
+            optionalReference = medication.times.size
+        ))
+
     }
 
     /**

@@ -21,6 +21,19 @@
             android:fontFamily="@font/sf_heavy"
             android:id="@+id/headerDay"/>
 
+    <TextView
+            android:text="@string/view_all_no_meds"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/noMedsText"
+            android:fontFamily="@font/sf_medium"
+            android:textSize="24sp"
+            tools:text="@string/view_all_no_meds"
+            android:textColor="@color/disabledTextColor"
+            android:textAlignment="center"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="24dp"/>
+
     <android.support.v7.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

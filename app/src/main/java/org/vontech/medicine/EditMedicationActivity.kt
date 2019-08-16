@@ -38,9 +38,11 @@ import android.support.v4.content.FileProvider
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import kotlinx.android.synthetic.main.delete_dialog.*
+import org.vontech.medicine.ocr.DosageType
 import org.vontech.medicine.pokos.MedicationEvent
 import org.vontech.medicine.pokos.MedicationEventType
 import org.vontech.medicine.utils.MedicationHistory
+import org.vontech.medicine.utils.buildDialog
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
@@ -87,7 +89,7 @@ class EditMedicationActivity : AppCompatActivity() {
         weekdayTextViews = arrayListOf(mondayTextView, tuesdayTextView, wednesdayTextView, thursdayTextView,
                                         fridayTextView, saturdayTextView, sundayTextView)
         viewsShownDuringEditing = arrayListOf(nameEditText, doseEditText, notesEditText, saveMedicationButton,
-                                                addReminderButton)
+                                                addReminderButton, selectAllDaysButton)
         viewsShownDuringEditing.addAll(weekdayTextViews)
         viewsShownDuringViewing = arrayListOf(nameTextView, doseTextView, notesTextView, todayTextView)
 
@@ -140,12 +142,14 @@ class EditMedicationActivity : AppCompatActivity() {
         }
         if (medication.dose != null) {
             doseEditText.setText(medication.dose.toString())
-            doseTextView.text = "${medication.dose.toString()} mL"
+            doseTextView.text = medication.dose.toString()
         }
         if (medication.notes != null) {
             notesEditText.setText(medication.notes)
             notesTextView.text = medication.notes
         }
+
+        doseMeasureText.text = medication.doseType.name.toLowerCase()
 
         // Show each time
         medicationTimesLinearLayout.removeAllViews()
@@ -232,7 +236,8 @@ class EditMedicationActivity : AppCompatActivity() {
             medication.name,
             medication.dose,
             medication.notes,
-            medication.id
+            medication.id,
+            medication.doseType
         )
         preservedMedication!!.days = medication.days.filter {true}.toMutableSet()
         preservedMedication!!.times = medication.times.filter {true}.toMutableSet()
@@ -285,6 +290,28 @@ class EditMedicationActivity : AppCompatActivity() {
         nextMonthButton.setOnClickListener {
             currentMonthState = currentMonthState.plusMonths(1)
             refreshCalendarUI()
+        }
+        doseMeasureText.setOnClickListener {
+            if (!isEditing) {
+                return@setOnClickListener
+            }
+            val popup = PopupMenu(this, it)
+            DosageType.values().forEach { dt ->
+                popup.menu.add(dt.name).setTitle(dt.name.toLowerCase())
+            }
+            popup.setOnMenuItemClickListener { mi ->
+                handleDosageTypeClicked(mi.title.toString())
+                return@setOnMenuItemClickListener true
+            }
+            popup.show()
+        }
+        selectAllDaysButton.setOnClickListener {
+            weekdayTextViews.forEach { tv ->
+                if (textViewToJoda(tv) !in medication.days) {
+                    clickWeekday(tv as TextView)
+                }
+            }
+
         }
 
     }
@@ -350,6 +377,11 @@ class EditMedicationActivity : AppCompatActivity() {
         refreshUI()
     }
 
+    private fun handleDosageTypeClicked(dosageType: String) {
+        medication.doseType = DosageType.valueOf(dosageType.toUpperCase())
+        refreshUI()
+    }
+
     /**
      * Sets the activity views to editable, so the medication can be modified
      */
@@ -369,10 +401,56 @@ class EditMedicationActivity : AppCompatActivity() {
 
     }
 
+    // Validates the medications before saving. Returns false if the form is not valid
+    private fun validateForm(): Boolean {
+
+        // Should have a name
+        if (medication.name?.trim()?.length == 0) {
+            showValidationError("A valid medication name must be entered.")
+            return false
+        }
+
+        // Should have a dosage
+        if (medication.dose == null || medication.dose!! < 0.000001) {
+            showValidationError("A valid dosage amount greater than 0 must be entered.")
+            return false
+        }
+
+        // Should have at least one day
+        if (medication.days.size == 0) {
+            showValidationError("The medication must be taken on at least one day.")
+            return false
+        }
+
+        // Should have at least one time
+        if (medication.times.size == 0) {
+            showValidationError("The medication must have at least one time to be taken.")
+            return false
+        }
+
+        return true
+
+    }
+
+    private fun showValidationError(message: String) {
+        val dialog = buildDialog("Medication Incomplete", message)
+        dialog.positiveButton.text = "OK"
+        dialog.negativeButton.visibility = View.GONE
+        dialog.positiveButton.setOnClickListener {
+            dialog.dismiss()
+        }
+        dialog.show()
+    }
+
     /**
      * Updates a modified Medication if editing, or adds a new Medication to the ArrayList of Medications
      */
     private fun saveMedication() {
+
+        if (!validateForm()) {
+            return
+        }
+
         // Do not allow medication to be created without a name
         if (nameEditText.text.isEmpty()) {
             Toast.makeText(this, "Must give medication a name", Toast.LENGTH_SHORT).show()
@@ -511,21 +589,6 @@ class EditMedicationActivity : AppCompatActivity() {
             sundayTextView -> return DateTimeConstants.SUNDAY
         }
         throw IllegalArgumentException("Invalid weekday name")
-    }
-
-    /**
-     * Configure the popup confirmation dialog styling and content
-     * @param title the title displayed on the dialog
-     * @param message the description on the dialog
-     */
-    private fun buildDialog(title: String, message: String): Dialog {
-        val dialog = Dialog(this)
-        dialog.setContentView(R.layout.delete_dialog)
-        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        dialog.titleTextView.text = title
-        dialog.messageTextView.text = message
-        dialog.negativeButton.setOnClickListener { dialog.dismiss() }
-        return dialog
     }
 
     /**
