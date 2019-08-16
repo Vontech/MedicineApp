@@ -337,22 +337,60 @@
                     android:fontFamily="@font/sf_bold"
                     android:id="@+id/historyTextView"/>
 
+            <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Monitor if you take this medication consistently"
+                    android:textSize="20sp"
+                    android:textColor="@color/disabledTextColor"
+                    android:fontFamily="@font/sf_medium"
+                    android:layout_marginTop="-14dp"/>
+
             <LinearLayout
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                <Button
-                        android:text="Previous Month"
-                        android:id="@+id/previousMonthButton"
+                <TextView
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="match_parent"
+                        android:id="@+id/monthNameTextView"
+                        android:text="august"
+                        android:fontFamily="@font/sf_medium"
+                        android:textColor="@color/textColor"
+                        android:textSize="24sp"
+                        android:layout_marginRight="8dp" />
 
-                <Button
-                        android:text="Next Month"
-                        android:id="@+id/nextMonthButton"
+                <TextView
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="match_parent"
+                        android:id="@+id/yearTextView"
+                        android:text="2019"
+                        android:fontFamily="@font/sf_regular"
+                        android:textColor="@color/textColor"
+                        android:textSize="24sp" />
+
+                <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="right"
+                        android:layout_marginTop="4dp">
+
+                    <Button
+                            android:id="@+id/previousMonthButton"
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:background="@drawable/ic_chevron_left"
+                            style="@style/Widget.AppCompat.Button.Borderless"
+                            android:layout_marginRight="4dp"/>
+
+                    <Button
+                            android:id="@+id/nextMonthButton"
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:background="@drawable/ic_chevron_right"
+                            style="@style/Widget.AppCompat.Button.Borderless"/>
+                </LinearLayout>
 
             </LinearLayout>
 
