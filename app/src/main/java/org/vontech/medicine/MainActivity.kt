@@ -104,8 +104,10 @@ class MainActivity : AppCompatActivity() {
         val nextBatch = getNextReminder()
         if (nextBatch?.reminderTime == null) {
             nextMedicationWidget.visibility = View.GONE
+            noNextMedicationContainer.visibility = if (medicationList.isEmpty()) View.GONE else View.VISIBLE
         } else {
             nextMedicationWidget.visibility = View.VISIBLE
+            noNextMedicationContainer.visibility = if (medicationList.isEmpty()) View.VISIBLE else View.GONE
             // Instantiate RecyclerView and set its adapter
             upcomingLinearLayoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
             recyclerView.layoutManager = upcomingLinearLayoutManager

@@ -88,7 +88,7 @@ class EditMedicationActivity : AppCompatActivity() {
         weekdayTextViews = arrayListOf(mondayTextView, tuesdayTextView, wednesdayTextView, thursdayTextView,
                                         fridayTextView, saturdayTextView, sundayTextView)
         viewsShownDuringEditing = arrayListOf(nameEditText, doseEditText, notesEditText, saveMedicationButton,
-                                                addReminderButton)
+                                                addReminderButton, selectAllDaysButton)
         viewsShownDuringEditing.addAll(weekdayTextViews)
         viewsShownDuringViewing = arrayListOf(nameTextView, doseTextView, notesTextView, todayTextView)
 
@@ -303,6 +303,14 @@ class EditMedicationActivity : AppCompatActivity() {
                 return@setOnMenuItemClickListener true
             }
             popup.show()
+        }
+        selectAllDaysButton.setOnClickListener {
+            weekdayTextViews.forEach { tv ->
+                if (textViewToJoda(tv) !in medication.days) {
+                    clickWeekday(tv as TextView)
+                }
+            }
+
         }
 
     }

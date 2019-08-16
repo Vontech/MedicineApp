@@ -252,6 +252,24 @@
                             android:layout_marginBottom="-20dp"
                             android:paddingBottom="8dp"/>
 
+                    <Button
+                            android:layout_width="wrap_content"
+                            android:layout_height="38dp"
+                            android:text="Select All"
+                            android:background="@drawable/mark_as_done_background"
+                            android:backgroundTint="@color/purple"
+                            android:textColor="@color/mainCardBackground"
+                            android:fontFamily="@font/sf_medium"
+                            android:id="@+id/selectAllDaysButton"
+                            android:layout_marginTop="12dp"
+                            android:layout_marginRight="3dp"
+                            android:textSize="16sp"
+                            android:visibility="gone"
+                            android:gravity="center_vertical"
+                            android:paddingLeft="14dp"
+                            android:paddingRight="14dp"
+                            android:paddingTop="2dp"/>
+
                 </LinearLayout>
 
             </LinearLayout>
