@@ -1,14 +1,12 @@
 package org.vontech.medicine
 
 import android.Manifest
-import android.annotation.SuppressLint
-import android.app.Dialog
 import android.app.TimePickerDialog
 import android.app.TimePickerDialog.OnTimeSetListener
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.*
+import android.graphics.BitmapFactory
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
@@ -25,7 +23,6 @@ import kotlinx.android.synthetic.main.time_layout.view.*
 import org.joda.time.format.DateTimeFormat
 import org.vontech.medicine.utils.EditState
 import org.vontech.medicine.views.CalendarEntryGenerator
-import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Environment
 import android.provider.MediaStore
@@ -34,6 +31,7 @@ import android.support.v4.content.FileProvider
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import kotlinx.android.synthetic.main.delete_dialog.*
+import kotlinx.android.synthetic.main.upcoming_recyclerview_item_row.view.*
 import org.joda.time.*
 import org.vontech.medicine.ocr.DosageType
 import org.vontech.medicine.pokos.MedicationEvent
@@ -133,6 +131,9 @@ class EditMedicationActivity : AppCompatActivity() {
 
         if (medication.pillImagePath.isNotEmpty()) {
             pillImageView.setImageURI(Uri.parse(medication.pillImagePath))
+        } else {
+            val icon = BitmapFactory.decodeResource(applicationContext.resources, R.drawable.placeholder)
+            pillImageView.setImageBitmap(icon)
         }
         if (medication.name != null) {
             nameEditText.setText(medication.name!!)
@@ -315,7 +316,7 @@ class EditMedicationActivity : AppCompatActivity() {
         calendar.onMonthChangeListener = object : OnMonthChangeListener {
             override fun changed(month: Int, year: Int) {
                 val spec = YearMonth(year, month)
-                monthNameTextView.text = spec.monthOfYear().asText.toUpperCase()
+                monthNameTextView.text = spec.monthOfYear().asText
                 yearTextView.text = spec.year.toString()
             }
         }
@@ -363,7 +364,7 @@ class EditMedicationActivity : AppCompatActivity() {
         }
         val timePickerDialog = TimePickerDialog(this, R.style.DialogTheme, myTimeListener, hour, minute, false)
         timePickerDialog.setTitle("Choose time for reminder")
-        timePickerDialog.window.setBackgroundDrawableResource(R.color.mainCardBackground)
+        timePickerDialog.window.setBackgroundDrawableResource(R.color.offWhite)
         timePickerDialog.show()
     }
 

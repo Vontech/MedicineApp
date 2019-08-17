@@ -238,6 +238,8 @@ data class ReminderClusterComponent (val medication: Medication, val timeIndex: 
 data class ReminderCluster (var start: LocalTime, var end: LocalTime, val components: MutableList<ReminderClusterComponent>)
 
 fun overlapsWithCluster(time: LocalTime, cluster: ReminderCluster, maxDistance: Int): Boolean {
+    val start = cluster.start.minusMinutes(maxDistance).toDateTimeToday()
+    val end = cluster.end.plusMinutes(maxDistance).toDateTimeToday()
     val interval = Interval(
         cluster.start.minusMinutes(maxDistance).toDateTimeToday(),
         cluster.end.plusMinutes(maxDistance).toDateTimeToday())

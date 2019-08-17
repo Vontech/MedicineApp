@@ -73,7 +73,7 @@ class UpcomingRecyclerAdapter(
                 view.imageView.setImageURI(Uri.parse(medication.pillImagePath))
             } else {
                 val icon = BitmapFactory.decodeResource(itemView.context.resources, R.drawable.placeholder)
-                view.imageView.setImageBitmap(getRoundedCornerBitmap(icon))
+                view.imageView.setImageBitmap(icon)
             }
 
             view.markAsDoneButton.setOnClickListener {
@@ -86,27 +86,6 @@ class UpcomingRecyclerAdapter(
             medicationHistoryStore.takeMedicationNow(medication)
             renderNextMedication()
 
-        }
-
-        private fun getRoundedCornerBitmap(bitmap: Bitmap): Bitmap {
-            val output = Bitmap.createBitmap(bitmap.width, bitmap.height, Bitmap.Config.ARGB_8888)
-            val canvas = Canvas(output)
-
-            val color = -0xbdbdbe
-            val paint = Paint()
-            val rect = Rect(0, 0, bitmap.width, bitmap.height)
-            val rectF = RectF(rect)
-            val roundPx = (bitmap.width / 4f)
-
-            paint.isAntiAlias = true
-            canvas.drawARGB(0, 0, 0, 0)
-            paint.color = color
-            canvas.drawRoundRect(rectF, roundPx, roundPx, paint)
-
-            paint.xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_IN)
-            canvas.drawBitmap(bitmap, rect, rect, paint)
-
-            return output
         }
     }
 

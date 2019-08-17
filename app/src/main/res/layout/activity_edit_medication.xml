@@ -7,14 +7,16 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:fillViewport="true"
         tools:context=".EditMedicationActivity"
-        android:background="@color/mainCardBackground"
+        android:background="@color/offWhite"
         android:id="@+id/editScreenScrollView">
 
     <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:padding="24dp">
+            android:paddingTop="24dp"
+            android:paddingLeft="24dp"
+            android:paddingRight="24dp">
 
         <FrameLayout
                 android:layout_width="wrap_content"
@@ -35,7 +37,7 @@
                     android:layout_height="175dp"
                     android:id="@+id/pillImageCameraOverlay"
                     android:background="@drawable/card_background"
-                    android:backgroundTint="#66000000"
+                    android:backgroundTint="#73000000"
                     android:elevation="1dp"
                     android:clickable="true">
 
@@ -258,7 +260,7 @@
                             android:text="Select All"
                             android:background="@drawable/mark_as_done_background"
                             android:backgroundTint="@color/purple"
-                            android:textColor="@color/mainCardBackground"
+                            android:textColor="@color/offWhite"
                             android:fontFamily="@font/sf_medium"
                             android:id="@+id/selectAllDaysButton"
                             android:layout_marginTop="12dp"
@@ -309,7 +311,7 @@
                         android:drawablePadding="6dp"
                         android:background="@drawable/mark_as_done_background"
                         android:backgroundTint="@color/purple"
-                        android:textColor="@color/mainCardBackground"
+                        android:textColor="@color/offWhite"
                         android:fontFamily="@font/sf_medium"
                         android:id="@+id/addReminderButton"
                         android:layout_marginTop="12dp"
@@ -390,7 +392,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:id="@+id/monthNameTextView"
-                        android:text="AUGUST"
+                        android:text="Month"
                         android:fontFamily="@font/sf_medium"
                         android:textColor="@color/textColor"
                         android:textSize="24sp"
@@ -400,7 +402,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:id="@+id/yearTextView"
-                        android:text="2019"
+                        android:text="Year"
                         android:fontFamily="@font/sf_regular"
                         android:textColor="@color/textColor"
                         android:textSize="24sp"
@@ -434,12 +436,108 @@
                     android:id="@+id/calendar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="32dp"
+                    android:layout_marginBottom="24dp"
                     android:layout_marginLeft="-3dp"
-                    android:layout_marginRight="-3dp"/>
+                    android:layout_marginRight="-3dp" />
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginBottom="32dp">
+
+                <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Color Key"
+                        android:textSize="20sp"
+                        android:fontFamily="@font/sf_medium"
+                        android:textColor="@color/disabledTextColor"/>
+
+                <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginLeft="4dp"
+                        android:layout_marginBottom="4dp">
+
+                    <LinearLayout
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:background="@drawable/card_background"
+                            android:backgroundTint="@color/green"
+                            android:layout_marginRight="16dp"/>
+
+
+                    <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="you took this medication every time"
+                            android:textColor="@color/textColor"
+                            android:textSize="20sp"
+                            android:fontFamily="@font/sf_regular"
+                            android:layout_marginTop="-10dp"/>
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginLeft="4dp"
+                        android:layout_marginBottom="4dp">
+
+                    <LinearLayout
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:background="@drawable/card_background"
+                            android:backgroundTint="@color/orange"
+                            android:layout_marginRight="16dp"/>
+
+
+                    <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="you took this medication sometimes"
+                            android:textColor="@color/textColor"
+                            android:textSize="20sp"
+                            android:fontFamily="@font/sf_regular"
+                            android:layout_marginTop="-10dp"/>
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginLeft="4dp"
+                        android:layout_marginBottom="4dp">
+
+                    <LinearLayout
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:background="@drawable/card_background"
+                            android:backgroundTint="@color/red"
+                            android:layout_marginRight="16dp"/>
+
+
+                    <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="you did not take this medication at all"
+                            android:textColor="@color/textColor"
+                            android:textSize="20sp"
+                            android:fontFamily="@font/sf_regular"
+                            android:layout_marginTop="-10dp"/>
+
+
+                </LinearLayout>
+
+            </LinearLayout>
 
         </LinearLayout>
-
 
         <Button
                 android:layout_width="match_parent"
@@ -449,7 +547,7 @@
                 android:id="@+id/editMedicationButton"
                 android:textSize="18sp"
                 android:fontFamily="@font/sf_bold"
-                android:textColor="@color/mainCardBackground"
+                android:textColor="@color/offWhite"
                 android:paddingTop="3dp"
                 android:paddingBottom="3dp"
                 android:textAlignment="center"/>
@@ -460,6 +558,7 @@
                 android:orientation="horizontal"
                 android:gravity="center_horizontal"
                 android:layout_marginTop="24dp"
+                android:layout_marginBottom="12dp"
                 android:id="@+id/editingButtons">
 
             <LinearLayout
@@ -488,7 +587,7 @@
                         android:text="delete\nmedication"
                         android:fontFamily="@font/sf_medium"
                         android:textSize="21sp"
-                        android:textColor="@color/mainCardBackground"
+                        android:textColor="@color/offWhite"
                         android:layout_marginLeft="5dp"
                         android:layout_marginTop="8dp"/>
             </LinearLayout>
@@ -518,7 +617,7 @@
                         android:text="cancel adding\nmedication"
                         android:fontFamily="@font/sf_medium"
                         android:textSize="21sp"
-                        android:textColor="@color/mainCardBackground"
+                        android:textColor="@color/offWhite"
                         android:layout_marginLeft="5dp"
                         android:layout_marginTop="12dp"/>
             </LinearLayout>
@@ -548,7 +647,7 @@
                         android:text="save\nmedication"
                         android:fontFamily="@font/sf_medium"
                         android:textSize="21sp"
-                        android:textColor="@color/mainCardBackground"
+                        android:textColor="@color/offWhite"
                         android:layout_marginLeft="5dp"
                         android:layout_marginTop="12dp"/>
             </LinearLayout>

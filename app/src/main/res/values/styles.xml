@@ -1,7 +1,7 @@
 <resources>
 
     <style name="DialogTheme" parent="Theme.AppCompat.Light.Dialog">
-        <item name="colorAccent">@color/blueButtonColor</item>
+        <item name="colorAccent">@color/blue</item>
         <item name="colorControlNormal">@color/textColor</item>
     </style>
 

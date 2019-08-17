@@ -7,6 +7,6 @@
         android:top="10dp"
         android:bottom="5dp"/>
 
-    <solid android:color="@color/mainCardBackground"/>
+    <solid android:color="@color/offWhite"/>
 
 </shape>

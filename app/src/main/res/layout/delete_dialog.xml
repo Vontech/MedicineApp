@@ -41,7 +41,7 @@
                 android:textSize="16sp"
                 android:textColor="@color/red"
                 android:fontFamily="@font/sf_semibold"
-                android:backgroundTint="@color/mainCardBackground"
+                android:backgroundTint="@color/offWhite"
                 style="?android:attr/borderlessButtonStyle"/>
 
         <Button
@@ -53,7 +53,7 @@
                 android:textSize="16sp"
                 android:textColor="@color/purple"
                 android:fontFamily="@font/sf_semibold"
-                android:backgroundTint="@color/mainCardBackground"
+                android:backgroundTint="@color/offWhite"
                 style="?android:attr/borderlessButtonStyle"/>
     </LinearLayout>
 </LinearLayout>
