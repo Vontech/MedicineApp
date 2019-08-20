@@ -17,6 +17,9 @@ import org.vontech.medicine.utils.EditState
 import org.vontech.medicine.utils.MedicationHistory
 import org.vontech.medicine.utils.buildDialog
 import java.util.*
+import kotlin.math.floor
+import kotlin.math.max
+import kotlin.math.min
 
 class MainActivity : AppCompatActivity() {
 
@@ -237,11 +240,19 @@ data class ReminderBatch (val medicationList: List<Medication>, val reminderTime
 data class ReminderClusterComponent (val medication: Medication, val timeIndex: Int)
 data class ReminderCluster (var start: LocalTime, var end: LocalTime, val components: MutableList<ReminderClusterComponent>)
 
+fun millisToMinutes(millis: Int): Int {
+    return floor((millis / 1000.0) / 60.0).toInt()
+}
+
 fun overlapsWithCluster(time: LocalTime, cluster: ReminderCluster, maxDistance: Int): Boolean {
-    val start = cluster.start.minusMinutes(maxDistance).toDateTimeToday()
-    val end = cluster.end.plusMinutes(maxDistance).toDateTimeToday()
-    val interval = Interval(
-        cluster.start.minusMinutes(maxDistance).toDateTimeToday(),
-        cluster.end.plusMinutes(maxDistance).toDateTimeToday())
+
+    val minutesToSubtract = min(maxDistance, millisToMinutes(cluster.start.millisOfDay))
+    val minutesToAdd = min(maxDistance, (24*60) - millisToMinutes(cluster.end.millisOfDay))
+
+    val start = cluster.start.minusMinutes(minutesToSubtract).toDateTimeToday()
+    val end = cluster.end.plusMinutes(minutesToAdd).toDateTimeToday()
+
+
+    val interval = Interval(start, end)
     return interval.contains(time.toDateTimeToday())
 }
