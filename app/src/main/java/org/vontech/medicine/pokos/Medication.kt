@@ -59,4 +59,12 @@ data class Medication(var name: String?, var dose: Float?, var notes: String, va
         return this.id.hashCode()
     }
 
+    fun createCopy(): Medication {
+        val medCopy = this.copy()
+        medCopy.days = this.days.toMutableSet()
+        medCopy.times = this.times.toMutableSet()
+        medCopy.pillImagePath = pillImagePath.toString()
+        return medCopy
+    }
+
 }

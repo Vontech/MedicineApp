@@ -5,5 +5,5 @@ enum class MedicationEventType {
     TAKEN,
     MISSED,
     REFILLED,
-    EDITED,s
+    EDITED
 }

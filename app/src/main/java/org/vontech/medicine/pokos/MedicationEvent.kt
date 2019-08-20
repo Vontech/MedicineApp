@@ -11,7 +11,8 @@ data class MedicationEvent(
     val eventType: MedicationEventType,
     val time: DateTime = DateTime.now(),
     val optionalIndex: Int? = null,
-    val optionalReference: Int? = null
+    val optionalReference: Int? = null,
+    val optionalMedicationReference: Medication? = null
 )
 
 fun isEventOnDay(event: MedicationEvent, day: LocalDate): Boolean {

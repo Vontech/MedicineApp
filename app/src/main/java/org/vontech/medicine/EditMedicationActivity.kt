@@ -206,24 +206,49 @@ class EditMedicationActivity : AppCompatActivity() {
 
                 // Case 1: Before creation date or after current date
                 if (day.isBefore(creationDate.time.toLocalDate()) || day.isAfter(LocalDate.now())) {
-                    // DO NOTHING
+                    view.calendarDayText.setTextColor(resources.getColor(R.color.disabledTextColor))
+                    return view
                 }
 
                 // Case 2: Not today - Find out what happened on this day
-                // 1) Figure out how many times it was taken
-                // 2) Figure out how many times it should have been taken
+                // 1) Figure out the med spec by finding the most recent edit event for this date
+                // 2) Figure out how many times it was taken
+                // 3) Figure out how many times it should have been taken based on spec
 
-                // Case 3: Is today
+                val latestEdit = medicationHistory.getEventsForMedication(
+                    medicationId = medication.id,
+                    dateEnd = day.toDateTimeAtStartOfDay().plusDays(1), // by end of this day
+                    eventType = MedicationEventType.EDITED
+                ).last()
 
-                when {
-                    day.dayOfMonth % 2 == 0 -> view.calendarDayText.background = resources.getDrawable(R.drawable.calendar_some_taken)
-                    day.dayOfMonth % 5 == 0 -> view.calendarDayText.background = resources.getDrawable(R.drawable.calendar_all_taken)
-                    day.dayOfMonth % 7 == 0 -> view.calendarDayText.background = resources.getDrawable(R.drawable.calendar_none_taken)
-                    else -> view.calendarDayText.setTextColor(resources.getColor(R.color.disabledTextColor))
+                val onThisDay = medicationHistory.getEventsForMedication(
+                    medicationId = medication.id,
+                    dateStart = day.toDateTimeAtStartOfDay(),
+                    dateEnd = day.toDateTimeAtStartOfDay().plusDays(1), // by end of this day
+                    eventType = MedicationEventType.TAKEN
+                )
+                val numTimesTaken = onThisDay.size
+
+                val shouldBeTakenToday = day.dayOfWeek in latestEdit.optionalMedicationReference!!.days
+                var numTimesToTake = 0
+                if (shouldBeTakenToday) {
+                    numTimesToTake = latestEdit.optionalMedicationReference!!.times.size
                 }
 
-                view.calendarDayText.setPadding(0, 0, 0, 0)
+                if (numTimesTaken == numTimesToTake) {
+                    view.calendarDayText.background = resources.getDrawable(R.drawable.calendar_all_taken)
+                    view.calendarDayText.setPadding(0, 0, 0, 0)
+                    return view
+                }
 
+                if (numTimesTaken == 0) {
+                    view.calendarDayText.background = resources.getDrawable(R.drawable.calendar_none_taken)
+                    view.calendarDayText.setPadding(0, 0, 0, 0)
+                    return view
+                }
+
+                view.calendarDayText.background = resources.getDrawable(R.drawable.calendar_some_taken)
+                view.calendarDayText.setPadding(0, 0, 0, 0)
                 return view
 
             }
@@ -483,6 +508,9 @@ class EditMedicationActivity : AppCompatActivity() {
                 MedicationEventType.CREATED
             ))
         }
+
+        // Add this edit event to the list
+        medicationHistory.addMedicationEditedEvent(medication)
 
         // If adding, simply move back to home
         // If replacing, turn off editing

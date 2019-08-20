@@ -190,7 +190,7 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 // Case 1: No clusters or no overlap with clusters
-                if (clusters.isEmpty()) {
+                if (overlappingClusters.isEmpty()) {
                     val cluster = ReminderCluster(medTime, medTime, mutableListOf(comp))
                     clusters.add(cluster)
                     return@forEachIndexed

@@ -28,6 +28,16 @@ class MedicationHistory(context: Context) {
         saveMedicationHistoryList(events)
     }
 
+    fun addMedicationEditedEvent(medication: Medication) {
+        val med = medication.createCopy()
+        addEvent(MedicationEvent(
+            med.id,
+            MedicationEventType.EDITED,
+            DateTime.now(),
+            optionalMedicationReference = med
+        ))
+    }
+
     /**
      * Returns a list of medication events given a medication id. Optionally
      * filter by time range and event type as well
