@@ -178,9 +178,14 @@ class MainActivity : AppCompatActivity() {
 
         // First, create clusters
         medicationList.forEach { med ->
+
+            // Skip medication if I don't take it today
+            if (DateTime.now().dayOfWeek !in med.days) {
+                return@forEach
+            }
+
             med.times.forEachIndexed { index, medTime ->
 
-                // TODO: Do not include a medication if it was already taken
                 if (index in medicationHistory.getIndicesOfTimesTakenToday(med)) {
                     println("SKIPPING MED ${med.name} for time $medTime")
                     return@forEachIndexed
