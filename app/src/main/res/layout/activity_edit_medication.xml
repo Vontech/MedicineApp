@@ -412,15 +412,27 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:gravity="right"
-                        android:layout_marginTop="4dp">
+                        android:layout_marginTop="-5dp">
 
                     <Button
                             android:id="@+id/previousMonthButton"
                             android:layout_width="32dp"
                             android:layout_height="32dp"
                             android:background="@drawable/ic_chevron_left"
-                            style="@style/Widget.AppCompat.Button.Borderless"
-                            android:layout_marginRight="4dp"/>
+                            style="@style/Widget.AppCompat.Button.Borderless"/>
+
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:id="@+id/todayButton"
+                            android:text="Today"
+                            android:textSize="20dp"
+                            android:fontFamily="@font/sf_medium"
+                            android:textColor="@color/disabledTextColor"
+                            android:layout_marginLeft="6dp"
+                            android:layout_marginRight="6dp"
+                            android:paddingTop="5dp"
+                            android:clickable="true" />
 
                     <Button
                             android:id="@+id/nextMonthButton"
