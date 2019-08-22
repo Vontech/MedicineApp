@@ -85,7 +85,7 @@ class EditMedicationActivity : AppCompatActivity() {
         weekdayTextViews = arrayListOf(mondayTextView, tuesdayTextView, wednesdayTextView, thursdayTextView,
                                         fridayTextView, saturdayTextView, sundayTextView)
         viewsShownDuringEditing = arrayListOf(nameEditText, doseEditText, notesEditText, saveMedicationButton,
-                                                addReminderButton, selectAllDaysButton)
+                                                addReminderButton, selectAllDaysButton, dropdownIndicator)
         viewsShownDuringEditing.addAll(weekdayTextViews)
         viewsShownDuringViewing = arrayListOf(nameTextView, doseTextView, notesTextView, todayTextView)
 
@@ -328,6 +328,9 @@ class EditMedicationActivity : AppCompatActivity() {
                 return@setOnMenuItemClickListener true
             }
             popup.show()
+        }
+        dropdownIndicator.setOnClickListener {
+            doseMeasureText.callOnClick()
         }
         selectAllDaysButton.setOnClickListener {
             weekdayTextViews.forEach { tv ->
