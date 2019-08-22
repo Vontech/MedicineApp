@@ -182,7 +182,7 @@ class EditMedicationActivity : AppCompatActivity() {
         historyContainer.visibility = if (isEditing) View.GONE else View.VISIBLE
     }
 
-    private fun refreshCalendarUI() {
+    private fun  refreshCalendarUI() {
 
         if (isEditing) return
         // First, we get the medication activity
@@ -305,12 +305,14 @@ class EditMedicationActivity : AppCompatActivity() {
         notesEditText.afterTextChanged {
             medication.notes = it
         }
-
+        todayButton.setOnClickListener{
+            currentMonthState = LocalDate.now().withDayOfMonth(1)
+            refreshCalendarUI()
+        }
         previousMonthButton.setOnClickListener {
             currentMonthState = currentMonthState.plusMonths(-1)
             refreshCalendarUI()
         }
-
         nextMonthButton.setOnClickListener {
             currentMonthState = currentMonthState.plusMonths(1)
             refreshCalendarUI()
@@ -382,6 +384,8 @@ class EditMedicationActivity : AppCompatActivity() {
      * Also displays the newly set reminder time in the list of all of the reminders
      */
     private fun showTimePickerDialog() {
+        hideKeyboard()
+
         val time = LocalTime()
         val hour = time.hourOfDay
         val minute = time.minuteOfHour
@@ -409,6 +413,7 @@ class EditMedicationActivity : AppCompatActivity() {
             textView.setTextColor(ContextCompat.getColor(this, R.color.textColor))
             medication.days.add(textViewToJoda(textView))
         }
+        hideKeyboard()
         refreshUI()
     }
 
@@ -653,6 +658,7 @@ class EditMedicationActivity : AppCompatActivity() {
      * have been granted and launch the camera
      */
     private fun dispatchTakePictureIntent() {
+        hideKeyboard()
         takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
 
         if (takePictureIntent.resolveActivity(packageManager) != null) {
