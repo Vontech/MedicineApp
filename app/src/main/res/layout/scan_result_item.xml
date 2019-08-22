@@ -9,9 +9,6 @@
         android:paddingBottom="0dp"
         android:paddingLeft="8dp">
 
-    <android.support.v7.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
 
         <LinearLayout
                 android:orientation="horizontal"
@@ -46,29 +43,17 @@
                         android:textColor="@color/textColor"/>
 
                 <TextView
-                        android:text="TextView"
+                        android:id="@+id/scan_result_description"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:id="@+id/scan_result_description"
-                        android:fontFamily="@font/sf_regular"
-                        android:textColor="@color/disabledTextColor"
-                        android:textSize="16sp"
-                        />
+                        android:fontFamily="@font/sf_bold"
+                        android:text="TextView"
+                        android:textColor="@color/purple"
+                        android:textSize="18sp"
+                />
 
             </LinearLayout>
 
-            <TextView
-                    android:text="TextView"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/scan_result_value"
-                    android:layout_weight="3"
-                    android:fontFamily="@font/sf_light"
-                    android:textColor="@color/purple"
-                    android:layout_marginRight="8dp"/>
-
         </LinearLayout>
-
-    </android.support.v7.widget.CardView>
 
 </FrameLayout>

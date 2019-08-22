@@ -17,6 +17,19 @@ import org.vontech.medicine.pokos.Medication
 import org.vontech.medicine.utils.EditState
 import org.vontech.medicine.utils.MedicationStore
 import java.util.*
+import android.util.DisplayMetrics
+import android.view.ViewGroup
+import android.util.TypedValue
+import android.opengl.ETC1.getHeight
+import android.opengl.ETC1.getWidth
+
+
+
+
+
+
+
+
 
 class ScanActivity : AppCompatActivity() {
 
@@ -83,6 +96,26 @@ class ScanActivity : AppCompatActivity() {
 
         }
 
+
+
+    }
+
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        super.onWindowFocusChanged(hasFocus)
+        // Set correct distance for bottom scanning view
+        val scanHeight = scanContainer.height
+
+        val params = separationView.layoutParams
+
+        val r = resources
+        val px = TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP,
+            42f,
+            r.displayMetrics
+        )
+
+        params.height = scanHeight - scanOverviewContainer.height - px.toInt()
+        separationView.layoutParams = params
     }
 
     private fun startCapturing() {
@@ -133,8 +166,19 @@ class ScanActivity : AppCompatActivity() {
 
     private fun updateResultViews(extraction: MedicineDocumentExtraction) {
 
-        val remaining: MedicineField = remainingFields(extraction).first()
+        val remainingFields = remainingFields(extraction)
         val viewsToShow = mutableListOf<View>()
+
+        // Update progress bar
+        scanProgressBar.max = 3
+        scanProgressBar.progress = 3 - remainingFields.size
+
+        if (remainingFields.isEmpty()) {
+            moveToEditing()
+            return
+        }
+
+        val remaining: MedicineField = remainingFields.first()
 
         // First attach remaining
         scanCallToAction.text = "Looking for " + medicineNames[remaining]
@@ -144,7 +188,7 @@ class ScanActivity : AppCompatActivity() {
         getDisplayInformation(extraction).forEach {
             val resultView = LayoutInflater.from(this).inflate(R.layout.scan_result_item, null)
             resultView.scan_result_name.text = it.name
-            resultView.scan_result_value.text = it.value
+            resultView.scan_result_description.text = it.value
             Log.i("RESULTS", "Adding as result: " + it.name)
             viewsToShow.add(resultView)
         }
@@ -160,7 +204,9 @@ class ScanActivity : AppCompatActivity() {
     }
 
     private fun moveToEditing() {
-        val extracted = attemptMedicationExtraction()
+        val docResult = scanBuilder!!.build()
+        val model = getModel(docResult)
+        val extracted = model?.extract(docResult, app.medicineNames)
 
         // Attempt to get a dosage type
         var dosageType = DosageType.MG
@@ -177,7 +223,7 @@ class ScanActivity : AppCompatActivity() {
             notes=""
         )
         val editMedicationIntent = Intent(this, EditMedicationActivity::class.java)
-        intent.putExtra(this.getString(R.string.edit_screen_state), EditState.SCANNING)
+        editMedicationIntent.putExtra(this.getString(R.string.edit_screen_state), EditState.SCANNING)
         editMedicationIntent.putExtra(getString(R.string.scan_medication), medicineToEdit)
         startActivity(editMedicationIntent)
         finish()

@@ -361,7 +361,7 @@ class EditMedicationActivity : AppCompatActivity() {
 
     private fun setupScanningState() {
         medication = intent.getSerializableExtra(this.getString(R.string.scan_medication)) as Medication
-        isEditing = false
+        isEditing = true
         isReplacing = false
     }
 
