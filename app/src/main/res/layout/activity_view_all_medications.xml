@@ -36,9 +36,20 @@
 
     <android.support.v7.widget.RecyclerView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_height="0dp"
             android:clipToPadding="false"
             android:id="@+id/recyclerView"
             android:orientation="vertical"/>
+
+    <com.google.android.gms.ads.AdView
+            xmlns:ads="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/adView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            ads:adSize="SMART_BANNER"
+            ads:adUnitId="ca-app-pub-5626721848828721~1506409820">
+
+    </com.google.android.gms.ads.AdView>
 
 </LinearLayout>

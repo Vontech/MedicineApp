@@ -42,6 +42,7 @@ dependencies {
     implementation 'net.danlew:android.joda:2.10.1.2'
     implementation 'com.github.siyamed:android-shape-imageview:0.9.+@aar'
     implementation 'com.github.DavidProdinger:weekdays-selector:1.1.0'
+    implementation 'com.google.android.gms:play-services-ads:17.0.0'
     testImplementation 'junit:junit:4.12'
     testImplementation 'io.kotlintest:kotlintest-runner-junit5:3.3.2'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'

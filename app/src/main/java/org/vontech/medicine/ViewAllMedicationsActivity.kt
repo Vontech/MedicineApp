@@ -4,11 +4,15 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
+import com.google.android.gms.ads.AdRequest
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main.recyclerView
 import kotlinx.android.synthetic.main.activity_view_all_medications.*
 import org.vontech.medicine.pokos.Medication
 import org.vontech.medicine.utils.MedicationStore
+import com.google.android.gms.ads.MobileAds
+
+
 
 class ViewAllMedicationsActivity : AppCompatActivity() {
 
@@ -22,6 +26,11 @@ class ViewAllMedicationsActivity : AppCompatActivity() {
         setContentView(R.layout.activity_view_all_medications)
 
         renderMedications()
+
+        MobileAds.initialize(this)
+        val adRequest = AdRequest.Builder().build()
+        adView.loadAd(adRequest)
+
     }
 
     override fun onResume() {
