@@ -51,4 +51,6 @@
     <!-- NOTIFICATIONS -->
     <string name="reset_notification_count">RESET_NOTIFICATION_COUNT</string>
 
+    <string name="feedback_email_us_here">Got feedback? Email us here!</string>
+
 </resources>

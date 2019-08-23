@@ -1,6 +1,7 @@
 package org.vontech.medicine
 
 import android.content.Intent
+import android.net.Uri
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
@@ -20,6 +21,9 @@ import java.util.*
 import kotlin.math.floor
 import kotlin.math.max
 import kotlin.math.min
+import android.content.ActivityNotFoundException
+import android.widget.Toast
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -90,6 +94,17 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, EditMedicationActivity::class.java)
             intent.putExtra(getString(R.string.edit_screen_state), EditState.ADDING)
             startActivity(intent)
+        }
+        aboutUsButton.setOnClickListener {
+            val emailIntent = Intent(Intent.ACTION_SENDTO)
+            emailIntent.data = Uri.parse("mailto:developer@example.com")
+            try {
+                startActivity(emailIntent)
+            } catch (e: ActivityNotFoundException) {
+                // Handle case where no email app is available
+                Toast.makeText(this, "No email app detected :(", Toast.LENGTH_SHORT).show()
+            }
+
         }
     }
 
