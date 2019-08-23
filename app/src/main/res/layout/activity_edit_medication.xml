@@ -456,7 +456,7 @@
                     android:id="@+id/calendar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="24dp"
+                    android:layout_marginBottom="12dp"
                     android:layout_marginLeft="-3dp"
                     android:layout_marginRight="-3dp" />
 
@@ -464,7 +464,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:layout_marginBottom="32dp">
+                    android:layout_marginBottom="24dp">
 
                 <TextView
                         android:layout_width="match_parent"
@@ -486,17 +486,17 @@
                             android:layout_height="20dp"
                             android:background="@drawable/card_background"
                             android:backgroundTint="@color/green"
-                            android:layout_marginRight="16dp"/>
+                            android:layout_marginRight="12dp"/>
 
 
                     <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="you took this medication every time"
+                            android:text="All doses taken"
                             android:textColor="@color/textColor"
                             android:textSize="20sp"
                             android:fontFamily="@font/sf_regular"
-                            android:layout_marginTop="-10dp"/>
+                            android:layout_marginTop="-8dp"/>
 
 
                 </LinearLayout>
@@ -513,17 +513,17 @@
                             android:layout_height="20dp"
                             android:background="@drawable/card_background"
                             android:backgroundTint="@color/orange"
-                            android:layout_marginRight="16dp"/>
+                            android:layout_marginRight="12dp"/>
 
 
                     <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="you took this medication sometimes"
+                            android:text="Some doses taken"
                             android:textColor="@color/textColor"
                             android:textSize="20sp"
                             android:fontFamily="@font/sf_regular"
-                            android:layout_marginTop="-10dp"/>
+                            android:layout_marginTop="-8dp"/>
 
 
                 </LinearLayout>
@@ -540,17 +540,17 @@
                             android:layout_height="20dp"
                             android:background="@drawable/card_background"
                             android:backgroundTint="@color/red"
-                            android:layout_marginRight="16dp"/>
+                            android:layout_marginRight="12dp"/>
 
 
                     <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="you did not take this medication at all"
+                            android:text="No doses taken"
                             android:textColor="@color/textColor"
                             android:textSize="20sp"
                             android:fontFamily="@font/sf_regular"
-                            android:layout_marginTop="-10dp"/>
+                            android:layout_marginTop="-8dp"/>
 
 
                 </LinearLayout>
