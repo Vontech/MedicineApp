@@ -97,7 +97,7 @@ class MainActivity : AppCompatActivity() {
         }
         aboutUsButton.setOnClickListener {
             val emailIntent = Intent(Intent.ACTION_SENDTO)
-            emailIntent.data = Uri.parse("mailto:developer@example.com")
+            emailIntent.data = Uri.parse("mailto:medz.app.feedback@gmail.com")
             try {
                 startActivity(emailIntent)
             } catch (e: ActivityNotFoundException) {
