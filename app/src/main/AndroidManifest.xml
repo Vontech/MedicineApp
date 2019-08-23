@@ -7,6 +7,8 @@
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
                      android:maxSdkVersion="18" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+
 
     <application
             android:name=".MedicineApplication"
@@ -28,6 +30,17 @@
                 android:name=".background.ReminderBroadcastReceiver"
                 android:enabled="true"
                 android:exported="false">
+        </receiver>
+
+        <!-- Start the Service if applicable on boot -->
+        <receiver
+                android:name=".background.BootBroadcastReceiver"
+                android:enabled="true"
+                android:permission="android.permission.RECEIVE_BOOT_COMPLETED">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
         </receiver>
 
         <service
