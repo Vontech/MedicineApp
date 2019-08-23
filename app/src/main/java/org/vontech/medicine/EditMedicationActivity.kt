@@ -445,7 +445,7 @@ class EditMedicationActivity : AppCompatActivity() {
     private fun validateForm(): Boolean {
 
         // Should have a name
-        if (medication.name?.trim()?.length == 0) {
+        if (medication.name == null || medication.name?.trim()?.length == 0 || nameEditText.text.isEmpty()) {
             showValidationError("A valid medication name must be entered.")
             return false
         }
@@ -491,11 +491,6 @@ class EditMedicationActivity : AppCompatActivity() {
             return
         }
 
-        // Do not allow medication to be created without a name
-        if (nameEditText.text.isEmpty()) {
-            Toast.makeText(this, "Must give medication a name", Toast.LENGTH_SHORT).show()
-            return
-        }
 
         // Dose has a default value to protect against converting a null value to an Int
         var dose = 0f
