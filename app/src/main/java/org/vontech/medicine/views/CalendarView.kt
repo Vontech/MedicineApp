@@ -9,7 +9,6 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import org.joda.time.LocalDate
 import org.joda.time.MutableDateTime
-import org.joda.time.YearMonth
 import org.vontech.medicine.R
 
 

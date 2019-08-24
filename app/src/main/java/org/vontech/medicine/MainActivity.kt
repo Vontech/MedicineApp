@@ -23,6 +23,7 @@ import kotlin.math.max
 import kotlin.math.min
 import android.content.ActivityNotFoundException
 import android.widget.Toast
+import org.vontech.medicine.views.makeHeightEqualWidth
 
 
 class MainActivity : AppCompatActivity() {
@@ -175,6 +176,15 @@ class MainActivity : AppCompatActivity() {
         val dayOfWeek = DateTime().dayOfWeek()
         val day = dayOfWeek.getAsText(Locale.getDefault()).toUpperCase()
         this.headerDay.text = day
+    }
+
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        super.onWindowFocusChanged(hasFocus)
+
+        makeHeightEqualWidth(viewAllMedicationsButton)
+        makeHeightEqualWidth(scanMedicationButton)
+        makeHeightEqualWidth(addNewMedicationButton)
+
     }
 
 

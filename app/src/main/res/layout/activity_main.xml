@@ -208,27 +208,27 @@
                 android:textColor="@color/textColor"
                 android:visibility="gone"/>
 
-        <RelativeLayout
+        <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="16dp"
                 android:layout_marginLeft="24dp"
-                android:layout_marginRight="24dp">
+                android:layout_marginTop="16dp"
+                android:layout_marginRight="24dp"
+                android:orientation="horizontal">
+
 
             <LinearLayout
-                    android:layout_width="175dp"
-                    android:layout_height="175dp"
                     android:id="@+id/viewAllMedicationsButton"
+                    android:layout_width="0dp"
+                    android:layout_height="175dp"
+                    android:layout_gravity=""
+                    android:layout_marginBottom="14dp"
+                    android:layout_weight="1"
                     android:background="@drawable/square_button_background"
                     android:backgroundTint="@color/red"
-                    android:paddingTop="20dp"
-                    android:paddingLeft="20dp"
-                    android:layout_marginBottom="14dp"
-                    android:layout_gravity=""
                     android:elevation="5dp"
                     android:orientation="vertical"
-                    android:layout_alignParentLeft="true">
+                    android:paddingLeft="20dp" android:paddingTop="20dp">
 
                 <ImageView
                         android:layout_width="60dp"
@@ -238,27 +238,33 @@
                 <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="view all\nmedications"
-                        android:fontFamily="@font/sf_medium"
-                        android:textSize="21sp"
-                        android:textColor="@color/offWhite"
                         android:layout_marginLeft="5dp"
-                        android:layout_marginTop="12dp"/>
+                        android:layout_marginTop="12dp"
+                        android:fontFamily="@font/sf_medium"
+                        android:text="view all\nmedications"
+                        android:textColor="@color/offWhite"
+                        android:textSize="21sp"/>
             </LinearLayout>
 
+            <FrameLayout
+                    android:layout_width="16dp"
+                    android:layout_height="match_parent">
+
+            </FrameLayout>
+
             <LinearLayout
-                    android:layout_width="175dp"
+                    android:id="@+id/scanMedicationButton"
+                    android:layout_width="0dp"
                     android:layout_height="175dp"
+                    android:layout_marginBottom="14dp"
+                    android:layout_weight="1"
                     android:background="@drawable/square_button_background"
                     android:backgroundTint="@color/purple"
-                    android:paddingTop="22dp"
-                    android:paddingLeft="20dp"
-                    android:layout_marginBottom="14dp"
-                    android:elevation="5dp"
-                    android:id="@+id/scanMedicationButton"
                     android:clickable="true"
+                    android:elevation="5dp"
                     android:orientation="vertical"
-                    android:layout_alignParentRight="true">
+                    android:paddingLeft="20dp"
+                    android:paddingTop="22dp">
 
                 <ImageView
                         android:layout_width="56dp"
@@ -268,34 +274,33 @@
                 <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="scan new medication"
-                        android:fontFamily="@font/sf_medium"
-                        android:textSize="21sp"
-                        android:textColor="@color/offWhite"
                         android:layout_marginLeft="5dp"
-                        android:layout_marginTop="14dp"/>
+                        android:layout_marginTop="14dp"
+                        android:fontFamily="@font/sf_medium"
+                        android:text="scan new medication"
+                        android:textColor="@color/offWhite"
+                        android:textSize="21sp"/>
             </LinearLayout>
 
-        </RelativeLayout>
+        </LinearLayout>
 
         <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginLeft="24dp">
+                android:layout_marginLeft="24dp"
+                android:layout_marginRight="24dp" android:orientation="horizontal">
 
             <LinearLayout
-                    android:layout_width="175dp"
-                    android:layout_height="175dp"
                     android:id="@+id/addNewMedicationButton"
+                    android:layout_width="0dp"
+                    android:layout_height="175dp"
+                    android:layout_marginBottom="12dp"
+                    android:layout_weight="1"
                     android:background="@drawable/square_button_background"
                     android:backgroundTint="@color/orange"
-                    android:layout_marginRight="36dp"
-                    android:layout_marginBottom="12dp"
-                    android:paddingTop="22dp"
-                    android:paddingLeft="20dp"
                     android:elevation="5dp"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:paddingLeft="20dp" android:paddingTop="22dp">
 
                 <ImageView
                         android:layout_width="54dp"
@@ -305,17 +310,23 @@
                 <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="add new\nmedication"
-                        android:fontFamily="@font/sf_medium"
-                        android:textSize="21sp"
-                        android:textColor="@color/offWhite"
                         android:layout_marginLeft="5dp"
-                        android:layout_marginTop="16dp"/>
+                        android:layout_marginTop="16dp"
+                        android:fontFamily="@font/sf_medium"
+                        android:text="add new\nmedication"
+                        android:textColor="@color/offWhite"
+                        android:textSize="21sp"/>
             </LinearLayout>
 
+            <FrameLayout
+                    android:layout_width="16dp"
+                    android:layout_height="match_parent">
+
+            </FrameLayout>
+
             <LinearLayout
-                    android:layout_width="150dp"
-                    android:layout_height="150dp"/>
+                    android:layout_width="0dp"
+                    android:layout_height="175dp" android:layout_weight="1"/>
 
         </LinearLayout>
 

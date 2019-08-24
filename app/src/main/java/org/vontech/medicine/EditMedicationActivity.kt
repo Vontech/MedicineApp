@@ -39,6 +39,7 @@ import org.vontech.medicine.pokos.MedicationEventType
 import org.vontech.medicine.utils.MedicationHistory
 import org.vontech.medicine.utils.buildDialog
 import org.vontech.medicine.views.OnMonthChangeListener
+import org.vontech.medicine.views.makeHeightEqualWidth
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
@@ -106,6 +107,17 @@ class EditMedicationActivity : AppCompatActivity() {
         refreshUI()
         refreshCalendarUI()
 
+    }
+
+    private fun resizeButtons() {
+        makeHeightEqualWidth(deleteMedicationButton)
+        makeHeightEqualWidth(cancelAddingButton)
+        makeHeightEqualWidth(saveMedicationButton)
+    }
+
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        super.onWindowFocusChanged(hasFocus)
+        resizeButtons()
     }
 
     private fun refreshUI() {
@@ -180,9 +192,10 @@ class EditMedicationActivity : AppCompatActivity() {
 
         // hide and show history
         historyContainer.visibility = if (isEditing) View.GONE else View.VISIBLE
+
     }
 
-    private fun  refreshCalendarUI() {
+    private fun refreshCalendarUI() {
 
         if (isEditing) return
         // First, we get the medication activity
@@ -349,6 +362,10 @@ class EditMedicationActivity : AppCompatActivity() {
                 monthNameTextView.text = spec.monthOfYear().asText
                 yearTextView.text = spec.year.toString()
             }
+        }
+
+        editingButtons.addOnLayoutChangeListener { _, _, _, _, _, _, _, _, _ ->
+            resizeButtons()
         }
 
     }

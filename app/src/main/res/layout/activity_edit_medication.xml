@@ -572,89 +572,93 @@
                 android:paddingBottom="3dp"
                 android:textAlignment="center"/>
 
-        <RelativeLayout
+        <LinearLayout
+                android:id="@+id/editingButtons"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_horizontal"
                 android:layout_marginTop="24dp"
                 android:layout_marginBottom="12dp"
-                android:id="@+id/editingButtons">
+                android:gravity="center_horizontal"
+                android:orientation="horizontal">
 
             <LinearLayout
-                    android:layout_width="175dp"
+                    android:id="@+id/deleteMedicationButton"
+                    android:layout_width="0dp"
                     android:layout_height="175dp"
+                    android:layout_marginBottom="12dp"
+                    android:layout_weight="1"
                     android:background="@drawable/square_button_background"
                     android:backgroundTint="@color/red"
-                    android:layout_marginBottom="12dp"
-                    android:layout_marginRight="32dp"
-                    android:paddingTop="18dp"
-                    android:paddingLeft="20dp"
                     android:elevation="5dp"
                     android:orientation="vertical"
-                    android:id="@+id/deleteMedicationButton"
-                    android:layout_alignParentLeft="true">
+                    android:paddingLeft="20dp"
+                    android:paddingTop="18dp"
+            >
 
                 <ImageView
                         android:layout_width="68dp"
                         android:layout_height="68dp"
-                        android:src="@drawable/ic_delete_medication"
-                        android:layout_marginTop="-4dp"/>
+                        android:layout_marginTop="-4dp"
+                        android:src="@drawable/ic_delete_medication"/>
 
                 <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="delete\nmedication"
-                        android:fontFamily="@font/sf_medium"
-                        android:textSize="21sp"
-                        android:textColor="@color/offWhite"
                         android:layout_marginLeft="5dp"
-                        android:layout_marginTop="8dp"/>
+                        android:layout_marginTop="8dp"
+                        android:fontFamily="@font/sf_medium"
+                        android:text="delete\nmedication"
+                        android:textColor="@color/offWhite"
+                        android:textSize="21sp"/>
             </LinearLayout>
 
             <LinearLayout
-                    android:layout_width="175dp"
+                    android:id="@+id/cancelAddingButton"
+                    android:layout_width="0dp"
                     android:layout_height="175dp"
+                    android:layout_weight="1"
+                    android:layout_marginBottom="12dp"
                     android:background="@drawable/square_button_background"
                     android:backgroundTint="@color/red"
-                    android:layout_marginBottom="12dp"
-                    android:paddingTop="20dp"
-                    android:paddingLeft="20dp"
                     android:elevation="5dp"
                     android:orientation="vertical"
-                    android:id="@+id/cancelAddingButton"
-                    android:layout_alignParentLeft="true">
+                    android:paddingLeft="20dp"
+                    android:paddingTop="20dp"
+            >
 
                 <ImageView
                         android:layout_width="62dp"
                         android:layout_height="62dp"
-                        android:src="@drawable/ic_cancel"
-                        android:layout_marginLeft="-4dp"/>
+                        android:layout_marginLeft="-4dp"
+                        android:src="@drawable/ic_cancel"/>
 
                 <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="cancel adding\nmedication"
-                        android:fontFamily="@font/sf_medium"
-                        android:textSize="21sp"
-                        android:textColor="@color/offWhite"
                         android:layout_marginLeft="5dp"
-                        android:layout_marginTop="12dp"/>
+                        android:layout_marginTop="12dp"
+                        android:fontFamily="@font/sf_medium"
+                        android:text="cancel adding\nmedication"
+                        android:textColor="@color/offWhite"
+                        android:textSize="21sp"/>
             </LinearLayout>
 
+            <FrameLayout android:layout_width="16dp" android:layout_height="match_parent" />
+
             <LinearLayout
-                    android:layout_width="175dp"
+                    android:id="@+id/saveMedicationButton"
+                    android:layout_width="0dp"
                     android:layout_height="175dp"
+                    android:layout_weight="1"
+                    android:layout_marginBottom="12dp"
                     android:background="@drawable/square_button_background"
                     android:backgroundTint="@color/purple"
-                    android:layout_marginBottom="12dp"
-                    android:paddingTop="20dp"
-                    android:paddingLeft="20dp"
-                    android:elevation="5dp"
                     android:clickable="true"
+                    android:elevation="5dp"
                     android:orientation="vertical"
-                    android:id="@+id/saveMedicationButton"
-                    android:layout_alignParentRight="true">
+                    android:paddingLeft="20dp"
+                    android:paddingTop="20dp"
+            >
 
                 <ImageView
                         android:layout_width="60dp"
@@ -664,15 +668,15 @@
                 <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="save\nmedication"
-                        android:fontFamily="@font/sf_medium"
-                        android:textSize="21sp"
-                        android:textColor="@color/offWhite"
                         android:layout_marginLeft="5dp"
-                        android:layout_marginTop="12dp"/>
+                        android:layout_marginTop="12dp"
+                        android:fontFamily="@font/sf_medium"
+                        android:text="save\nmedication"
+                        android:textColor="@color/offWhite"
+                        android:textSize="21sp"/>
             </LinearLayout>
 
-        </RelativeLayout>
+        </LinearLayout>
 
 
     </LinearLayout>
