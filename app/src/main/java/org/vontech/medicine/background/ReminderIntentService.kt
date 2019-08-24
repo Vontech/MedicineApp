@@ -13,9 +13,13 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.support.v4.app.NotificationCompat
-import org.vontech.medicine.R
 import org.vontech.medicine.security.SecurePreferencesBuilder
 import org.vontech.medicine.utils.getPreferences
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.os.Build
+
+
 
 
 /**
@@ -43,6 +47,15 @@ class ReminderIntentService: IntentService("ReminderIntentService") {
         builder.setAutoCancel(true) // Notification will be dismissed once clicked
         builder.setPriority(Notification.PRIORITY_HIGH)
         builder.setDefaults(Notification.DEFAULT_ALL)
+        val name = "Medz"
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(name, name, NotificationManager.IMPORTANCE_HIGH)
+            val mNotificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            mNotificationManager.createNotificationChannel(channel)
+            builder.setChannelId(name)
+        } else {
+            TODO("VERSION.SDK_INT < N")
+        }
 
         setIntents(builder)
 
@@ -66,7 +79,7 @@ class ReminderIntentService: IntentService("ReminderIntentService") {
         // Clicking on notification opens MainActivity
         val contentIntent = Intent(this, MainActivity::class.java)
         val extras = Bundle()
-        extras.putInt(getString(R.string.reset_notification_count), 1) // Catch this on the MainActivity
+        extras.putInt(getString(org.vontech.medicine.R.string.reset_notification_count), 1) // Catch this on the MainActivity
         contentIntent.putExtras(extras)
 
         val mainActivityPendingIntent = PendingIntent.getActivity(this, 0,

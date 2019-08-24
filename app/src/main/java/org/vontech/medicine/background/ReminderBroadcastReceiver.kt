@@ -30,6 +30,8 @@ class ReminderBroadcastReceiver: BroadcastReceiver() {
         remindIntent.putExtras(extras)
         context!!.startService(remindIntent)
 
+        Log.i("ReminderBroadcast...kt", "RECEIVED ALARM, FIRING NOTIF SERVICE")
+
         Log.e("Medicine", "received")
     }
 

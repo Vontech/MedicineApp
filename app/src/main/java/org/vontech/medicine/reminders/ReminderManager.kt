@@ -22,7 +22,7 @@ import java.util.ArrayList
 class ReminderManager(val context: Context) {
 
     private val REMINDER_IDS_KEY = context.getString(R.string.reminder_id_list)
-    private var prefs = SecurePreferencesBuilder(context).build()//context.getSharedPreferences(IDS_KEY, Context.MODE_PRIVATE)
+    private var prefs = context.getSharedPreferences(REMINDER_IDS_KEY, Context.MODE_PRIVATE)//SecurePreferencesBuilder(context).build()//
     private val gson = getSpecialGson()
 
     /**
@@ -47,6 +47,7 @@ class ReminderManager(val context: Context) {
         notifyIntent.putExtras(extras)
 
         // Make notifyIntent a PendingIntent so it can be fired at a given time
+        Log.i("ReminderManager.kt", "CREATING REMINDER WITH ALARM MANAGER")
         val pendingIntent = PendingIntent.getBroadcast(context, id, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT)
         val alarmManager = this.context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         // Set the time to send the broadcast at
