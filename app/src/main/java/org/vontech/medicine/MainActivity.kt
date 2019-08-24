@@ -22,6 +22,7 @@ import kotlin.math.floor
 import kotlin.math.max
 import kotlin.math.min
 import android.content.ActivityNotFoundException
+import android.content.SharedPreferences
 import android.widget.Toast
 import org.vontech.medicine.views.makeHeightEqualWidth
 
@@ -71,6 +72,29 @@ class MainActivity : AppCompatActivity() {
         renderButtons()
         renderNextMedication()
         renderMissingPane()
+
+        showWelcomeDialog()
+
+    }
+
+    private fun showWelcomeDialog() {
+
+        val prefs = org.vontech.medicine.utils.getPreferences(this)
+
+        if (prefs.getBoolean("first_time", true)) {
+            val message = "Medz tracks and reminds you to take your medications. Get started by adding or scanning a new medication.\n\nNOTE: This app is still in development - provide feedback with the button at the bottom of the home screen!"
+            val dialog = buildDialog("Welcome to Medz!", message)
+            dialog.positiveButton.text = "DISMISS"
+            dialog.negativeButton.visibility = View.GONE
+            dialog.positiveButton.setOnClickListener {
+                dialog.dismiss()
+            }
+            dialog.show()
+
+            prefs.edit().putBoolean("first_time", false).apply()
+
+        }
+
 
     }
 
