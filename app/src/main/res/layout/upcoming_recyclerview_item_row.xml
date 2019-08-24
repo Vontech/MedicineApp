@@ -26,10 +26,11 @@
             android:text="Medication Name"
             android:textStyle="bold"
             android:textColor="@color/textColor"
-            android:fontFamily="@font/sf_bold"
+            android:fontFamily="@font/sf_semibold"
             android:textAlignment="viewStart"
             android:paddingTop="8dp"
             android:paddingLeft="16dp"
+            android:paddingRight="16dp"
             android:ellipsize="end"
             android:maxLines="1"/>
 

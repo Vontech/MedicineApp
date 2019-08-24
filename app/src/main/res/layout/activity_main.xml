@@ -333,10 +333,8 @@
         <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="fill_parent"
-                android:id="@+id/aboutUsButton"
                 android:orientation="vertical"
                 android:layout_marginTop="12dp"
-                android:clickable="true"
                 android:gravity="bottom">
 
             <LinearLayout
@@ -344,7 +342,9 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:padding="8dp"
-                    android:layout_gravity="center_horizontal">
+                    android:layout_gravity="center_horizontal"
+                    android:id="@+id/aboutUsButton"
+                    android:clickable="true">
 
                 <ImageView
                         android:layout_width="28dp"
