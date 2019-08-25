@@ -14,6 +14,8 @@ import org.vontech.medicine.R
 import org.vontech.medicine.background.ReminderBroadcastReceiver
 import org.vontech.medicine.pokos.Medication
 import org.vontech.medicine.security.SecurePreferencesBuilder
+import org.vontech.medicine.utils.MedicationHistory
+import org.vontech.medicine.utils.MedicationStore
 import org.vontech.medicine.utils.getSpecialGson
 import java.lang.IllegalArgumentException
 import java.lang.RuntimeException
@@ -24,6 +26,9 @@ class ReminderManager(val context: Context) {
     private val REMINDER_IDS_KEY = context.getString(R.string.reminder_id_list)
     private var prefs = context.getSharedPreferences(REMINDER_IDS_KEY, Context.MODE_PRIVATE)//SecurePreferencesBuilder(context).build()//
     private val gson = getSpecialGson()
+
+    val NOTIFICATION_TITLE = "Time to take your medicine!"
+    val NOTIFICATION_MESSAGE = "Click to view this medication"
 
     /**
      * Adds a new reminder to the list of reminders
@@ -115,7 +120,9 @@ class ReminderManager(val context: Context) {
 
     // Schedule the next reminder for this medication using addReminder
     fun scheduleReminder(medication: Medication, title: String, message: String) {
-        addReminder(title, message,medication.id, getNextTime(medication)!!)
+        val nextTime = getNextTime(medication)!!
+        addReminder(title, message, medication.id, nextTime)
+        Log.i("SCHEDULED REMINDER", "Scheduled ${medication.name} for $nextTime")
     }
 
     /**
@@ -128,23 +135,29 @@ class ReminderManager(val context: Context) {
         editor.apply()
     }
 
-    fun getNextTime(medication: Medication) : DateTime? {
+    fun getNextTime(medication: Medication, afterTime: DateTime = DateTime.now()) : DateTime? {
 
         if (medication.days.isEmpty() || medication.times.isEmpty()) {
             return null
         }
 
-        var today = DateTime()
+        val medicationHistory = MedicationHistory(context)
 
         val times = ArrayList<DateTime>()
         medication.days.sorted().forEach {day ->
-            medication.times.sorted().forEach {time ->
-                var daysToAdd = day - today.dayOfWeek
+            medication.times.sorted().forEachIndexed {index, time ->
+                var daysToAdd = day - afterTime.dayOfWeek
                 if (daysToAdd < 0) { daysToAdd += 7 }
-                if (daysToAdd == 0 && LocalTime.now().isAfter(time)) { daysToAdd += 7 }
-                var newDay = DateTime.now().plusDays(daysToAdd)
+                if (daysToAdd == 0 && afterTime.toLocalTime().isAfter(time)) { daysToAdd += 7 }
+                var newDay = afterTime.plusDays(daysToAdd)
                 newDay = newDay.withTime(time.hourOfDay, time.minuteOfHour, time.secondOfMinute, 0)
-                times.add(newDay)
+
+                // Only add this time if this time has not yet been taken according to
+                // med events
+                val timeIndicesTaken = medicationHistory.getIndicesOfTimeTakenOn(medication, newDay)
+                if (index !in timeIndicesTaken) {
+                    times.add(newDay)
+                }
             }
         }
 
@@ -153,27 +166,18 @@ class ReminderManager(val context: Context) {
 
         return nextTime
 
-//
-//
-//        // If the medication needs to be taken later today
-//        val remainingTimes = medication.times.filter { it.isAfter(day.toLocalTime()) }.sorted()
-//        if (remainingTimes.isNotEmpty() && medication.days.contains(day.dayOfWeek)) {
-//            return remainingTimes.first().toDateTimeToday()
-//        }
-//
-//        // If the next reminder is on a different day
-//        day = DateTime().plusDays(1)
-//        for (i in 2..9) {
-//            // If the medication needs to be taken on this day, schedule for the earliest time
-//            if (medication.days.contains(day.dayOfWeek)) {
-//                val time = medication.times.sorted().first()
-//                return DateTime(day.year, day.monthOfYear, day.dayOfMonth,
-//                    time.hourOfDay, time.minuteOfHour, time.secondOfMinute)
-//            }
-//
-//            day = DateTime().plusDays(1)
-//        }
-//
-//        throw RuntimeException("SOMEHOW REACHED BOTTOM OF getNextTime")
     }
+
+    /**
+     * Deletes and sets each reminder again, however ignoring times where a medication
+     * has already been taken.
+     */
+    fun resetAllReminders() {
+        val medStore = MedicationStore(context)
+        medStore.getMedications().forEach {
+            deleteReminder(it.id)
+            scheduleReminder(it, NOTIFICATION_TITLE, NOTIFICATION_MESSAGE)
+        }
+    }
+
 }

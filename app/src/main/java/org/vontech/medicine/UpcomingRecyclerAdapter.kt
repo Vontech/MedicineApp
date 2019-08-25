@@ -16,6 +16,7 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.util.Log
 import org.joda.time.*
+import org.vontech.medicine.reminders.ReminderManager
 
 class UpcomingRecyclerAdapter(
     private val medications: List<Medication>,
@@ -84,6 +85,7 @@ class UpcomingRecyclerAdapter(
         private fun handleMedicineTaken(medication: Medication) {
 
             medicationHistoryStore.takeMedicationNow(medication)
+            ReminderManager(itemView.context).resetAllReminders()
             renderNextMedication()
 
         }

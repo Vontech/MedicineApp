@@ -71,10 +71,14 @@ class MedicationHistory(context: Context) {
     }
 
     fun getIndicesOfTimesTakenToday(medication: Medication): List<Int> {
+        return getIndicesOfTimeTakenOn(medication, DateTime.now())
+    }
+
+    fun getIndicesOfTimeTakenOn(medication: Medication, date: DateTime): List<Int> {
         return this.getEventsForMedication(
             medication.id,
-            DateTime.now().withTimeAtStartOfDay(),
-            DateTime.now().withTimeAtStartOfDay().plusDays(1),
+            date.withTimeAtStartOfDay(),
+            date.withTimeAtStartOfDay().plusDays(1),
             MedicationEventType.TAKEN)
             .map {it.optionalIndex!!}
     }
