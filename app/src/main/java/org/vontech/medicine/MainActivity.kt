@@ -44,9 +44,7 @@ class MainActivity : AppCompatActivity() {
 
         upcomingLinearLayoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         recyclerView.layoutManager = upcomingLinearLayoutManager
-        upcomingAdapterUpcomingMedication = UpcomingRecyclerAdapter(medicationList, this.applicationContext) {
-            this.renderNextMedication()
-        }
+        upcomingAdapterUpcomingMedication = UpcomingRecyclerAdapter(mutableListOf(), mutableListOf(), this) {renderNextMedication()}
         recyclerView.adapter = upcomingAdapterUpcomingMedication
 
         if (intent.getSerializableExtra(getString(R.string.reset_notification_count)) == 1) {
@@ -155,6 +153,7 @@ class MainActivity : AppCompatActivity() {
             recyclerView.layoutManager = upcomingLinearLayoutManager
             upcomingAdapterUpcomingMedication = UpcomingRecyclerAdapter(
                 nextBatch.medicationList,
+                nextBatch.timeIndices,
                 this.applicationContext
             ) {renderNextMedication()}
             recyclerView.adapter = upcomingAdapterUpcomingMedication
@@ -233,7 +232,7 @@ class MainActivity : AppCompatActivity() {
                 return@forEach
             }
 
-            med.times.forEachIndexed { index, medTime ->
+            med.times.sorted().forEachIndexed { index, medTime ->
 
                 if (index in medicationHistory.getIndicesOfTimesTakenToday(med)) {
                     println("SKIPPING MED ${med.name} for time $medTime")
@@ -281,15 +280,16 @@ class MainActivity : AppCompatActivity() {
         // Now find the cluster with the earliest time
         val earliestCluster = clusters.minBy { it.start }
         val medsToTake = earliestCluster!!.components.map {it.medication}
+        val medTimeIndices = earliestCluster!!.components.map {it.timeIndex}
         val earliestMed = earliestCluster.start
 
-        return ReminderBatch(medsToTake, earliestMed)
+        return ReminderBatch(medsToTake, earliestMed, medTimeIndices)
 
     }
 
 }
 
-data class ReminderBatch (val medicationList: List<Medication>, val reminderTime: LocalTime?)
+data class ReminderBatch (val medicationList: List<Medication>, val reminderTime: LocalTime?, val timeIndices: List<Int>)
 
 data class ReminderClusterComponent (val medication: Medication, val timeIndex: Int)
 data class ReminderCluster (var start: LocalTime, var end: LocalTime, val components: MutableList<ReminderClusterComponent>)
