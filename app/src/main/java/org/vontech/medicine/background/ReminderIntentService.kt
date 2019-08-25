@@ -18,18 +18,28 @@ import org.vontech.medicine.utils.getPreferences
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.os.Build
-
-
+import android.support.v4.app.JobIntentService
 
 
 /**
  * Receives the intent from ReminderBroadcastReceiver, builds, and fires a notification
  */
-class ReminderIntentService: IntentService("ReminderIntentService") {
+class ReminderIntentService: JobIntentService() {
 
-    private val notifcationId = 1
 
-    override fun onHandleIntent(intent: Intent?) {
+
+    companion object {
+
+        private val notifcationId = 1
+
+        fun enqueueWork(context: Context, work: Intent) {
+            enqueueWork(context, ReminderIntentService::class.java, notifcationId, work)
+        }
+
+    }
+
+
+    override fun onHandleWork(intent: Intent) {
         val builder = Notification.Builder(this)
         val title = intent!!.getStringExtra("title")
 //        val message = intent.getStringExtra("message")

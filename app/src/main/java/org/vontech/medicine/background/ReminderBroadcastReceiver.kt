@@ -28,7 +28,8 @@ class ReminderBroadcastReceiver: BroadcastReceiver() {
         extras.putInt("medicationId", intent.getIntExtra("medicationId", 0))
 
         remindIntent.putExtras(extras)
-        context!!.startService(remindIntent)
+        //context!!.startService(remindIntent)
+        ReminderIntentService.enqueueWork(context!!, remindIntent)
 
         Log.i("ReminderBroadcast...kt", "RECEIVED ALARM, FIRING NOTIF SERVICE")
 
