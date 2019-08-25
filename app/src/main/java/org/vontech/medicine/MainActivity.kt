@@ -201,9 +201,6 @@ class MainActivity : AppCompatActivity() {
         val dayOfWeek = DateTime().dayOfWeek()
         val day = dayOfWeek.getAsText(Locale.getDefault()).toUpperCase()
         this.headerDay.text = day
-        this.headerDay.setOnClickListener {
-            generateFakeMedication(this)
-        }
     }
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
