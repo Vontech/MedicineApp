@@ -38,7 +38,7 @@ class ReminderIntentService: IntentService("ReminderIntentService") {
         val numNotifications = getNumberOfNotifications(this) + 1
 
         // Get number of medications there are
-        val message = "You have $numNotifications to take"
+        val message = "You have medications to take"
 
         builder.setContentTitle(title)
         builder.setContentText(message)
