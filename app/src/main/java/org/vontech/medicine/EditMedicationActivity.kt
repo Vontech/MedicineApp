@@ -51,6 +51,8 @@ class EditMedicationActivity : AppCompatActivity() {
     val NOTIFICATION_TITLE = "Time to take your medicine!"
     val NOTIFICATION_MESSAGE = "Click to view this medication"
     val FN = "EditMedicationActivity"
+    val dateFormatter = DateTimeFormat.forPattern("MMMM d, yyyy")
+    val timeFormatter = DateTimeFormat.forPattern("hh:mm aa").withZone(DateTimeZone.getDefault())
 
     val REQUEST_IMAGE_CAPTURE = 2
     private lateinit var photoPath: String
@@ -195,6 +197,18 @@ class EditMedicationActivity : AppCompatActivity() {
 
     }
 
+    private fun showCalendarEntryDialog(title: String, message: String) {
+
+        val dialog = buildDialog(title, message)
+        dialog.positiveButton.text = "OK"
+        dialog.negativeButton.visibility = View.GONE
+        dialog.positiveButton.setOnClickListener {
+            dialog.dismiss()
+        }
+        dialog.show()
+
+    }
+
     private fun refreshCalendarUI() {
 
         if (isEditing) return
@@ -236,11 +250,14 @@ class EditMedicationActivity : AppCompatActivity() {
 
                 val onThisDay = medicationHistory.getEventsForMedication(
                     medicationId = medication.id,
-                    dateStart = day.toDateTimeAtStartOfDay(),
-                    dateEnd = day.toDateTimeAtStartOfDay().plusDays(1), // by end of this day
+                    dateStart = day.toDateTimeAtStartOfDay(DateTimeZone.getDefault()),
+                    dateEnd = day.toDateTimeAtStartOfDay(DateTimeZone.getDefault()).plusDays(1), // by end of this day
                     eventType = MedicationEventType.TAKEN
                 )
                 val numTimesTaken = onThisDay.size
+
+                val timesTaken = onThisDay.sortedBy { it.time }.map {"\u2022 " + it.time.toString(timeFormatter)}
+                val takenMessage = "You took this medication at the following times on ${day.toString(dateFormatter)}\n\n${timesTaken.joinToString("\n")}"
 
                 val shouldBeTakenToday = day.dayOfWeek in latestEdit.optionalMedicationReference!!.days
                 var numTimesToTake = 0
@@ -251,17 +268,26 @@ class EditMedicationActivity : AppCompatActivity() {
                 if (numTimesTaken == numTimesToTake) {
                     view.calendarDayText.background = resources.getDrawable(R.drawable.calendar_all_taken)
                     view.calendarDayText.setPadding(0, 0, 0, 0)
+                    view.setOnClickListener {
+                        showCalendarEntryDialog("All Taken", takenMessage)
+                    }
                     return view
                 }
 
                 if (numTimesTaken == 0) {
                     view.calendarDayText.background = resources.getDrawable(R.drawable.calendar_none_taken)
                     view.calendarDayText.setPadding(0, 0, 0, 0)
+                    view.setOnClickListener {
+                        showCalendarEntryDialog("None Taken", "This medication was not taken on ${day.toString(dateFormatter)}")
+                    }
                     return view
                 }
 
                 view.calendarDayText.background = resources.getDrawable(R.drawable.calendar_some_taken)
                 view.calendarDayText.setPadding(0, 0, 0, 0)
+                view.setOnClickListener {
+                    showCalendarEntryDialog("Some Taken", takenMessage)
+                }
                 return view
 
             }
@@ -547,6 +573,7 @@ class EditMedicationActivity : AppCompatActivity() {
         }
 
         refreshUI()
+        refreshCalendarUI()
         scrollToTop()
         hideKeyboard()
 

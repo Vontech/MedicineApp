@@ -11,12 +11,8 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.delete_dialog.*
 import org.joda.time.*
 import org.vontech.medicine.pokos.Medication
-import org.vontech.medicine.utils.MedicationStore
 import org.joda.time.format.DateTimeFormat
 import org.vontech.medicine.background.setNumberOfNotifications
-import org.vontech.medicine.utils.EditState
-import org.vontech.medicine.utils.MedicationHistory
-import org.vontech.medicine.utils.buildDialog
 import java.util.*
 import kotlin.math.floor
 import kotlin.math.max
@@ -24,6 +20,7 @@ import kotlin.math.min
 import android.content.ActivityNotFoundException
 import android.content.SharedPreferences
 import android.widget.Toast
+import org.vontech.medicine.utils.*
 import org.vontech.medicine.views.makeHeightEqualWidth
 
 
@@ -200,6 +197,9 @@ class MainActivity : AppCompatActivity() {
         val dayOfWeek = DateTime().dayOfWeek()
         val day = dayOfWeek.getAsText(Locale.getDefault()).toUpperCase()
         this.headerDay.text = day
+        this.headerDay.setOnClickListener {
+            generateFakeMedication(this)
+        }
     }
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
