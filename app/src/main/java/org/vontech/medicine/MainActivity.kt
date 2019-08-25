@@ -142,7 +142,7 @@ class MainActivity : AppCompatActivity() {
     private fun renderNextMedication() {
 
         val nextBatch = getNextReminder()
-        if (nextBatch?.reminderTime == null) {
+        if (nextBatch == null || (nextBatch.reminderTime == null && nextBatch.medicationList.isEmpty())) {
             nextMedicationWidget.visibility = View.GONE
             noNextMedicationContainer.visibility = if (medicationList.isEmpty()) View.GONE else View.VISIBLE
         } else {
@@ -161,7 +161,12 @@ class MainActivity : AppCompatActivity() {
             Log.d("Next Batch", nextBatch.medicationList.toString())
 
             val fmt = DateTimeFormat.forPattern("h:mm aa")
-            nextReminderTimeTextView.text = fmt.print(nextBatch.reminderTime)
+            if (nextBatch.reminderTime != null) {
+                nextReminderTimeTextView.text = fmt.print(nextBatch.reminderTime)
+            } else {
+                nextReminderTimeTextView.text = "earlier"
+            }
+
             nextReminderNumMedsTextView.text = nextBatch.medicationList.size.toString()
 
             markAllAsTakenButton.setOnClickListener {
@@ -278,10 +283,16 @@ class MainActivity : AppCompatActivity() {
         }
 
         // Now find the cluster with the earliest time
-        val earliestCluster = clusters.minBy { it.start }
-        val medsToTake = earliestCluster!!.components.map {it.medication}
-        val medTimeIndices = earliestCluster!!.components.map {it.timeIndex}
-        val earliestMed = earliestCluster.start
+        val clustersAlreadyPassed = clusters.filter {it.end.isBefore(DateTime.now().toLocalTime())}
+        val nextClusters = clusters.filter { it.end.isAfter(DateTime.now().toLocalTime()) }
+        val earliestCluster = nextClusters.minBy { it.start }
+
+        val allCompsToConsider = clustersAlreadyPassed.map { it.components }.flatten().toMutableList()
+        allCompsToConsider.addAll(earliestCluster?.components ?: mutableListOf())
+
+        val medsToTake = allCompsToConsider.map {it.medication}
+        val medTimeIndices = allCompsToConsider.map {it.timeIndex}
+        val earliestMed = earliestCluster?.start
 
         return ReminderBatch(medsToTake, earliestMed, medTimeIndices)
 
