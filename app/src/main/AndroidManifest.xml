@@ -2,41 +2,88 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="org.vontech.medicine">
 
+
+
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+                     android:maxSdkVersion="18" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+
 
     <application
             android:name=".MedicineApplication"
-            android:allowBackup="true"
             android:icon="@mipmap/ic_launcher"
             android:label="@string/app_name"
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
-            android:usesCleartextTraffic="true"
-            android:theme="@style/AppTheme">
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:usesCleartextTraffic="true">
+
+        <meta-data
+                android:name="com.google.android.gms.ads.APPLICATION_ID"
+                android:value="ca-app-pub-5626721848828721~1506409820"/>
+
+        <activity android:name=".ViewAllMedicationsActivity">
+        </activity>
+
         <receiver
-            android:name=".background.ReminderBroadcastReceiver"
-            android:enabled="true"
-            android:exported="false" >
+                android:name=".background.ReminderBroadcastReceiver"
+                android:enabled="true"
+                android:exported="false">
         </receiver>
+
+        <!-- Start the Service if applicable on boot -->
+        <receiver
+                android:name=".background.BootBroadcastReceiver"
+                android:enabled="true"
+                android:permission="android.permission.RECEIVE_BOOT_COMPLETED">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </receiver>
+
         <service
-            android:name=".background.ReminderIntentService"
-            android:exported="false" >
+                android:name=".background.ReminderIntentService"
+                android:permission="android.permission.BIND_JOB_SERVICE"
+                android:exported="false">
         </service>
-        <activity android:name=".ScanActivity">
-        </activity>
-        <activity android:name=".RegistrationActivity">
-        </activity>
-        <activity android:name=".LoginActivity">
-        </activity>
-        <activity android:name=".MainActivity">
+
+        <activity
+                android:name=".ScanActivity"
+                android:screenOrientation="portrait"/>
+        <activity
+                android:name=".RegistrationActivity"
+                android:screenOrientation="portrait"/>
+        <activity
+                android:name=".LoginActivity"
+                android:screenOrientation="portrait"/>
+        <activity
+                android:name=".MainActivity"
+                android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".EditMedicationActivity">
-        </activity>
+        <activity
+                android:name=".EditMedicationActivity"
+                android:screenOrientation="portrait"/>
+
+        <meta-data
+                android:name="preloaded_fonts"
+                android:resource="@array/preloaded_fonts"/>
+
+        <provider
+                android:name="android.support.v4.content.FileProvider"
+                android:authorities="com.example.android.fileprovider"
+                android:exported="false"
+                android:grantUriPermissions="true">
+            <meta-data
+                    android:name="android.support.FILE_PROVIDER_PATHS"
+                    android:resource="@xml/file_paths"></meta-data>
+        </provider>
     </application>
 
 </manifest>

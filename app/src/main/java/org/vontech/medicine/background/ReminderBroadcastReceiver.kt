@@ -6,6 +6,10 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 
+/**
+ * This class's onReceive method is called by the OS when an intent needs to be fired.
+ * onReceive passes on the pendingIntent to ReminderIntentService for the notification to be fired.
+ */
 class ReminderBroadcastReceiver: BroadcastReceiver() {
 
     /**
@@ -18,11 +22,16 @@ class ReminderBroadcastReceiver: BroadcastReceiver() {
 
         // Add the title and message from the ReminderManager to the intent passed to the ReminderIntentService
         val extras = Bundle()
+//        extras.putInt("id", intent!!.getIntExtra("id", 0))
         extras.putString("title", intent!!.getStringExtra("title"))
         extras.putString("message", intent.getStringExtra("message"))
+        extras.putInt("medicationId", intent.getIntExtra("medicationId", 0))
 
         remindIntent.putExtras(extras)
-        context!!.startService(remindIntent)
+        //context!!.startService(remindIntent)
+        ReminderIntentService.enqueueWork(context!!, remindIntent)
+
+        Log.i("ReminderBroadcast...kt", "RECEIVED ALARM, FIRING NOTIF SERVICE")
 
         Log.e("Medicine", "received")
     }

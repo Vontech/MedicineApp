@@ -1,24 +1,371 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<ScrollView
         xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        tools:context=".MainActivity">
+        android:fillViewport="true"
+        android:background="@color/white">
 
-    <android.support.v7.widget.RecyclerView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/recyclerView"
-    android:layout_weight="1"/>
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="20dp"
+            tools:context=".MainActivity"
+            android:background="@color/white"
+            android:orientation="vertical"
+            android:id="@+id/mainActivityLayout">
 
-    <Button android:layout_width="match_parent" android:layout_height="wrap_content"
-    android:id="@+id/newMedicationButton"
-    android:text="Add New Medication"/>
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/textColor"
+                android:text="MONDAY"
+                android:textSize="32sp"
+                android:paddingRight="26dp"
+                android:paddingLeft="26dp"
+                android:textStyle="bold"
+                android:fontFamily="@font/sf_heavy"
+                android:id="@+id/headerDay"/>
 
-    <Button android:layout_width="match_parent" android:layout_height="wrap_content"
-            android:id="@+id/scanMedicationButton"
-            android:text="Scan New Medication"/>
+        <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/noMedicinesContainer">
 
-</LinearLayout>
+            <TextView
+                    android:text="@string/main_no_meds"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/textView"
+                    android:fontFamily="@font/sf_medium"
+                    android:textSize="24sp"
+                    tools:text="@string/main_no_meds"
+                    android:textColor="@color/disabledTextColor"
+                    android:textAlignment="center"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginBottom="24dp"/>
+        </LinearLayout>
+
+        <LinearLayout
+                android:id="@+id/noNextMedicationContainer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/widget_background"
+                android:orientation="horizontal"
+                android:paddingRight="36dp"
+                android:paddingLeft="24dp"
+                android:layout_marginLeft="24dp"
+                android:paddingBottom="12dp">
+
+            <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    app:srcCompat="@drawable/tada"
+                    android:id="@+id/imageView2"
+                    android:layout_weight="1"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginRight="12dp"/>
+
+            <TextView
+                    android:text="No upcoming medications!"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:textColor="@color/textColor"
+                    android:fontFamily="@font/sf_regular"
+                    android:layout_marginTop="4dp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:id="@+id/nextMedicationWidget">
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingLeft="24dp"
+                    android:id='@+id/nextReminderHeader'>
+
+                <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/widget_background"
+                        android:orientation="vertical"
+                        android:paddingRight="48dp"
+                        android:paddingLeft="18dp">
+
+                    <TextView
+                            android:id="@+id/nextReminderTitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="18sp"
+                            android:textColor="@color/textColor"
+                            android:text="@string/main_next_medication"
+                            android:fontFamily="@font/sf_regular"
+                            android:layout_marginBottom="-6dp"/>
+
+                    <LinearLayout
+                            android:id="@+id/nextReminderDetails"
+                            android:orientation="horizontal"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="-6dp">
+
+                        <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/nextReminderTimeTextView"
+                                android:textSize="20sp"
+                                android:textColor="@color/textColor"
+                                android:textAlignment="viewStart"
+                                android:fontFamily="@font/sf_bold"/>
+
+                        <TextView
+                                android:text=" today, "
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="20sp"
+                                android:textColor="@color/textColor"
+                                android:textAlignment="viewStart"
+                                android:fontFamily="@font/sf_regular"/>
+
+                        <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/nextReminderNumMedsTextView"
+                                android:textStyle="bold"
+                                android:textSize="20sp"
+                                android:textColor="@color/textColor"
+                                android:textAlignment="viewStart"
+                                android:fontFamily="@font/sf_bold"/>
+
+                        <TextView
+                                android:text=" medications"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="20sp"
+                                android:textColor="@color/textColor"
+                                android:textAlignment="viewStart"
+                                android:fontFamily="@font/sf_regular"/>
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <android.support.v7.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clipToPadding="false"
+                    android:layout_marginTop="12dp"
+                    android:paddingLeft="26dp"
+                    android:id="@+id/recyclerView"
+                    android:layout_weight="0"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="4dp"/>
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/mark_as_done_background"
+                    android:layout_marginLeft="24dp"
+                    android:layout_marginRight="24dp"
+                    android:layout_marginBottom="24dp"
+                    android:elevation="3dp">
+
+                <TextView
+                        android:id="@+id/markAllAsTakenButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="MARK ALL AS TAKEN"
+                        android:textSize="18sp"
+                        android:fontFamily="@font/sf_bold"
+                        android:textColor="@color/offWhite"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="3dp"
+                        android:textAlignment="center"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Other"
+                android:fontFamily="@font/sf_bold"
+                android:layout_marginLeft="24dp"
+                android:textSize="24sp"
+                android:textColor="@color/textColor"
+                android:visibility="gone"/>
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="24dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginRight="24dp"
+                android:orientation="horizontal">
+
+
+            <LinearLayout
+                    android:id="@+id/viewAllMedicationsButton"
+                    android:layout_width="0dp"
+                    android:layout_height="175dp"
+                    android:layout_gravity=""
+                    android:layout_marginBottom="14dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/square_button_background"
+                    android:backgroundTint="@color/red"
+                    android:elevation="5dp"
+                    android:orientation="vertical"
+                    android:paddingLeft="20dp" android:paddingTop="20dp">
+
+                <ImageView
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:src="@drawable/ic_list"/>
+
+                <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginTop="12dp"
+                        android:fontFamily="@font/sf_medium"
+                        android:text="view all\nmedications"
+                        android:textColor="@color/offWhite"
+                        android:textSize="21sp"/>
+            </LinearLayout>
+
+            <FrameLayout
+                    android:layout_width="16dp"
+                    android:layout_height="match_parent">
+
+            </FrameLayout>
+
+            <LinearLayout
+                    android:id="@+id/scanMedicationButton"
+                    android:layout_width="0dp"
+                    android:layout_height="175dp"
+                    android:layout_marginBottom="14dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/square_button_background"
+                    android:backgroundTint="@color/purple"
+                    android:clickable="true"
+                    android:elevation="5dp"
+                    android:orientation="vertical"
+                    android:paddingLeft="20dp"
+                    android:paddingTop="22dp">
+
+                <ImageView
+                        android:layout_width="56dp"
+                        android:layout_height="56dp"
+                        android:src="@drawable/ic_camera"/>
+
+                <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginTop="14dp"
+                        android:fontFamily="@font/sf_medium"
+                        android:text="scan new medication"
+                        android:textColor="@color/offWhite"
+                        android:textSize="21sp"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="24dp"
+                android:layout_marginRight="24dp" android:orientation="horizontal">
+
+            <LinearLayout
+                    android:id="@+id/addNewMedicationButton"
+                    android:layout_width="0dp"
+                    android:layout_height="175dp"
+                    android:layout_marginBottom="12dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/square_button_background"
+                    android:backgroundTint="@color/orange"
+                    android:elevation="5dp"
+                    android:orientation="vertical"
+                    android:paddingLeft="20dp" android:paddingTop="22dp">
+
+                <ImageView
+                        android:layout_width="54dp"
+                        android:layout_height="54dp"
+                        android:src="@drawable/ic_create"/>
+
+                <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginTop="16dp"
+                        android:fontFamily="@font/sf_medium"
+                        android:text="add new\nmedication"
+                        android:textColor="@color/offWhite"
+                        android:textSize="21sp"/>
+            </LinearLayout>
+
+            <FrameLayout
+                    android:layout_width="16dp"
+                    android:layout_height="match_parent">
+
+            </FrameLayout>
+
+            <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="175dp" android:layout_weight="1"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                android:orientation="vertical"
+                android:layout_marginTop="12dp"
+                android:gravity="bottom">
+
+            <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="8dp"
+                    android:layout_gravity="center_horizontal"
+                    android:id="@+id/aboutUsButton"
+                    android:clickable="true">
+
+                <ImageView
+                        android:layout_width="28dp"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_email"
+                        android:layout_marginTop="3dp"
+                        android:layout_marginRight="4dp"
+                        android:padding="1dp"/>
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/feedback_email_us_here"
+                        android:fontFamily="@font/sf_regular"
+                        android:textColor="@color/disabledTextColor"
+                        android:textSize="18sp"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</ScrollView>

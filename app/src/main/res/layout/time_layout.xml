@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:id="@+id/deleteReminderImgView"
+        android:src="@drawable/ic_delete"
+        android:layout_marginRight="10dp"
+        android:clickable="true"
+        android:visibility="gone"
+        android:layout_marginTop="8dp"/>
+
+    <TextView
+        android:text="TextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/timeTextView"
+        android:textSize="24sp"
+        android:textColor="@color/textColor"
+        android:fontFamily="@font/sf_medium"
+        android:layout_marginBottom="-20dp"
+        android:paddingBottom="8dp"/>
+</LinearLayout>

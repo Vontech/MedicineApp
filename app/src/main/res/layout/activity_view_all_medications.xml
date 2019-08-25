@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ViewAllMedicationsActivity"
+        android:orientation="vertical">
+
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/textColor"
+            android:text="All Medications"
+            android:textSize="32sp"
+            android:paddingTop="20dp"
+            android:layout_marginBottom="-8dp"
+            android:paddingRight="26dp"
+            android:paddingLeft="26dp"
+            android:textStyle="bold"
+            android:fontFamily="@font/sf_heavy"
+            android:id="@+id/headerDay"/>
+
+    <TextView
+            android:text="@string/view_all_no_meds"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/noMedsText"
+            android:fontFamily="@font/sf_medium"
+            android:textSize="24sp"
+            tools:text="@string/view_all_no_meds"
+            android:textColor="@color/disabledTextColor"
+            android:textAlignment="center"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="24dp"/>
+
+    <android.support.v7.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:layout_height="0dp"
+            android:clipToPadding="false"
+            android:id="@+id/recyclerView"
+            android:orientation="vertical"/>
+
+    <com.google.android.gms.ads.AdView
+            xmlns:ads="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/adView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            ads:adSize="SMART_BANNER"
+            ads:adUnitId="ca-app-pub-5626721848828721~1506409820">
+
+    </com.google.android.gms.ads.AdView>
+
+</LinearLayout>

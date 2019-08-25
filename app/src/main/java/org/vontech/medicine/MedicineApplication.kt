@@ -5,6 +5,7 @@ import android.app.Application
 import android.content.Intent
 import android.util.Log
 import com.github.kittinunf.fuel.core.FuelManager
+import net.danlew.android.joda.JodaTimeAndroid
 import org.vontech.medicine.auth.UserSession
 import org.vontech.medicine.utils.*
 
@@ -24,12 +25,19 @@ class MedicineApplication : Application() {
 
     var medicineApi: MedicineApi? = null
     var userSession: UserSession? = null
+    lateinit var medicineNames: HashMap<String, MedicineNameDefinition>
 
     override fun onCreate() {
         super.onCreate()
 
         // Setup the FuelManager
         FuelManager.instance.basePath = API_URL
+
+        // Background task to read medicine
+        loadMedicineNames()
+
+        // Needed for Joda to work properly
+        JodaTimeAndroid.init(this)
 
     }
 
@@ -82,6 +90,14 @@ class MedicineApplication : Application() {
         editor.putString(SESSION_STORE_KEY, userSessionToJson(userSession))
         editor.commit() // TODO: Should we use apply?
 
+    }
+
+    private fun loadMedicineNames() {
+        // Load medications in background task
+        medicineNames = MedicineReader(this).readMedicines()
+        medicineNames.forEach {
+            //Log.i("MedicineApplication.kt", it.key + " --> " + it.value)
+        }
     }
 
 }

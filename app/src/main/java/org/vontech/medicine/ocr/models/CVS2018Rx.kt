@@ -1,8 +1,11 @@
 package org.vontech.medicine.ocr.models
 
+import android.util.Log
 import org.vontech.medicine.ocr.*
+import org.vontech.medicine.utils.MedicineNameDefinition
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.HashMap
 
 
 // Variables for regexes
@@ -16,7 +19,7 @@ const val QTY_REGEX_TWO = "(qty|qtv)\\s*:{0,1}\\s*(\\d+)"
 val QTY_REGEX = "(?:$QTY_REGEX_ONE|$QTY_REGEX_TWO)"
 
 // Do some fuzziness
-val FILLED_DATE_REGEX = "Filled[:\\.]{0,1}\\s*($DATE_REGEX)"
+val FILLED_DATE_REGEX = "(?:Filled|flled|filed)[:\\.]{0,1}\\s*($DATE_REGEX)"
 val ORIGINAL_DATE_REGEX = "Orig[:\\.]{0,1}($DATE_REGEX)"
 val DISCARD_DATE_REGEX = "d After[:\\.]{0,1}\\s*($DATE_REGEX)"
 
@@ -25,22 +28,31 @@ val dateFormat = SimpleDateFormat("MM/dd/yyyy", Locale.US)
 
 class CVS2018Rx: MedicineDocumentModel() {
 
-    override fun extract(scannedDoc: DocumentScan): MedicineDocumentExtraction {
+    override fun extract(
+        scannedDoc: DocumentScan,
+        medicineNames: HashMap<String, MedicineNameDefinition>
+    ): MedicineDocumentExtraction {
         // Extract each part of the bottle:
 
         val s = scannedDoc.joinedText
 
+        val name = this.getLikelyMedicineNames(scannedDoc, medicineNames)
         val phones = this.fuzzySearchAllStrings(PHONE_REGEX, s)
         val dosageType = this.fuzzySearchString(DOSAGE_TYPE_REGEX, s)
+        val dosageAmount = this.fuzzySearch(DOSAGE_AMOUNT_REGEX, s)?.groupValues?.get(1)
         val rxNumber = this.fuzzySearch(RX_NUM_REGEX, s)?.groupValues?.get(1)
         val fillDateRaw = this.fuzzySearch(FILLED_DATE_REGEX, s)?.groupValues?.get(1)
         val discardDateRaw = this.fuzzySearch(DISCARD_DATE_REGEX, s)?.groupValues?.get(1)
         val fillDate: Date? = if (fillDateRaw != null) dateFormat.parse(fillDateRaw) else null
         val discardDate: Date? = if (discardDateRaw != null) dateFormat.parse(discardDateRaw) else null
 
+        Log.i("AMOUNT", "Amount: " + dosageAmount.toString())
+
 
         return MedicineDocumentExtraction(
+            name = if (name.isNotEmpty()) name[0] else null,
             dosageType = dosageType,
+            dosageAmount = dosageAmount?.toFloatOrNull(),
             rxIdentifier = rxNumber,
             fillDate = fillDate,
             discardDate = discardDate,

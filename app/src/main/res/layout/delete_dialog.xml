@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/card_background"
+    android:padding="24dp">
+
+    <TextView
+            android:text="Confirm Deletion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/titleTextView"
+            android:textSize="24sp"
+            android:textColor="@color/textColor"
+            android:fontFamily="@font/sf_medium"/>
+
+    <TextView
+        android:text="Do you want to delete this medication?"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/messageTextView"
+        android:textSize="20sp"
+        android:textColor="@color/textColor"
+        android:fontFamily="@font/sf_regular"/>
+
+    <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="right"
+            android:layout_marginBottom="-12dp">
+
+        <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/negativeButton"
+                android:text="CANCEL"
+                android:clickable="true"
+                android:textSize="16sp"
+                android:textColor="@color/red"
+                android:fontFamily="@font/sf_semibold"
+                android:backgroundTint="@color/offWhite"
+                style="?android:attr/borderlessButtonStyle"/>
+
+        <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/positiveButton"
+                android:text="CONFIRM"
+                android:clickable="true"
+                android:textSize="16sp"
+                android:textColor="@color/purple"
+                android:fontFamily="@font/sf_semibold"
+                android:backgroundTint="@color/offWhite"
+                style="?android:attr/borderlessButtonStyle"/>
+    </LinearLayout>
+</LinearLayout>

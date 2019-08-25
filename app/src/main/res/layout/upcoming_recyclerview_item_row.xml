@@ -1,0 +1,87 @@
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:background="@drawable/card_background"
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:elevation="10dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginRight="14dp">
+
+    <com.github.siyamed.shapeimageview.mask.PorterShapeImageView
+            android:layout_width="@dimen/mainScreenPillSize"
+            android:layout_height="@dimen/mainScreenPillSize"
+            android:id="@+id/imageView"
+            app:siShape="@drawable/upcoming_image_mask"
+            android:src="@drawable/placeholder"
+            app:siSquare="true"/>
+
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/nameTextView"
+            android:textSize="22sp"
+            android:text="Medication Name"
+            android:textStyle="bold"
+            android:textColor="@color/textColor"
+            android:fontFamily="@font/sf_semibold"
+            android:textAlignment="viewStart"
+            android:paddingTop="8dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:ellipsize="end"
+            android:maxLines="1"/>
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="-10dp"
+            android:orientation="horizontal"
+            android:paddingLeft="16dp" android:paddingRight="16dp">
+
+        <TextView
+                android:id="@+id/doseTextView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/sf_regular"
+                android:text="1200 IUs"
+                android:textAlignment="viewStart"
+                android:textColor="@color/disabledTextColor"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textSize="18sp"/>
+
+        <TextView
+                android:id="@+id/reminderTimeTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/sf_regular" android:text="11:00am"
+                android:textColor="@color/disabledTextColor"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/markAsDoneButton"
+        android:clickable="true"
+        android:background="@drawable/card_button"
+        android:layout_marginTop="4dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="6dp"
+        android:gravity="bottom">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="CLICK ONCE TAKEN"
+            android:textColor="@color/offWhite"
+            android:fontFamily="@font/sf_semibold"
+            android:textSize="15sp"
+            android:gravity="center"/>
+    </LinearLayout>
+
+</LinearLayout>
