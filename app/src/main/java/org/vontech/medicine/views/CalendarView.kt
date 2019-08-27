@@ -213,7 +213,7 @@ fun getArrayOfDates(timeAnchor: LocalDate): List<List<LocalDate>> {
     val backReference = currentDay.copy()
 
     // Roll back to the beginning of the week
-    while (backReference.dayOfWeek != 1) { backReference.addDays(-1) }
+    while (backReference.dayOfWeek != 7) { backReference.addDays(-1) }
 
     // Add the days from last month
     while (backReference.dayOfMonth != 1) {
@@ -224,14 +224,14 @@ fun getArrayOfDates(timeAnchor: LocalDate): List<List<LocalDate>> {
     // Now add each day from this month
     while (currentDay.monthOfYear == month) {
         monthEntries.last().add(LocalDate(currentDay.copy()))
-        if (currentDay.dayOfWeek == 7) {
+        if (currentDay.dayOfWeek == 6) {
             monthEntries.add(mutableListOf())
         }
         currentDay.addDays(1)
     }
 
     // Now add the final days from next month
-    while (currentDay.dayOfWeek != 1) {
+    while (currentDay.dayOfWeek != 7) {
         monthEntries.last().add(LocalDate(currentDay.copy()))
         currentDay.addDays(1)
     }
